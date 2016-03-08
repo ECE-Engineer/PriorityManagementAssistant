@@ -36,6 +36,7 @@ public class Main {
         String choice = kb.nextLine();
         
         if(choice.equalsIgnoreCase("Y"))
+            System.out.println("hello world");
             //prompt user for stuff
             
     }
