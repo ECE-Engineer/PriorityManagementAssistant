@@ -28,17 +28,151 @@ import java.util.Scanner;
  * @author Kyle Z
  */
 public class Main {
+        static Scanner kb = new Scanner(System.in);
+    
+        static String line;
 
+        static String task;
+        static int month;
+        static int day;
+        static int year;
+        static int hour;
+        static int minute;
+        static int priority;
+        static boolean numberFlag = true; //set default value here
+        static boolean badInfoFlag = true;    //set default value here
+    
+  
     public static void main(String[] args) {
-        Scanner kb = new Scanner(System.in);
+        
         System.out.println("Welcome I am your Priority Management Assistant");
         System.out.println("Would you like to make an assignment?\t" + ("Y / N"));
         String choice = kb.nextLine();
         
-        if(choice.equalsIgnoreCase("Y"))
-            System.out.println("hello world");
-            //prompt user for stuff
-            
+        if(choice.equalsIgnoreCase("Y")){
+            task = getTask();
+            month = getMonth();
+            day = getDay();
+            year = getYear();
+            hour = getHour();
+            minute = getMinute();
+            priority = getPriority();
+        }
+    }
+        
+        private static String getTask(){
+            do {
+                System.out.println("Please Enter The Title Of Your Task");  //prompt user for task
+                line = kb.nextLine();
+            } while (line == null); //prompt the user for no input
+            return line;
+        }
+        private static int getMonth(){
+            do {
+                System.out.println("Please Enter The Month Of Your Task's Due Date\t" + ("MM"));  //prompt user for month
+                line = kb.nextLine();
+                
+                try {   //promt the user for an integer number
+                    numberFlag = true;
+                    month = Integer.parseInt(line);
+                    badInfoFlag = true;
+                    if(month < 1 || month > 12)
+                        badInfoFlag = false;
+                } catch (NumberFormatException e) {
+                    numberFlag = false;
+                }
+            } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
+            return month;
+        }
+        private static int getDay(){
+            do {
+                System.out.println("Please Enter The Day Of Your Task's Due Date\t" + ("DD"));  //prompt user for day
+                line = kb.nextLine();
+                
+                try {   //promt the user for an integer number
+                    numberFlag = true;
+                    day = Integer.parseInt(line);
+                    badInfoFlag = true;
+                    if(day < 1 || day > 31)
+                        badInfoFlag = false;
+                } catch (NumberFormatException e) {
+                    numberFlag = false;
+                }
+            } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
+            return day;
+        }
+        private static int getYear(){
+            do {
+                System.out.println("Please Enter The Year Of Your Task's Due Date\t" + ("YYYY"));  //prompt user for year
+                line = kb.nextLine();
+                
+                try {   //promt the user for an integer number
+                    numberFlag = true;
+                    year = Integer.parseInt(line);
+                    badInfoFlag = true;
+                    if(year < 2016)
+                        badInfoFlag = false;
+                } catch (NumberFormatException e) {
+                    numberFlag = false;
+                }
+            } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
+            return year;
+        }
+        private static int getHour(){
+            do {
+                System.out.println("Please Enter The Hour Of Your Task's Due Date\t" + ("hh"));  //prompt user for hour
+                line = kb.nextLine();
+                
+                try {   //promt the user for an integer number
+                    numberFlag = true;
+                    hour = Integer.parseInt(line);
+                    badInfoFlag = true;
+                    if(hour < 1 || hour > 24)
+                        badInfoFlag = false;
+                } catch (NumberFormatException e) {
+                    numberFlag = false;
+                }
+            } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
+            return hour;
+        }
+        private static int getMinute(){
+            do {
+                System.out.println("Please Enter The Minute Of Your Task's Due Date\t" + ("mm"));  //prompt user for minute
+                line = kb.nextLine();
+                
+                try {   //promt the user for an integer number
+                    numberFlag = true;
+                    minute = Integer.parseInt(line);
+                    badInfoFlag = true;
+                    if(minute < 0 || minute > 59)
+                        badInfoFlag = false;
+                } catch (NumberFormatException e) {
+                    numberFlag = false;
+                }
+            } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
+            return minute;
+        }
+        private static int getPriority(){
+            do {
+                System.out.println("Please Enter The Priority Of Your Task\t" + ("Between 1 & 3"));  //prompt user for priority
+                line = kb.nextLine();
+                if(line == null){   //assign a default priority value for no input
+                        priority = 1;
+                    }
+                else{
+                    try {   //promt the user for an integer number
+                        numberFlag = true;
+                        priority = Integer.parseInt(line);
+                        badInfoFlag = true;
+                        if(priority < 1 || priority > 3)
+                            badInfoFlag = false;
+                    } catch (NumberFormatException e) {
+                        numberFlag = false;
+                    }
+                }
+            } while (numberFlag || badInfoFlag);
+            return priority;
+        }
     }
     
-}
+
