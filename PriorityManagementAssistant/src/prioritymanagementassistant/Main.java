@@ -22,7 +22,10 @@ enable screen pop-ups as reminders for those assignments.
 
 package prioritymanagementassistant;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Kyle Z
@@ -41,7 +44,10 @@ public class Main {
         static int priority;
         static boolean numberFlag = true; //set default value here
         static boolean badInfoFlag = true;    //set default value here
+        
+        static ArrayList<String> list = new ArrayList<>();
     
+        
   
     public static void main(String[] args) {
         
@@ -50,6 +56,7 @@ public class Main {
         String choice = kb.nextLine();
         
         if(choice.equalsIgnoreCase("Y")){
+            String build;
             task = getTask();
             month = getMonth();
             day = getDay();
@@ -57,8 +64,16 @@ public class Main {
             hour = getHour();
             minute = getMinute();
             priority = getPriority();
+            build = task + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
+            list.add(build);
         }
+        
+        
     }
+    
+        private static void setPath(String s){  //get the path to save the file from the user
+            
+        }
         
         private static String getTask(){
             do {
@@ -73,13 +88,13 @@ public class Main {
                 line = kb.nextLine();
                 
                 try {   //promt the user for an integer number
-                    numberFlag = true;
-                    month = Integer.parseInt(line);
-                    badInfoFlag = true;
-                    if(month < 1 || month > 12)
-                        badInfoFlag = false;
-                } catch (NumberFormatException e) {
                     numberFlag = false;
+                    month = Integer.parseInt(line);
+                    badInfoFlag = false;
+                    if(month < 1 || month > 12)
+                        badInfoFlag = true;
+                } catch (NumberFormatException e) {
+                    numberFlag = true;
                 }
             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
             return month;
@@ -90,13 +105,13 @@ public class Main {
                 line = kb.nextLine();
                 
                 try {   //promt the user for an integer number
-                    numberFlag = true;
-                    day = Integer.parseInt(line);
-                    badInfoFlag = true;
-                    if(day < 1 || day > 31)
-                        badInfoFlag = false;
-                } catch (NumberFormatException e) {
                     numberFlag = false;
+                    day = Integer.parseInt(line);
+                    badInfoFlag = false;
+                    if(day < 1 || day > 31)
+                        badInfoFlag = true;
+                } catch (NumberFormatException e) {
+                    numberFlag = true;
                 }
             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
             return day;
@@ -107,13 +122,13 @@ public class Main {
                 line = kb.nextLine();
                 
                 try {   //promt the user for an integer number
-                    numberFlag = true;
-                    year = Integer.parseInt(line);
-                    badInfoFlag = true;
-                    if(year < 2016)
-                        badInfoFlag = false;
-                } catch (NumberFormatException e) {
                     numberFlag = false;
+                    year = Integer.parseInt(line);
+                    badInfoFlag = false;
+                    if(year < 2016)
+                        badInfoFlag = true;
+                } catch (NumberFormatException e) {
+                    numberFlag = true;
                 }
             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
             return year;
@@ -124,13 +139,13 @@ public class Main {
                 line = kb.nextLine();
                 
                 try {   //promt the user for an integer number
-                    numberFlag = true;
-                    hour = Integer.parseInt(line);
-                    badInfoFlag = true;
-                    if(hour < 1 || hour > 24)
-                        badInfoFlag = false;
-                } catch (NumberFormatException e) {
                     numberFlag = false;
+                    hour = Integer.parseInt(line);
+                    badInfoFlag = false;
+                    if(hour < 1 || hour > 24)
+                        badInfoFlag = true;
+                } catch (NumberFormatException e) {
+                    numberFlag = true;
                 }
             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
             return hour;
@@ -141,13 +156,13 @@ public class Main {
                 line = kb.nextLine();
                 
                 try {   //promt the user for an integer number
-                    numberFlag = true;
-                    minute = Integer.parseInt(line);
-                    badInfoFlag = true;
-                    if(minute < 0 || minute > 59)
-                        badInfoFlag = false;
-                } catch (NumberFormatException e) {
                     numberFlag = false;
+                    minute = Integer.parseInt(line);
+                    badInfoFlag = false;
+                    if(minute < 0 || minute > 59)
+                        badInfoFlag = true;
+                } catch (NumberFormatException e) {
+                    numberFlag = true;
                 }
             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
             return minute;
@@ -161,13 +176,13 @@ public class Main {
                     }
                 else{
                     try {   //promt the user for an integer number
-                        numberFlag = true;
-                        priority = Integer.parseInt(line);
-                        badInfoFlag = true;
-                        if(priority < 1 || priority > 3)
-                            badInfoFlag = false;
-                    } catch (NumberFormatException e) {
                         numberFlag = false;
+                        priority = Integer.parseInt(line);
+                        badInfoFlag = false;
+                        if(priority < 1 || priority > 3)
+                            badInfoFlag = true;
+                    } catch (NumberFormatException e) {
+                        numberFlag = true;
                     }
                 }
             } while (numberFlag || badInfoFlag);
