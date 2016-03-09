@@ -64,7 +64,7 @@ public class Main {
             String build;
             task = getTask();
             month = getMonth();
-            day = getDay2(month);
+            day = getDay(month);
             year = getYear();
             hour = getHour();
             minute = getMinute();
@@ -120,7 +120,7 @@ public class Main {
             return month;
         }
         
-        private static int getDay2(int m){
+        private static int getDay(int m){
             if(m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12 ){
                do{
                    System.out.println("Please Enter The Day Of Your Task's Due Date\t(1-31)");
@@ -180,23 +180,7 @@ public class Main {
       
         
        
-        private static int getDay(){
-            do {
-                System.out.println("Please Enter The Day Of Your Task's Due Date\t" + ("DD"));  //prompt user for day
-                line = kb.nextLine();
-                
-                try {   //promt the user for an integer number
-                    numberFlag = false;
-                    day = Integer.parseInt(line);
-                    badInfoFlag = false;
-                    if(day < 1 || day > 31)
-                        badInfoFlag = true;
-                } catch (NumberFormatException e) {
-                    numberFlag = true;
-                }
-            } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
-            return day;
-        }
+       
         private static int getYear(){
             do {
                 System.out.println("Please Enter The Year Of Your Task's Due Date\t" + ("YYYY"));  //prompt user for year
