@@ -1,19 +1,25 @@
 /*
-The Priority Management Assistant (PMA) will be a desktop application for
-windows and linux that will prioritize the everyday life of an individual.
-The user must be able to input their class assignments such as homeworks,
-projects, labs, upcoming exams and quizzes, meetings, classes, etc. The program
-needs to be well organized and have good structure for a graphical user
-interface to make it as simple as possible for the user to create, remove, or
-edit an upcoming assignment. This graphical user interface must provide
-clickable buttons for certain features such as adding, removing, and saving an
-assignment. As the program is running, there needs to be a list of all
-assignments with deadlines for some set interval of time. The program needs
-to be able to update itself every time the user adds, removes, or edits their
-assignments. There also needs to be a way to list the assignments in order of
-importance according to the user’s specification when he/she submits the
-assignment. There will be a feature that the user can configure that will
-enable screen pop-ups as reminders for those assignments.
+ * The Priority Management Assistant (PMA):
+ * currently allows the user to make an assignment and sucessfully save it to
+ * the file. We have made many changes to the program to ensure that the program
+ * at it's current state, won't break with invalid input.
+ *
+ *NEXT IMPROVEMENTS:
+ *get rid of the additional pop-up at the beginning***FIX LATER
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * Improvements can be made to inform the user about invalid input that they 
+ * may provide to the program.
  */
 
 //Kyle Zeller & Andrew Braunagel
@@ -24,11 +30,11 @@ package prioritymanagementassistant;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 
 /**
  * @author Kyle Z
@@ -49,6 +55,7 @@ public class Main {
         static boolean numberFlag = true; //set default value here
         static boolean badInfoFlag = true;    //set default value here
         
+        static LocalDateTime timePoint = LocalDateTime.now();   // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
         static Scanner kb = new Scanner(System.in);
         static ArrayList<String> list = new ArrayList<>();
         static FileOutputStream saveFile;
@@ -56,6 +63,7 @@ public class Main {
         static PrintWriter writer;
     
     public static void main(String[] args) {
+        
         System.out.println("Welcome I am your Priority Management Assistant");
         do {
             do {
@@ -66,13 +74,13 @@ public class Main {
             if(mkTask.equalsIgnoreCase("Y")){
                 String build;
                 task = getTask();
+                year = getYear();
                 month = getMonth();
                 day = getDay();
-                year = getYear();
                 hour = getHour();
                 minute = getMinute();
                 priority = getPriority();
-                build = task + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority + "\n";
+                build = task + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
                 list.add(build);
             }
             
@@ -98,9 +106,10 @@ public class Main {
                     badInfoFlag = false;
                     writer = new PrintWriter(line, "UTF-8");
 
-                    // save the file
+                    // write to the file
                     for(String content : list){
                         writer.print(content);
+                        writer.println();
                     }
                     
                     // Close the file.
@@ -116,7 +125,7 @@ public class Main {
             do {
                 System.out.println("Please Enter The Title Of Your Task");  //prompt user for task
                 line = kb.nextLine();
-            } while (line == null); //prompt the user for no input
+            } while (line == null || line.contains("---")); //prompt the user for no input
             return line;
         }
         
@@ -125,11 +134,15 @@ public class Main {
                 System.out.println("Please Enter The Month Of Your Task's Due Date\t" + ("MM"));  //prompt user for month
                 line = kb.nextLine();
                 
+                if(line.startsWith("0")){   //this will prevent a parsing error from string to int
+                    line = line.replaceFirst("0", "");
+                }
+                
                 try {   //promt the user for an integer number
                     numberFlag = false;
                     month = Integer.parseInt(line);
                     badInfoFlag = false;
-                    if(month < 1 || month > 12)
+                    if(month < 1 || month > 12 || (year == timePoint.getYear() && month < timePoint.getMonthValue()))
                         badInfoFlag = true;
                 } catch (NumberFormatException e) {
                     numberFlag = true;
@@ -143,11 +156,15 @@ public class Main {
                 System.out.println("Please Enter The Day Of Your Task's Due Date\t" + ("DD"));  //prompt user for day
                 line = kb.nextLine();
                 
+                if(line.startsWith("0")){   //this will prevent a parsing error from string to int
+                    line = line.replaceFirst("0", "");
+                }
+                
                 try {   //promt the user for an integer number
                     numberFlag = false;
                     day = Integer.parseInt(line);
                     badInfoFlag = false;
-                    if(day < 1 || day > 31)
+                    if(day < 1 || day > 31 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth()))
                         badInfoFlag = true;
                 } catch (NumberFormatException e) {
                     numberFlag = true;
@@ -165,7 +182,7 @@ public class Main {
                     numberFlag = false;
                     year = Integer.parseInt(line);
                     badInfoFlag = false;
-                    if(year < 2016)
+                    if(year < timePoint.getYear())
                         badInfoFlag = true;
                 } catch (NumberFormatException e) {
                     numberFlag = true;
@@ -179,11 +196,15 @@ public class Main {
                 System.out.println("Please Enter The Hour Of Your Task's Due Date\t" + ("hh"));  //prompt user for hour
                 line = kb.nextLine();
                 
+                if(line.startsWith("0")){   //this will prevent a parsing error from string to int
+                    line = line.replaceFirst("0", "");
+                }
+                
                 try {   //promt the user for an integer number
                     numberFlag = false;
                     hour = Integer.parseInt(line);
                     badInfoFlag = false;
-                    if(hour < 1 || hour > 24)
+                    if(hour < 1 || hour > 24 || (day == timePoint.getDayOfMonth() && hour < timePoint.getHour()))
                         badInfoFlag = true;
                 } catch (NumberFormatException e) {
                     numberFlag = true;
@@ -197,11 +218,15 @@ public class Main {
                 System.out.println("Please Enter The Minute Of Your Task's Due Date\t" + ("mm"));  //prompt user for minute
                 line = kb.nextLine();
                 
+                if(line.startsWith("0")){   //this will prevent a parsing error from string to int
+                    line = line.replaceFirst("0", "");
+                }
+                
                 try {   //promt the user for an integer number
                     numberFlag = false;
                     minute = Integer.parseInt(line);
                     badInfoFlag = false;
-                    if(minute < 0 || minute > 59)
+                    if(minute < 0 || minute > 59 || (hour == timePoint.getHour() && minute < timePoint.getMinute()))
                         badInfoFlag = true;
                 } catch (NumberFormatException e) {
                     numberFlag = true;
