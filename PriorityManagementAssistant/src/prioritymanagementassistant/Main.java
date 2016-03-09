@@ -16,7 +16,7 @@ assignment. There will be a feature that the user can configure that will
 enable screen pop-ups as reminders for those assignments.
  */
 
-
+//Kyle Zeller & Andrew Braunagel
 
 
 
@@ -25,17 +25,21 @@ package prioritymanagementassistant;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 
 /**
  * @author Kyle Z
  */
 public class Main {
-        static Scanner kb = new Scanner(System.in);
-    
+        
+        static String mkTask;
+        static String svTask = "N"; //set default value for when the user leaves the list empty
         static String line;
-
         static String task;
+        static String filePath;
         static int month;
         static int day;
         static int year;
@@ -44,51 +48,66 @@ public class Main {
         static int priority;
         static boolean numberFlag = true; //set default value here
         static boolean badInfoFlag = true;    //set default value here
-        private static String filePath;
         
+        static Scanner kb = new Scanner(System.in);
         static ArrayList<String> list = new ArrayList<>();
-        
-        static File file;
-        
-        
+        static FileOutputStream saveFile;
+        static ObjectOutputStream save;
+        static PrintWriter writer;
     
-        
-  
     public static void main(String[] args) {
-        
         System.out.println("Welcome I am your Priority Management Assistant");
-        System.out.println("Would you like to make an assignment?\t" + ("Y / N"));
-        String choice = kb.nextLine();
-        
-        if(choice.equalsIgnoreCase("Y")){
-            String build;
-            task = getTask();
-            month = getMonth();
-            day = getDay();
-            year = getYear();
-            hour = getHour();
-            minute = getMinute();
-            priority = getPriority();
-            build = task + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
-            list.add(build);
-            setPath();  //path is set & file has been created
-        }
-        //MORE WILL GO HERE
+        do {
+            do {
+                System.out.println("Would you like to make an assignment?\t" + ("Y / N"));
+                mkTask = kb.nextLine();
+            } while (!mkTask.equalsIgnoreCase("Y") && !mkTask.equalsIgnoreCase("N"));
+            
+            if(mkTask.equalsIgnoreCase("Y")){
+                String build;
+                task = getTask();
+                month = getMonth();
+                day = getDay();
+                year = getYear();
+                hour = getHour();
+                minute = getMinute();
+                priority = getPriority();
+                build = task + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority + "\n";
+                list.add(build);
+            }
+            
+            if(list != null){
+                do {
+                    System.out.println("Are you done making assignments?\t" + ("Y / N"));
+                    svTask = kb.nextLine();
+                } while (!svTask.equalsIgnoreCase("Y") && !svTask.equalsIgnoreCase("N"));
+                
+                if(svTask.equalsIgnoreCase("Y")){
+                    setPath();  //path is set & file has been created
+                }
+            }
+        } while (svTask.equalsIgnoreCase("N"));
+        //MORE WILL GO HERE, IN THE NEXT REQUIREMENTS
     }
     
         private static void setPath(){  //get the path to save the file from the user
             do {
                 System.out.println("Specify Path Name\t" + "\"C:\\\\person\\\\Desktop\\\\test\\\\newFile.txt\"");
                 line = kb.nextLine();
-                file = new File(line);
-		try {
-                        badInfoFlag = false;
-			//create a new file if it doesn't exist already
-			file.createNewFile();
-	
-		} catch (IOException e) {
-			badInfoFlag = true;
-		}
+                try {  // Catch errors in I/O if necessary.
+                    badInfoFlag = false;
+                    writer = new PrintWriter(line, "UTF-8");
+
+                    // save the file
+                    for(String content : list){
+                        writer.print(content);
+                    }
+                    
+                    // Close the file.
+                    writer.close();
+                } catch(IOException e){
+                    badInfoFlag = true;
+                }
             } while (line == null || badInfoFlag);
             filePath = line;
         }
@@ -100,6 +119,7 @@ public class Main {
             } while (line == null); //prompt the user for no input
             return line;
         }
+        
         private static int getMonth(){
             do {
                 System.out.println("Please Enter The Month Of Your Task's Due Date\t" + ("MM"));  //prompt user for month
@@ -117,6 +137,7 @@ public class Main {
             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
             return month;
         }
+        
         private static int getDay(){
             do {
                 System.out.println("Please Enter The Day Of Your Task's Due Date\t" + ("DD"));  //prompt user for day
@@ -134,6 +155,7 @@ public class Main {
             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
             return day;
         }
+        
         private static int getYear(){
             do {
                 System.out.println("Please Enter The Year Of Your Task's Due Date\t" + ("YYYY"));  //prompt user for year
@@ -151,6 +173,7 @@ public class Main {
             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
             return year;
         }
+        
         private static int getHour(){
             do {
                 System.out.println("Please Enter The Hour Of Your Task's Due Date\t" + ("hh"));  //prompt user for hour
@@ -168,6 +191,7 @@ public class Main {
             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
             return hour;
         }
+        
         private static int getMinute(){
             do {
                 System.out.println("Please Enter The Minute Of Your Task's Due Date\t" + ("mm"));  //prompt user for minute
@@ -185,6 +209,7 @@ public class Main {
             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
             return minute;
         }
+        
         private static int getPriority(){
             do {
                 System.out.println("Please Enter The Priority Of Your Task\t" + ("Between 1 & 3"));  //prompt user for priority
