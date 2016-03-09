@@ -44,8 +44,13 @@ public class Main {
         static int priority;
         static boolean numberFlag = true; //set default value here
         static boolean badInfoFlag = true;    //set default value here
+        private static String filePath;
         
         static ArrayList<String> list = new ArrayList<>();
+        
+        static File file;
+        
+        
     
         
   
@@ -66,13 +71,26 @@ public class Main {
             priority = getPriority();
             build = task + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
             list.add(build);
+            setPath();  //path is set & file has been created
         }
-        
-        
+        //MORE WILL GO HERE
     }
     
-        private static void setPath(String s){  //get the path to save the file from the user
-            
+        private static void setPath(){  //get the path to save the file from the user
+            do {
+                System.out.println("Specify Path Name\t" + "\"C:\\\\person\\\\Desktop\\\\test\\\\newFile.txt\"");
+                line = kb.nextLine();
+                file = new File(line);
+		try {
+                        badInfoFlag = false;
+			//create a new file if it doesn't exist already
+			file.createNewFile();
+	
+		} catch (IOException e) {
+			badInfoFlag = true;
+		}
+            } while (line == null || badInfoFlag);
+            filePath = line;
         }
         
         private static String getTask(){
@@ -189,5 +207,3 @@ public class Main {
             return priority;
         }
     }
-    
-
