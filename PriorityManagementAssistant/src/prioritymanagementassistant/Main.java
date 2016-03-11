@@ -318,7 +318,7 @@ public class Main {
         
         private static int getMinute(String n){
             do {
-                System.out.println("What minute is " + n + " due? (1-60)");  //prompt user for minute
+                System.out.println("What minute is " + n + " due? (0-59)");  //prompt user for minute
                 line = kb.nextLine();
                 
                 if(line.startsWith("0")){   //this will prevent a parsing error from string to int
