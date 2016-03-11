@@ -65,25 +65,25 @@ public class Main {
     public static void main(String[] args) {
         
         System.out.println("Welcome I am your Priority Management Assistant");
-<<<<<<< HEAD
+
         System.out.println("Would you like to make an assignment?\t" + ("Y / N"));
         String choice = kb.nextLine();
         
         if(choice.equalsIgnoreCase("Y")){
             String build;
             task = getTask();
-            month = getMonth();
-            day = getDay(month);
-            year = getYear();
-            hour = getHour();
-            minute = getMinute();
-            priority = getPriority();
+            month = getMonth(task);
+            day = getDay(month, task);
+            year = getYear(task);
+            hour = getHour(task);
+            minute = getMinute(task);
+            priority = getPriority(task);
             build = task + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
             list.add(build);
             setPath();  //path is set & file has been created
         }
         //MORE WILL GO HERE
-=======
+
         do {
             do {
                 System.out.println("Would you like to make an assignment?\t" + ("Y / N"));
@@ -93,12 +93,12 @@ public class Main {
             if(mkTask.equalsIgnoreCase("Y")){
                 String build;
                 task = getTask();
-                year = getYear();
-                month = getMonth();
-                day = getDay();
-                hour = getHour();
-                minute = getMinute();
-                priority = getPriority();
+                year = getYear(task);
+                month = getMonth(task);
+                day = getDay(task);
+                hour = getHour(task);
+                minute = getMinute(task);
+                priority = getPriority(task);
                 build = task + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
                 list.add(build);
             }
@@ -115,7 +115,7 @@ public class Main {
             }
         } while (svTask.equalsIgnoreCase("N"));
         //MORE WILL GO HERE, IN THE NEXT REQUIREMENTS
->>>>>>> 9e388ccf07750ba5e05f3e91f82995ebf2e77f57
+
     }
     
         private static void setPath(){  //get the path to save the file from the user
@@ -143,15 +143,15 @@ public class Main {
         
         private static String getTask(){
             do {
-                System.out.println("Please Enter The Title Of Your Task");  //prompt user for task
+                System.out.println("Please enter a name for your Assignment:");  //prompt user for task
                 line = kb.nextLine();
             } while (line == null || line.contains("---")); //prompt the user for no input
             return line;
         }
         
-        private static int getMonth(){
+        private static int getMonth(String n){
             do {
-                System.out.println("Please Enter The Month Of Your Task's Due Date\t(1-12)");  //prompt user for month
+                System.out.println("What month is " + n + " due? (1-12)");  //prompt user for month
                 line = kb.nextLine();
                 
                 if(line.startsWith("0")){   //this will prevent a parsing error from string to int
@@ -162,15 +162,15 @@ public class Main {
                     numberFlag = false;
                     month = Integer.parseInt(line);
                     badInfoFlag = false;
-<<<<<<< HEAD
+
                     if(month < 1 || month > 12){
                        System.out.println(month + " is not a valid Month, please enter a number between 1 and 12.");
                        badInfoFlag = true;
                     }
-=======
+
                     if(month < 1 || month > 12 || (year == timePoint.getYear() && month < timePoint.getMonthValue()))
                         badInfoFlag = true;
->>>>>>> 9e388ccf07750ba5e05f3e91f82995ebf2e77f57
+
                 } catch (NumberFormatException e) {
                     numberFlag = true;
                 }
@@ -178,11 +178,11 @@ public class Main {
             return month;
         }
         
-<<<<<<< HEAD
-        private static int getDay(int m){
+
+        private static int getDay(int m, String n){
             if(m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12 ){
                do{
-                   System.out.println("Please Enter The Day Of Your Task's Due Date\t(1-31)");
+                   System.out.println("What day is " + n + " due? (1-31)");
                    line = kb.nextLine();
                    try {   //promt the user for an integer number
                         numberFlag = false;
@@ -199,7 +199,7 @@ public class Main {
                    return day;
             }else if(m == 4 || m == 6 || m == 9 || m == 11){
                do{
-                   System.out.println("Please Enter The Day Of Your Task's Due Date\t(1-30)");
+                   System.out.println("What day is " + n + " due? (1-30)");
                    line = kb.nextLine();
                    try {   //promt the user for an integer number
                         numberFlag = false;
@@ -216,7 +216,7 @@ public class Main {
                    return day;                 
             }else if(month == 2){
                do{
-                   System.out.println("Please Enter The Day Of Your Task's Due Date\t(1-31)");
+                   System.out.println("what day is " + n + " due? (1-28)");
                    line = kb.nextLine();
                    try {   //promt the user for an integer number
                         numberFlag = false;
@@ -240,10 +240,10 @@ public class Main {
         
        
        
-=======
-        private static int getDay(){
+
+        private static int getDay(String n){
             do {
-                System.out.println("Please Enter The Day Of Your Task's Due Date\t" + ("DD"));  //prompt user for day
+                System.out.println("What day is " + n + " due?");  //prompt user for day
                 line = kb.nextLine();
                 
                 if(line.startsWith("0")){   //this will prevent a parsing error from string to int
@@ -263,22 +263,22 @@ public class Main {
             return day;
         }
         
->>>>>>> 9e388ccf07750ba5e05f3e91f82995ebf2e77f57
-        private static int getYear(){
+
+        private static int getYear(String n){
             do {
-                System.out.println("Please Enter The Year Of Your Task's Due Date\t" + ("YYYY"));  //prompt user for year
+                System.out.println("What year is " + n + " due?");  //prompt user for year
                 line = kb.nextLine();
                 
                 try {   //promt the user for an integer number
                     numberFlag = false;
                     year = Integer.parseInt(line);
                     badInfoFlag = false;
-<<<<<<< HEAD
+
                     if(year < 2016){
                         System.out.println(year + " is not a valid Year, please enter a number greater than 2015.");
-=======
+
                     if(year < timePoint.getYear())
->>>>>>> 9e388ccf07750ba5e05f3e91f82995ebf2e77f57
+
                         badInfoFlag = true;
                     }
                 } catch (NumberFormatException e) {
@@ -288,9 +288,9 @@ public class Main {
             return year;
         }
         
-        private static int getHour(){
+        private static int getHour(String n){
             do {
-                System.out.println("Please Enter The Hour Of Your Task's Due Date\t" + ("hh"));  //prompt user for hour
+                System.out.println("What hour is " + n + " due? (1-24)");  //prompt user for hour
                 line = kb.nextLine();
                 
                 if(line.startsWith("0")){   //this will prevent a parsing error from string to int
@@ -301,12 +301,12 @@ public class Main {
                     numberFlag = false;
                     hour = Integer.parseInt(line);
                     badInfoFlag = false;
-<<<<<<< HEAD
+
                     if(hour < 1 || hour > 24){
                         System.out.println(hour + " is not a valid Hour, please enter a number between 1 and 24.");
-=======
+
                     if(hour < 1 || hour > 24 || (day == timePoint.getDayOfMonth() && hour < timePoint.getHour()))
->>>>>>> 9e388ccf07750ba5e05f3e91f82995ebf2e77f57
+
                         badInfoFlag = true;
                     }
                 } catch (NumberFormatException e) {
@@ -316,9 +316,9 @@ public class Main {
             return hour;
         }
         
-        private static int getMinute(){
+        private static int getMinute(String n){
             do {
-                System.out.println("Please Enter The Minute Of Your Task's Due Date\t" + ("mm"));  //prompt user for minute
+                System.out.println("What minute is " + n + " due? (1-60)");  //prompt user for minute
                 line = kb.nextLine();
                 
                 if(line.startsWith("0")){   //this will prevent a parsing error from string to int
@@ -329,12 +329,12 @@ public class Main {
                     numberFlag = false;
                     minute = Integer.parseInt(line);
                     badInfoFlag = false;
-<<<<<<< HEAD
+
                     if(minute < 0 || minute > 59){
                         System.out.println(minute + " is not a valid Minute, please enter a number between 1 and 60.");
-=======
+
                     if(minute < 0 || minute > 59 || (hour == timePoint.getHour() && minute < timePoint.getMinute()))
->>>>>>> 9e388ccf07750ba5e05f3e91f82995ebf2e77f57
+
                         badInfoFlag = true;
                     }
                 } catch (NumberFormatException e) {
@@ -344,9 +344,9 @@ public class Main {
             return minute;
         }
         
-        private static int getPriority(){
+        private static int getPriority(String n){
             do {
-                System.out.println("Please Enter The Priority Of Your Task\t" + ("Between 1 & 3"));  //prompt user for priority
+                System.out.println("What is the priority of " + n + " (1-3)");  //prompt user for priority
                 line = kb.nextLine();
                 if(line == null){   //assign a default priority value for no input
                         priority = 1;
