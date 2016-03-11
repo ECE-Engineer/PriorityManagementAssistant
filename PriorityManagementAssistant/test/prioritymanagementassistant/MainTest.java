@@ -8,13 +8,13 @@
  *
  *
  *
- *
- *
- *
- *
- *
- *
- *
+ * The methods for the Main.java class are private except for the main,
+ * so I will be running the test program by the main method everytime.
+ * I am also doing this because all the time variables are dependent on the
+ * higher up time variables. (EX) getDay() needs to see the month you've
+ * selected because the amount of days in each month vary. All the "TIME"
+ * based methods except for the getYear() method would be affected in a
+ * similar fashion.
  *
  *
  */
@@ -27,7 +27,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
@@ -63,6 +63,158 @@ public class MainTest {
     @Rule
     public ExpectedException exc = ExpectedException.none();
 
+    @Test
+    public void testSetPath(){
+        String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\no.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\YES.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\n",       //this will cause the program to ask again
+                             "C:\\Users\\Kyle Z\\Desktop\\MaYbE.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\rirvuitibu.txt\n",
+                             "C:\\Users\\Kyle Z\n",       //this will cause the program to ask again
+                             "C:\\Users\\Kyle Z\\Foo\n",       //this will cause the program to ask again
+                             "C:\\Users\\Kyle Z\\Desktop\\Bar WHAT.txt\n",
+                             "C:\\Users\\Kyle Z\\FU_BAR\n",};       //this will cause the program to ask again
+        ByteArrayInputStream input;
+        for(String elements : testInfo){
+            input = new ByteArrayInputStream(elements.getBytes());
+            System.setIn(input);
+            System.setIn(System.in);
+        }
+    }
+    
+    @Test
+    public void testGetTask(){
+        String[] testInfo = {"blah\n",
+                             "hw\n",
+                             "MEETING\n",
+                             "Foo Bar\n",
+                             "HeLlOwOrLd\n",
+                             "     \n",
+                             "---\n",       //this will cause the program to ask again
+                             "6879786b5986v475\n",
+                             "*(^&RV HGHUYF\n",
+                             "%E&*$V&*^%V(**B)\n",};
+        ByteArrayInputStream input;
+        for(String elements : testInfo){
+            input = new ByteArrayInputStream(elements.getBytes());
+            System.setIn(input);
+            System.setIn(System.in);
+        }
+    }
+    
+    @Test
+    public void testGetYear(String n){
+        String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+        ByteArrayInputStream input;
+        for(String elements : testInfo){
+            input = new ByteArrayInputStream(elements.getBytes());
+            System.setIn(input);
+            System.setIn(System.in);
+        }
+    }
+    
+    @Test
+    public void testGetMonth(){
+        String[] testInfo = {"12\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+        ByteArrayInputStream input;
+        for(String elements : testInfo){
+            input = new ByteArrayInputStream(elements.getBytes());
+            System.setIn(input);
+            System.setIn(System.in);
+        }
+    }
+    
+    @Test
+    public void testGetDay(int m, String n){
+        String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+        ByteArrayInputStream input;
+        for(String elements : testInfo){
+            input = new ByteArrayInputStream(elements.getBytes());
+            System.setIn(input);
+            System.setIn(System.in);
+        }
+    }
+    
+    @Test
+    public void testGetHour(String n){
+        String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+        ByteArrayInputStream input;
+        for(String elements : testInfo){
+            input = new ByteArrayInputStream(elements.getBytes());
+            System.setIn(input);
+            System.setIn(System.in);
+        }
+    }
+    @Test
+    public void testGetMinute(String n){
+        String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+        ByteArrayInputStream input;
+        for(String elements : testInfo){
+            input = new ByteArrayInputStream(elements.getBytes());
+            System.setIn(input);
+            System.setIn(System.in);
+        }
+    }
+    
+    @Test
+    public void testGetPriority(String n){
+        String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
+                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+        ByteArrayInputStream input;
+        for(String elements : testInfo){
+            input = new ByteArrayInputStream(elements.getBytes());
+            System.setIn(input);
+            System.setIn(System.in);
+        }
+    }
+    
     /**
      * Test of main method, of class Main.
      */
