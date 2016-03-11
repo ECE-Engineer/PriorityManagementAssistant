@@ -275,7 +275,7 @@ public class Main {
                     badInfoFlag = false;
 
                     if(year < 2016){
-                        System.out.println(year + " is not a valid Year, please enter a number greater than 2015.");
+                        System.out.println(year + " is not a valid Year, please enter a number greater than " + (timePoint.getYear()- 1));
 
                     if(year < timePoint.getYear())
 
