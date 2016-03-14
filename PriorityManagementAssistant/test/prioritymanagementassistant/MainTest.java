@@ -103,7 +103,7 @@ public class MainTest {
     }
     
     @Test
-    public void testGetYear(String n){
+    public void testGetYear(){
         String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
                              "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
                              "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
@@ -141,7 +141,7 @@ public class MainTest {
     }
     
     @Test
-    public void testGetDay(int m, String n){
+    public void testGetDay(){
         String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
                              "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
                              "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
@@ -160,7 +160,7 @@ public class MainTest {
     }
     
     @Test
-    public void testGetHour(String n){
+    public void testGetHour(){
         String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
                              "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
                              "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
@@ -178,7 +178,7 @@ public class MainTest {
         }
     }
     @Test
-    public void testGetMinute(String n){
+    public void testGetMinute(){
         String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
                              "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
                              "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
@@ -197,7 +197,7 @@ public class MainTest {
     }
     
     @Test
-    public void testGetPriority(String n){
+    public void testGetPriority(){
         String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
                              "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
                              "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
