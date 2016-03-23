@@ -28,8 +28,24 @@ public class Assignment {
     private static int month, day, year, hour, minute, priority;
     private static boolean numberFlag = true, badInfoFlag = true;    //set default value here
 
-    private static LocalDateTime timePoint = LocalDateTime.now();   // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
+    public static LocalDateTime timePoint = LocalDateTime.now();   // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
     private static Scanner kb = new Scanner(System.in);
+    
+    public static String setDefaultPath(){
+        do {
+            System.out.println("Name Your List File???");
+            System.out.println("EX :\t" + "\"newFile\"");
+            line = kb.nextLine();
+
+            try {  // Catch errors in I/O if necessary.
+                badInfoFlag = false;
+                PrintWriter writer = new PrintWriter(("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\" + line + ".txt"), "UTF-8");
+            } catch(IOException e){
+                badInfoFlag = true;
+            }
+        } while (line == null || badInfoFlag);
+        return "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\" + line + ".txt";
+    }
     
     public static String getPath(){  //get prefered file path
         do {
@@ -74,9 +90,9 @@ public class Assignment {
                    badInfoFlag = true;
                 }
 
-                if(month < 1 || month > 12 || (year == timePoint.getYear() && month < timePoint.getMonthValue()))
+                if(month < 1 || month > 12 || (year == timePoint.getYear() && month < timePoint.getMonthValue())){
                     badInfoFlag = true;
-
+                }
             } catch (NumberFormatException e) {
                 numberFlag = true;
             }
@@ -94,7 +110,7 @@ public class Assignment {
                     numberFlag = false;
                     day = Integer.parseInt(line);
                     badInfoFlag = false;
-                    if(day < 1 || day > 31){
+                    if(day < 1 || day > 31 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
                         System.out.println(day + " is not a valid Day, please enter a number between 1 and 31.");
                         badInfoFlag = true;
                     }
@@ -110,7 +126,7 @@ public class Assignment {
                     numberFlag = false;
                     day = Integer.parseInt(line);
                     badInfoFlag = false;
-                    if(day < 1 || day > 30){
+                    if(day < 1 || day > 30 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
                         System.out.println(day + " is not a valid Day, please enter a number between 1 and 30.");
                         badInfoFlag = true;
                     }
@@ -126,7 +142,7 @@ public class Assignment {
                     numberFlag = false;
                     day = Integer.parseInt(line);
                     badInfoFlag = false;
-                    if(day < 1 || day > 28){
+                    if(day < 1 || day > 28 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
                         System.out.println(day + " is not a valid Day, please enter a number between 1 and 28.");
                         badInfoFlag = true;
                     }
@@ -150,8 +166,8 @@ public class Assignment {
 
                 if(year < 2016){
                     System.out.println(year + " is not a valid Year, please enter a number greater than " + (timePoint.getYear()-1) + ".");
-
-                if(year < timePoint.getYear())
+                }
+                if(year < timePoint.getYear()){
 
                     badInfoFlag = true;
                 }
@@ -178,8 +194,8 @@ public class Assignment {
 
                 if(hour < 1 || hour > 24){
                     System.out.println(hour + " is not a valid Hour, please enter a number between 1 and 24.");
-
-                if(hour < 1 || hour > 24 || (day == timePoint.getDayOfMonth() && hour < timePoint.getHour()))
+                }
+                if(hour < 1 || hour > 24 || (day == timePoint.getDayOfMonth() && hour < timePoint.getHour())){
 
                     badInfoFlag = true;
                 }
@@ -206,8 +222,8 @@ public class Assignment {
 
                 if(minute < 0 || minute > 59){
                     System.out.println(minute + " is not a valid Minute, please enter a number between 1 and 60.");
-
-                if(minute < 0 || minute > 59 || (hour == timePoint.getHour() && minute < timePoint.getMinute()))
+                }
+                if(minute < 0 || minute > 59 || (hour == timePoint.getHour() && minute < timePoint.getMinute())){
 
                     badInfoFlag = true;
                 }

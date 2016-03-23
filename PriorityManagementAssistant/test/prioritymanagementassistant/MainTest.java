@@ -73,7 +73,7 @@ public class MainTest {
                              "C:\\Users\\Kyle Z\n",       //this will cause the program to ask again
                              "C:\\Users\\Kyle Z\\Foo\n",       //this will cause the program to ask again
                              "C:\\Users\\Kyle Z\\Desktop\\Bar WHAT.txt\n",
-                             "C:\\Users\\Kyle Z\\FU_BAR\n",};       //this will cause the program to ask again
+                             "C:\\Users\\Kyle Z\\FU_BAR\n"};       //this will cause the program to ask again
         ByteArrayInputStream input;
         for(String elements : testInfo){
             input = new ByteArrayInputStream(elements.getBytes());
@@ -93,7 +93,7 @@ public class MainTest {
                              "---\n",       //this will cause the program to ask again
                              "6879786b5986v475\n",
                              "*(^&RV HGHUYF\n",
-                             "%E&*$V&*^%V(**B)\n",};
+                             "%E&*$V&*^%V(**B)\n"};
         ByteArrayInputStream input;
         for(String elements : testInfo){
             input = new ByteArrayInputStream(elements.getBytes());
@@ -104,15 +104,15 @@ public class MainTest {
     
     @Test
     public void testGetYear(){
-        String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+        String[] testInfo = {"1253\n",
+                             " \n",
+                             "3540\n",
+                             "11\n",
+                             "2016\n",
+                             "7\n",
+                             "2017\n",
+                             "4\n",
+                             "3\n"};
         ByteArrayInputStream input;
         for(String elements : testInfo){
             input = new ByteArrayInputStream(elements.getBytes());
@@ -124,14 +124,14 @@ public class MainTest {
     @Test
     public void testGetMonth(){
         String[] testInfo = {"12\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+                             " \n",
+                             "324\n",
+                             "11\n",
+                             "3\n",
+                             "7\n",
+                             "gdf\n",
+                             "4\n",
+                             "3\n"};
         ByteArrayInputStream input;
         for(String elements : testInfo){
             input = new ByteArrayInputStream(elements.getBytes());
@@ -142,15 +142,15 @@ public class MainTest {
     
     @Test
     public void testGetDay(){
-        String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+        String[] testInfo = {"12\n",
+                             " \n",
+                             "30\n",
+                             "11\n",
+                             "3\n",
+                             "7\n",
+                             "31\n",
+                             "4\n",
+                             "3\n"};
         ByteArrayInputStream input;
         for(String elements : testInfo){
             input = new ByteArrayInputStream(elements.getBytes());
@@ -161,15 +161,15 @@ public class MainTest {
     
     @Test
     public void testGetHour(){
-        String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+        String[] testInfo = {"12\n",
+                             " \n",
+                             "30\n",
+                             "11\n",
+                             "3\n",
+                             "7\n",
+                             "31\n",
+                             "24\n",
+                             "23\n"};
         ByteArrayInputStream input;
         for(String elements : testInfo){
             input = new ByteArrayInputStream(elements.getBytes());
@@ -179,15 +179,15 @@ public class MainTest {
     }
     @Test
     public void testGetMinute(){
-        String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
+        String[] testInfo = {"56\n",
+                             " \n",
+                             "30\n",
+                             "11\n",
+                             "300\n",
+                             "7\n",
+                             "31\n",
+                             "4\n",
+                             "3\n"};
         ByteArrayInputStream input;
         for(String elements : testInfo){
             input = new ByteArrayInputStream(elements.getBytes());

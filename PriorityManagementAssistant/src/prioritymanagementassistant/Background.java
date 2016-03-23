@@ -13,10 +13,6 @@
  * 
  * 
  * 
- * 
- * 
- * 
- * 
  */
 package prioritymanagementassistant;
 
@@ -30,12 +26,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import static prioritymanagementassistant.Assignment.timePoint;
+import static prioritymanagementassistant.Assignment.getTask;
 
 public class Background {
-    
     private static ArrayList<String> list = new ArrayList<>();
     private static PrintWriter backgroundFile, userFile;
-    private static String filePath;
+    private static String filePath, assignment;
+    private static int track;
+    
+    public static String getDestinationFolder(){
+        int count = 0;
+        for (int i = 0; i < filePath.length(); i++) {
+            if((filePath.substring(i, i+1)).equalsIgnoreCase("\\"))
+                count++;
+        }
+        
+        return (filePath.substring((filePath.lastIndexOf("\\", filePath.lastIndexOf("\\", filePath.length())-1))+1, filePath.lastIndexOf("\\", filePath.length())));
+    }
     
     public static void writeFile(String path) throws FileNotFoundException, UnsupportedEncodingException{//line ZERO must contain the path of the list file
         //open the text file
@@ -93,12 +101,127 @@ public class Background {
         list.add(build);
     }
     
-    public static boolean isList(){
-        if(list != null)
-            return true;
-        else
-            return false;
+    public static void printList() {
+        //display all tasks
+        for(String content : list){
+            System.out.println(content.substring(0, content.indexOf("---")));
+        }
+    }
+    
+    public static boolean getTask(String s){    //prints all information about a given task
+        //search for the task in the list using the task name
+        boolean taskFound = true;
+        int count = 0;
+        for(String content : list){
+            if(content.substring(0, content.indexOf("---")).equalsIgnoreCase(s)){
+                System.out.println(content.replaceAll("---", "\t"));
+                taskFound = false;
+                break;
+            }
+            count++;
+        }
+        return taskFound;
+    }
+    
+    public static void removeOnLoad(){
+        for(int i = 0; i < list.size(); i++){
+            if(Integer.parseInt(list.get(i).split("---")[3]) < timePoint.getYear()){
+                list.remove(i);
+            } else if(Integer.parseInt(list.get(i).split("---")[1]) < timePoint.getMonthValue()) {
+                list.remove(i);
+            } else if(Integer.parseInt(list.get(i).split("---")[2]) < timePoint.getDayOfMonth()) {
+                list.remove(i);
+            } else if(Integer.parseInt(list.get(i).split("---")[4]) < timePoint.getHour()) {
+                list.remove(i);
+            } else if(Integer.parseInt(list.get(i).split("---")[5]) < timePoint.getMinute()) {
+                list.remove(i);
+            }
+        }
+    }
+    
+    public static boolean removeTask(String s){
+        //search for the task in the list using the task name
+        boolean taskFound = true;
+        int count = 0;
+        for(String content : list){
+            if(content.substring(0, content.indexOf("---")).equalsIgnoreCase(s)){
+                list.remove(count);
+                taskFound = false;
+                break;
+            }
+            count++;
+        }
+        return taskFound;
+    }
+    
+    public static boolean isNull(){
+        return list.isEmpty();
+    }
+    
+    public static void printWholeList() {    //DEBUG :`PRINT ALL CONTENTS OF THE LIST
+        //display all tasks
+        for(String content : list){
+            System.out.println(content);
+        }
+    }
+    
+    public static boolean isAssignmentPresent(String s){
+        //search for the task in the list using the task name
+        boolean taskFound = false;  //assignment not present in list
+        track = 0;
+        for(String content : list){
+            if(content.substring(0, content.indexOf("---")).equalsIgnoreCase(s)){
+                taskFound = true;   //assignment present in list
+                assignment = content;
+                break;
+            }
+            track++;
+        }
+        return taskFound;
+    }
+    
+    public static void setTask(String s){
+        int year, month, day, hour, minute, priority;
+        month = Integer.parseInt(assignment.split("---")[1]);
+        day = Integer.parseInt(assignment.split("---")[2]);
+        year = Integer.parseInt(assignment.split("---")[3]);
+        hour = Integer.parseInt(assignment.split("---")[4]);
+        minute = Integer.parseInt(assignment.split("---")[5]);
+        priority = Integer.parseInt(assignment.split("---")[6]);
+        //adjust the value for assignment
+        assignment = s + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
+        //build the list
+        list.add(assignment);
+    }
+    
+    public static void setTime(int y, int mo, int d, int h, int mi){
+        String name;
+        int priority;
+        name = assignment.split("---")[0];
+        priority = Integer.parseInt(assignment.split("---")[6]);
+        //adjust the value for assignment
+        assignment = name + "---" + mo + "---" + d + "---" + y + "---" + h + "---" + mi + "---" + priority;
+        //build the list
+        list.add(assignment);
+    }
+    
+    public static void setPriority(int p){
+        String name;
+        int year, month, day, hour, minute;
+        name = assignment.split("---")[0];
+        month = Integer.parseInt(assignment.split("---")[1]);
+        day = Integer.parseInt(assignment.split("---")[2]);
+        year = Integer.parseInt(assignment.split("---")[3]);
+        hour = Integer.parseInt(assignment.split("---")[4]);
+        minute = Integer.parseInt(assignment.split("---")[5]);
+        //adjust the value for assignment
+        assignment = name + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + p;
+        //build the list
+        list.add(assignment);
+    }
+    
+    public static void removeElement(){
+        list.remove(track);
     }
     //ADD METHODS TO PARSE THE INFORMATION FOR THE CONTENTS OF AN INDIVIDUAL TASK
 }
-
