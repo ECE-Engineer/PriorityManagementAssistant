@@ -27,6 +27,19 @@
  * The program will allow the user to pick the priority of an assignent by
  * color.
 
+ * REQ 8
+ * The program will automatically order assignments by due date and priority,
+ * before they are added to the list.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * 
  * A NEW STRUCTURE FOR THIS SHOULD BE ADDED TO MAKE INTEGRATION EASIER
  * YOU NEED TO DO THE BASIC STUFF FIRST LIKE TELLING THE USER THE CURRENT
@@ -149,6 +162,7 @@ import static prioritymanagementassistant.Background.removeOnLoad;
 import static prioritymanagementassistant.Background.setTask;
 import static prioritymanagementassistant.Background.setTime;
 import static prioritymanagementassistant.Background.setPriority;
+import static prioritymanagementassistant.Background.sort;
 
 /**
  * @author Kyle Z
@@ -347,6 +361,7 @@ public class Main {
                     
                 }//this is the end to the if statement for if the list is empty
             }//this is the end to the if that runs if the user is done making assignments
+            sort(); //sort the list according to due date and priority just before saving the file
             writeFile(filePath);    //write to & save file
         }while (svTask.equalsIgnoreCase("N"));//this runs wile the user is not done making assignments
         createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
