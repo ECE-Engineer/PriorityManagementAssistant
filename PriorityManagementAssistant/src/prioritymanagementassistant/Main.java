@@ -30,6 +30,20 @@
  * REQ 8
  * The program will automatically order assignments by due date and priority,
  * before they are added to the list.
+
+ * REQ 9
+ * Create pop-ups for the assignments, where as the priority level determines
+ * the color of the pop-up & the close-ness to the dealine determines the size
+ * of the pop-ups. This part of the program must be able to run at different
+ * time intervals than that of the program. This will be the "smart" part of the
+ * program because of what it will require the program to do. In other words the
+ * program will at random times look at the current time and compare that to the
+ * items in the list and at 24, 12, 6, 3, 2, 1 hr notification times. The
+ * program will have to know when to check the list and when to notify the user.
+ * 
+ * 
+ * 
+ * 
  * 
  * 
  * 
@@ -48,19 +62,6 @@
  * 
  * IT'S A SIMPLER GUI THAT CAN BE MADE TO CLOSER APPORXIMATELY THE CHANGES TO
  * BE MADE FOR THE ACTUAL GUI FOR THE PROGRAM.
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
  * 
  * 
  * IMPROVEMENTS WILL BE MADE TO ALLOW THE USER TO CHANGE THE PATH AT ANY TIME.
