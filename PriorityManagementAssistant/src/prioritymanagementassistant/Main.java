@@ -98,11 +98,31 @@
  * order to work. (THIS IS PROBLAMATIC FOR THE INTEGRATION STEP)
  * 
  * 
+ * 
+ *
+ * NEXT ON THE TO DO LIST:
+ * 
+ * 
+ * 
+ * 
+ * create the junit tests for the program that you've written so far.
+ * 
+ * 
  *
  * 
  * 
  * 
  * 
+ * create a folder and place all files for the PMA into it.
+ * find a way to put the bat file in the startup folder, so the program still
+ * works how it should. then have jar[0] create the bat file and place it in the
+ * same folder as everything else. then integrate the GUI and alter the program.
+ * then add the features of the program responsible for the popups & edit the
+ * program that creates and runs the bat file, so the popups occur when they are
+ * supposed to and not when they're not.
+ * 
+ * 
+ *
  * 
  * 
  * ADVANCED:
@@ -186,8 +206,6 @@ public class Main {
                 fLocation = kb.nextLine();
             } while (!fLocation.equalsIgnoreCase("Y") && !fLocation.equalsIgnoreCase("N"));
             
-            
-            
             if(fLocation.equalsIgnoreCase("Y")) {
                 filePath = setDefaultPath();
             } else  filePath = getPath();  //user specifeied path
@@ -215,14 +233,13 @@ public class Main {
         
         
         do {    //this runs for as long as long as the user wants to continue adding assignments
-            do {    //this runs if this is the first assignment being made in this iteration of the program
-                if(create){
-                    System.out.println("Would you like to make an assignment?\t" + ("Y / N"));
-                    mkTask = kb.nextLine();
-                    create = false;
-                } else  mkTask = "Y";
-                
-            } while (!mkTask.equalsIgnoreCase("Y") && !mkTask.equalsIgnoreCase("N"));
+            if(create){
+                do {    //this runs if this is the first assignment being made in this iteration of the program
+                        System.out.println("Would you like to make an assignment?\t" + ("Y / N"));
+                        mkTask = kb.nextLine();
+                } while (!mkTask.equalsIgnoreCase("Y") && !mkTask.equalsIgnoreCase("N"));
+            }
+            create = false;
             
             if(mkTask.equalsIgnoreCase("Y")) {
                 String build;

@@ -231,34 +231,36 @@ public class Background {
     
     public static void sort(){      //bubblesort method b/c the list will likely never be beyond 100 assignments
         for (int i = 0; i < list.size(); i++) {
-            for (int j = 0; j < list.size(); j++) {
+            for (int j = 1; j < list.size(); j++) {
+//                System.out.println(Integer.parseInt(list.get(j).split("---")[3]));    //DEBUG
+//                System.out.println(Integer.parseInt(list.get(j-1).split("---")[3]));  //DEBUG
                 if(Integer.parseInt(list.get(j).split("---")[3]) < Integer.parseInt(list.get(j-1).split("---")[3])) {   //checks year
                     //switch
-                    
+                    switchElements(j);
                 } else if(Integer.parseInt(list.get(j).split("---")[3]) == Integer.parseInt(list.get(j-1).split("---")[3])) {   //checks year
                     //more checks
                     if(Integer.parseInt(list.get(j).split("---")[1]) < Integer.parseInt(list.get(j-1).split("---")[1])) {   //checks month
-                    //switch
+                        //switch
                         switchElements(j);
                     } else if(Integer.parseInt(list.get(j).split("---")[1]) == Integer.parseInt(list.get(j-1).split("---")[1])) {   //checks month
                         //more checks
                         if(Integer.parseInt(list.get(j).split("---")[2]) < Integer.parseInt(list.get(j-1).split("---")[2])) {   //checks day
-                        //switch
+                            //switch
                             switchElements(j);
                         } else if(Integer.parseInt(list.get(j).split("---")[2]) == Integer.parseInt(list.get(j-1).split("---")[2])) {   //checks day
                             //more checks
                             if(Integer.parseInt(list.get(j).split("---")[4]) < Integer.parseInt(list.get(j-1).split("---")[4])) {   //checks hour
-                            //switch
+                                //switch
                                 switchElements(j);
                             } else if(Integer.parseInt(list.get(j).split("---")[4]) == Integer.parseInt(list.get(j-1).split("---")[4])) {   //checks hour
                                 //more checks
                                 if(Integer.parseInt(list.get(j).split("---")[5]) < Integer.parseInt(list.get(j-1).split("---")[5])) {   //checks minute
-                                //switch
+                                    //switch
                                     switchElements(j);
                                 } else if(Integer.parseInt(list.get(j).split("---")[5]) == Integer.parseInt(list.get(j-1).split("---")[5])) {   //checks minute
                                     //more checks
                                     if(Integer.parseInt(list.get(j).split("---")[6]) < Integer.parseInt(list.get(j-1).split("---")[6])) {   //checks priority
-                                    //switch
+                                        //switch
                                         switchElements(j);
                                     }
                                 }

@@ -19,6 +19,7 @@ import java.util.Scanner;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import static prioritymanagementassistant.Background.isAssignmentPresent;
 
 //Kyle Zeller
 
@@ -67,7 +68,7 @@ public class Assignment {
         do {
             System.out.println("Please enter a name for your Assignment:");  //prompt user for task
             line = kb.nextLine();
-        } while (line == null || line.contains("---")); //prompt the user for no input
+        } while (line == null || line.contains("---") || isAssignmentPresent(line)); //prompt the user for no input
         return line;
     }
 
