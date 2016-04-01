@@ -190,11 +190,10 @@ import static prioritymanagementassistant.Background.sort;
  */
 public class Main {
 
-    private static String mkTask, svTask = "N", task, filePath, fLocation,
-                          delFileChoice, delFile, infoChoice, info, editFileChoice,
-                          editInfo, editContent, editSameChoice;
-    private static int month, day, year, hour, minute, priority;
-    private static boolean create = true;
+    private static String name, filePath, fLocation, delFile, info, editInfo,
+                          editContent, editSameChoice, line;
+    private static int month, day, year, hour, minute, priority, numberOption;
+    private static boolean create = true, numberFlag = false;
 
     private static Scanner kb = new Scanner(System.in);
 
@@ -227,161 +226,180 @@ public class Main {
                 filePath = getPath();
         }
         
+        //START-UP//    is EMPTY            FORCE          CASE 1:
+        //if there are NO assignments, the user must make an assignment before getting other options.
         
+        //START-UP//    CONTAINS stuff      OPTIONS        CASE 2:
+        //if there are assignments, the user can use anything above.
         
+        //CONTINUOUSLY//    check EMPTY     FORCE          CASE 3:
+        //if the user at any time makes the list empty, force the user must make an assignment before getting other options.
         
+        //CONTINUOUSLY//    check CONTAINS     OPTIONS     CASE 4:
+        //if the user makes any N number of assignments at any time, they should get all the options even for just 1 assignment.
         
-        
-        do {    //this runs for as long as long as the user wants to continue adding assignments
-            if(create){
-                do {    //this runs if this is the first assignment being made in this iteration of the program
-                        System.out.println("Would you like to make an assignment?\t" + ("Y / N"));
-                        mkTask = kb.nextLine();
-                } while (!mkTask.equalsIgnoreCase("Y") && !mkTask.equalsIgnoreCase("N"));
-            }
-            create = false;
-            
-            if(mkTask.equalsIgnoreCase("Y")) {
-                String build;
-                task = getTask();
-                year = getYear(task);
-                month = getMonth(task);
-                day = getDay(month, task);
-                hour = getHour(task);
-                minute = getMinute(task);
-                priority = getPriority(task);
-                build = task + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
-                buildList(build);
-            }
-            
-            do {    //this runs only after the user has been prompted to create an assignment
-                System.out.println("Are you done making assignments?\t" + ("Y / N"));
-                svTask = kb.nextLine();
-            } while (!svTask.equalsIgnoreCase("Y") && !svTask.equalsIgnoreCase("N"));
+        outerloop:        //break only if the user is done with everything
+        while(true){
+            while(isNull()){    //CASE 1 & 3
+                do{
+                    try{
+                        numberFlag = false;
+                        System.out.println("\nHere Are Your Options\n");
 
-            if(svTask.equalsIgnoreCase("Y")){
-                //printWholeList(); //DEBUG
-                if(!isNull()){    //list is not null
-                    do {    //this runs for as long as the user previously wanted to delete a given assignment
-                        do {    //ask the user if they want to delete any task
-                            System.out.println("Would you like to delete an assignment?\t" + ("Y / N"));
-                            delFileChoice = kb.nextLine();
-                        } while (!delFileChoice.equalsIgnoreCase("Y") && !delFileChoice.equalsIgnoreCase("N"));
-                        if(delFileChoice.equalsIgnoreCase("Y")){
-                            System.out.println("These are all your assignments so far:");
-                            //display all tasks
-                            printList();
-                            
-                            do {    //this runs for as long as the user previously wanted to get more information about an assignment
-                                do {    //prompt the user if they want additional information about a given assignment
-                                    System.out.println("Would you like to know more information about a given assignment?\t" + ("Y / N"));
-                                    infoChoice = kb.nextLine();
-                                } while (!infoChoice.equalsIgnoreCase("Y") && !infoChoice.equalsIgnoreCase("N"));
-                                if(infoChoice.equalsIgnoreCase("Y")){
-                                    //ask the user which assignment
-                                    do {    //the user will be prompted again for invalid input
-                                        System.out.println("Please enter the name of the task you'd like additional information about");
-                                        info = kb.nextLine();
-                                    } while (getTask(info));
-                                }
-                            } while (infoChoice.equalsIgnoreCase("Y"));
-                            do {
-                                //select a file to delete
-                                System.out.println("Please enter the name of the task you'd like to delete");
-                                delFile = kb.nextLine();
-                            } while (removeTask(delFile));  //the user will be prompted again for invalid input
-                        }
-                    } while (delFileChoice.equalsIgnoreCase("Y") && !isNull());
+                        System.out.println("\tOPTIONS:");
+                        System.out.println("------------------------");
+                        System.out.println("[0]\tQUIT");
+                        System.out.println("[1]\tCREATE");
+
+                        System.out.println("\nPLEASE SELECT A NUMBER");
+                        
+                        line = kb.nextLine();
+                        numberOption = Integer.parseInt(line);
+                    }catch(NumberFormatException e){
+                        numberFlag = true;
+                    }
+                } while(line == null || numberFlag || numberOption > 1 || numberOption < 0);
+
+                if(numberOption == 0){
+                    writeFile(filePath);    //write to & save file
+                    createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
+                    break outerloop;
+                }
+                if(numberOption == 1){
+                    //make an assignment
+                    String build;
+                    name = getTask();
+                    year = getYear(name);
+                    month = getMonth(name);
+                    day = getDay(month, name);
+                    hour = getHour(name);
+                    minute = getMinute(name);
+                    priority = getPriority(name);
+                    build = name + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
+                    buildList(build);
                     
+                    sort(); //sort the list according to due date and priority just before saving the file
+                }
+            }
+
+            while(!isNull()){   //CASE 2 & 4
+                do{
+                    try{
+                        numberFlag = false;
+                        System.out.println("\nHere Are Your Options\n");
+
+                        System.out.println("\tOPTIONS:");
+                        System.out.println("------------------------");
+                        System.out.println("[0]\tQUIT");
+                        System.out.println("[1]\tCREATE");
+                        System.out.println("[2]\tDELETE");
+                        System.out.println("[3]\tEDIT");
+                        System.out.println("[4]\tVIEW ASSIGNMENTS");
+                        System.out.println("[5]\tVIEW CONTENTS");
+
+                        System.out.println("\nPLEASE SELECT A NUMBER");
+                        
+                        line = kb.nextLine();
+                        numberOption = Integer.parseInt(line);
+                    }catch(NumberFormatException e){
+                        numberFlag = true;
+                    }
+                } while(line == null || numberFlag || numberOption > 5 || numberOption < 0);
+
+                if(numberOption == 0){
+                    writeFile(filePath);    //write to & save file
+                    createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
+                    break outerloop;
+                }
+                if(numberOption == 1){
+                    //make an assignment
+                    String build;
+                    name = getTask();
+                    year = getYear(name);
+                    month = getMonth(name);
+                    day = getDay(month, name);
+                    hour = getHour(name);
+                    minute = getMinute(name);
+                    priority = getPriority(name);
+                    build = name + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
+                    buildList(build);
+                    
+                    sort(); //sort the list according to due date and priority just before saving the file
+                }
+                if(numberOption == 2){
+                    //prompt to delete
                     do {
-                    //ask the user if they want to edit any given task
+                        //select a file to delete
+                        System.out.println("Please enter the name of the task you'd like to delete");
+                        delFile = kb.nextLine();
+                    } while (removeTask(delFile));  //the user will be prompted again for invalid input
+                    
+                    sort(); //sort the list according to due date and priority just before saving the file
+                }
+                if(numberOption == 3){
+                    //prompt to edit
+                    do {
+                        //select an assignment to edit
+                        System.out.println("Please enter the name of the task you'd like to edit");
+                        editInfo = kb.nextLine();
+                    } while (!isAssignmentPresent(editInfo));  //the user will be prompted again for invalid input
+
+                    do {    //THIS WILL RUN FOR AS LONG AS THE USER PREVIOUSLY WANTED TO EDIT THE SAME ASSIGNMENT SOME MORE
+                        //prompt the user to change task name, time, or priority
                         do {
-                            System.out.println("Would you like to edit an assignment?\t" + ("Y / N"));
-                            editFileChoice = kb.nextLine();
-                        } while (!editFileChoice.equalsIgnoreCase("Y") && !editFileChoice.equalsIgnoreCase("N"));
-                        
-                        
-                        if(editFileChoice.equalsIgnoreCase("Y")){
-                            System.out.println("These are all your assignments so far:");
-                            //display all tasks
-                            printList();
-                            
-                            do {
-                                //prompt the user if they want additional information about a given assignment
-                                do {
-                                    System.out.println("Would you like to know more information about a given assignment?\t" + ("Y / N"));
-                                    infoChoice = kb.nextLine();
-                                } while (!infoChoice.equalsIgnoreCase("Y") && !infoChoice.equalsIgnoreCase("N"));
-                                if(infoChoice.equalsIgnoreCase("Y")){
-                                    //ask the user which assignment
-                                    do {
-                                        System.out.println("Please enter the name of the task you'd like additional information about");
-                                        info = kb.nextLine();
-                                    } while (getTask(info));  //the user will be prompted again for invalid input
-                                }
-                            } while (infoChoice.equalsIgnoreCase("Y")); //ask user again if they want additional information about a given assignment
-                            
-                            do {
-                                //select an assignment to edit
-                                System.out.println("Please enter the name of the task you'd like to edit");
-                                editInfo = kb.nextLine();
-                            } while (!isAssignmentPresent(editInfo));  //the user will be prompted again for invalid input
-                            
-                            
-                            
-                            
-                            
-                            do {    //THIS WILL RUN FOR AS LONG AS THE USER PREVIOUSLY WANTED TO EDIT THE SAME ASSIGNMENT SOME MORE
-                                //prompt the user to change task name, time, or priority
-                                do {
-                                    //select the assignment content to edit
-                                    System.out.println("Would you like to change the name, time, or priority of your assignment?\t" + ("T\t:\tN\t:\tP"));
-                                    editContent = kb.nextLine();
-                                } while (!editContent.equalsIgnoreCase("N") && !editContent.equalsIgnoreCase("T") && !editContent.equalsIgnoreCase("P"));  //the user will be prompted again for invalid input
+                            //select the assignment content to edit
+                            System.out.println("Would you like to change the name, time, or priority of your assignment?\t" + ("T\t:\tN\t:\tP"));
+                            editContent = kb.nextLine();
+                        } while (!editContent.equalsIgnoreCase("N") && !editContent.equalsIgnoreCase("T") && !editContent.equalsIgnoreCase("P"));  //the user will be prompted again for invalid input
 
 
-                                //check if the name is to be changed
-                                if(editContent.equalsIgnoreCase("N")) {
-                                    //give a new name for the task
-                                    task = getTask();
-                                    //set the name
-                                    setTask(task);
-                                }
-                                //check if the time is to be changed
-                                else if(editContent.equalsIgnoreCase("T")) {
-                                    //give a new due date for the task
-                                    year = getYear(editInfo);
-                                    month = getMonth(editInfo);
-                                    day = getDay(month, editInfo);
-                                    hour = getHour(editInfo);
-                                    minute = getMinute(editInfo);
-                                    //set the time
-                                    setTime(year, month, day, hour, minute);
-                                }
-                                else {  //I know that the user wants to change the priority
-                                    //give a new priority for the task
-                                    priority = getPriority(editInfo);
-                                    //set the priority
-                                    setPriority(priority);
-                                }
-                                do {    //run until user answers correctly
-                                    System.out.println("Would you like to change your assignment again??\t" + "Y | N");
-                                    editSameChoice = kb.nextLine();
-                                } while(!editSameChoice.equalsIgnoreCase("Y") && !editSameChoice.equalsIgnoreCase("N"));
-                            } while (editSameChoice.equalsIgnoreCase("Y"));
-                            
-                            
-                            removeElement();
-                            
-                        }//this is the end to the if statement asking the user if they want to edit other assignments
-                    } while (editFileChoice.equalsIgnoreCase("Y") && !isNull()); //this runs while the list is not empty and the user wants to continue editing assignments
-                    
-                    
-                }//this is the end to the if statement for if the list is empty
-            }//this is the end to the if that runs if the user is done making assignments
-            sort(); //sort the list according to due date and priority just before saving the file
-            writeFile(filePath);    //write to & save file
-        }while (svTask.equalsIgnoreCase("N"));//this runs wile the user is not done making assignments
-        createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
+                        //check if the name is to be changed
+                        if(editContent.equalsIgnoreCase("N")) {
+                            //give a new name for the task
+                            name = getTask();
+                            //set the name
+                            setTask(name);
+                        }
+                        //check if the time is to be changed
+                        else if(editContent.equalsIgnoreCase("T")) {
+                            //give a new due date for the task
+                            year = getYear(editInfo);
+                            month = getMonth(editInfo);
+                            day = getDay(month, editInfo);
+                            hour = getHour(editInfo);
+                            minute = getMinute(editInfo);
+                            //set the time
+                            setTime(year, month, day, hour, minute);
+                        }
+                        else {  //I know that the user wants to change the priority
+                            //give a new priority for the task
+                            priority = getPriority(editInfo);
+                            //set the priority
+                            setPriority(priority);
+                        }
+                        do {    //run until user answers correctly
+                            System.out.println("Would you like to change your assignment again??\t" + "Y | N");
+                            editSameChoice = kb.nextLine();
+                        } while(!editSameChoice.equalsIgnoreCase("Y") && !editSameChoice.equalsIgnoreCase("N"));
+                    } while (editSameChoice.equalsIgnoreCase("Y"));
+
+                    removeElement();    //this removes the older version of that assignment
+                    sort(); //sort the list according to due date and priority just before saving the file
+                }
+                if(numberOption == 4){
+                    //prompt to view all assignments
+                    System.out.println("These are all your assignments so far:");
+                    //display all tasks
+                    printList();
+                }
+                if(numberOption == 5){
+                    //prompt to view assignment contents
+                    do {    //the user will be prompted again for invalid input
+                        System.out.println("Please enter the name of the task you'd like additional information about");
+                        info = kb.nextLine();
+                    } while (getTask(info));
+                }
+            }
+        }
     }
 }

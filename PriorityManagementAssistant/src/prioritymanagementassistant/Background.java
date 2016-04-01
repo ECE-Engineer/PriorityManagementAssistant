@@ -33,7 +33,7 @@ public class Background {
     private static ArrayList<String> list = new ArrayList<>();
     private static PrintWriter backgroundFile, userFile;
     private static String filePath, assignment;
-    private static int track;
+    private static int track = 0;
     
     public static String getDestinationFolder(){
         int count = 0;
@@ -168,14 +168,13 @@ public class Background {
     public static boolean isAssignmentPresent(String s){
         //search for the task in the list using the task name
         boolean taskFound = false;  //assignment not present in list
-        track = 0;
-        for(String content : list){
-            if(content.substring(0, content.indexOf("---")).equalsIgnoreCase(s)){
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).substring(0, list.get(i).indexOf("---")).equalsIgnoreCase(s)){
                 taskFound = true;   //assignment present in list
-                assignment = content;
+                assignment = list.get(i);
+                track = i;
                 break;
             }
-            track++;
         }
         return taskFound;
     }
@@ -220,7 +219,8 @@ public class Background {
         list.add(assignment);
     }
     
-    public static void removeElement(){
+    public static void removeElement(){    //this removes the older version of that edited assignment
+        System.out.println(track);
         list.remove(track);
     }
     
