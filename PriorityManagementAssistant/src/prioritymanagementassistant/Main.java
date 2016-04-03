@@ -267,7 +267,6 @@ public class Main {
                 }
                 if(numberOption == 1){
                     //make an assignment
-                    String build;
                     name = getTask();
                     year = getYear(name);
                     month = getMonth(name);
@@ -275,8 +274,7 @@ public class Main {
                     hour = getHour(name);
                     minute = getMinute(name);
                     priority = getPriority(name);
-                    build = name + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
-                    buildList(build);
+                    buildList(name + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority);
                     
                     sort(); //sort the list according to due date and priority just before saving the file
                 }

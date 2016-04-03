@@ -220,7 +220,7 @@ public class Background {
     }
     
     public static void removeElement(){    //this removes the older version of that edited assignment
-        System.out.println(track);
+        //System.out.println(track);    //DEBUG
         list.remove(track);
     }
     
