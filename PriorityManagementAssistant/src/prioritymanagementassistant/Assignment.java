@@ -18,101 +18,84 @@ package prioritymanagementassistant;
 import java.util.Scanner;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
-import static prioritymanagementassistant.Background.isAssignmentPresent;
 
 //Kyle Zeller
 
 public class Assignment {
-    
-//    String name;
-//    int month, day, year, hour, minute, priority;
-//    
-//    public Assignment(String n, int mo, int d, int y, int h, int mi, int p){
-//        //assign corresponding values
-//        name = n;
-//        month = mo;
-//        day = d;
-//        year = y;
-//        hour = h;
-//        minute = mi;
-//        priority = p;
-//    }
-//    
-//    public String getName(){
-//        return name;
-//    }
-//    
-//    public void setName(String n){
-//        this.name = n;
-//    }
-//    
-//    public int getMonth(){
-//        return month;
-//    }
-//    
-//    public void setMonth(int mo){
-//        this.month = mo;
-//    }
-//    
-//    public int getDay(){
-//        return day;
-//    }
-//    
-//    public void setDay(int d){
-//        this.day = d;
-//    }
-//    
-//    public int getYear(){
-//        return year;
-//    }
-//    
-//    public void setYear(int y){
-//        year = y;
-//    }
-//    
-//    public int getHour(){
-//        return hour;
-//    }
-//    
-//    public void setHour(int h){
-//        this.hour = h;
-//    }
-//    
-//    public int getMinute(){
-//        return minute;
-//    }
-//    
-//    public void setMinute(int mi){
-//        this.minute = mi;
-//    }
-//    
-//    public int getPriority(){
-//        return priority;
-//    }
-//    
-//    public void setPriority(int p){
-//        this.priority = p;
-//    }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    private static String line, task;
-    private static int month, day, year, hour, minute, priority;
-    private static boolean numberFlag = true, badInfoFlag = true;    //set default value here
-
-    public static LocalDateTime timePoint = LocalDateTime.now();   // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
+    private static String line;
+    private static boolean badInfoFlag = true;    //set default value here
     private static Scanner kb = new Scanner(System.in);
     
+    private String name;
+    private int month, day, year, hour, minute, priority;
+    
+    public Assignment(String n, int mo, int d, int y, int h, int mi, int p){
+        //assign corresponding values
+        name = n;
+        month = mo;
+        day = d;
+        year = y;
+        hour = h;
+        minute = mi;
+        priority = p;
+    }
+    
+    public String getName(){
+        return name;
+    }
+    
+    public void setName(String n){
+        this.name = n;
+    }
+    
+    public int getMonth(){
+        return month;
+    }
+    
+    public void setMonth(int mo){
+        this.month = mo;
+    }
+    
+    public int getDay(){
+        return day;
+    }
+    
+    public void setDay(int d){
+        this.day = d;
+    }
+    
+    public int getYear(){
+        return year;
+    }
+    
+    public void setYear(int y){
+        year = y;
+    }
+    
+    public int getHour(){
+        return hour;
+    }
+    
+    public void setHour(int h){
+        this.hour = h;
+    }
+    
+    public int getMinute(){
+        return minute;
+    }
+    
+    public void setMinute(int mi){
+        this.minute = mi;
+    }
+    
+    public int getPriority(){
+        return priority;
+    }
+    
+    public void setPriority(int p){
+        this.priority = p;
+    }
+
     public static String setDefaultPath(){
         do {
             System.out.println("Name Your List File???");
@@ -143,204 +126,5 @@ public class Assignment {
             }
         } while (line == null || badInfoFlag);
         return line;
-    }
-
-    
-    
-    
-    
-    public static String getTask(){
-        do {
-            System.out.println("Please enter a name for your Assignment:");  //prompt user for task
-            line = kb.nextLine();
-        } while (line == null || line.contains("---") || isAssignmentPresent(line)); //prompt the user for no input
-        return line;
-    }
-
-    public static int getMonth(String n){
-        do {
-            System.out.println("What month is " + n + " due? (1-12)");  //prompt user for month
-            line = kb.nextLine();
-
-            if(line.startsWith("0")){   //this will prevent a parsing error from string to int
-                line = line.replaceFirst("0", "");
-            }
-
-            try {   //promt the user for an integer number
-                numberFlag = false;
-                month = Integer.parseInt(line);
-                badInfoFlag = false;
-
-                if(month < 1 || month > 12){
-                   System.out.println(month + " is not a valid Month, please enter a number between 1 and 12.");
-                   badInfoFlag = true;
-                }
-
-                if(month < 1 || month > 12 || (year == timePoint.getYear() && month < timePoint.getMonthValue())){
-                    badInfoFlag = true;
-                }
-            } catch (NumberFormatException e) {
-                numberFlag = true;
-            }
-        } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
-        return month;
-    }
-
-
-    public static int getDay(int m, String n){
-        if(m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12 ){
-           do{
-               System.out.println("What day is " + n + " due? (1-31)");
-               line = kb.nextLine();
-               try {   //promt the user for an integer number
-                    numberFlag = false;
-                    day = Integer.parseInt(line);
-                    badInfoFlag = false;
-                    if(day < 1 || day > 31 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
-                        System.out.println(day + " is not a valid Day, please enter a number between 1 and 31.");
-                        badInfoFlag = true;
-                    }
-                }catch (NumberFormatException e) {
-                    numberFlag = true;
-            }
-           }while(line == null || numberFlag || badInfoFlag);
-        }else if(m == 4 || m == 6 || m == 9 || m == 11){
-           do{
-               System.out.println("What day is " + n + " due? (1-30)");
-               line = kb.nextLine();
-               try {   //promt the user for an integer number
-                    numberFlag = false;
-                    day = Integer.parseInt(line);
-                    badInfoFlag = false;
-                    if(day < 1 || day > 30 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
-                        System.out.println(day + " is not a valid Day, please enter a number between 1 and 30.");
-                        badInfoFlag = true;
-                    }
-                }catch (NumberFormatException e) {
-                    numberFlag = true;
-                }
-           }while(line == null || numberFlag || badInfoFlag);               
-        }else if(month == 2){
-           do{
-               System.out.println("what day is " + n + " due? (1-28)");
-               line = kb.nextLine();
-               try {   //promt the user for an integer number
-                    numberFlag = false;
-                    day = Integer.parseInt(line);
-                    badInfoFlag = false;
-                    if(day < 1 || day > 28 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
-                        System.out.println(day + " is not a valid Day, please enter a number between 1 and 28.");
-                        badInfoFlag = true;
-                    }
-                }catch (NumberFormatException e) {
-                    numberFlag = true;
-                }
-           }while(line == null || numberFlag || badInfoFlag);               
-        }
-    return day;
-    }   
-
-    public static int getYear(String n){
-        do {
-            System.out.println("What year is " + n + " due?");  //prompt user for year
-            line = kb.nextLine();
-
-            try {   //promt the user for an integer number
-                numberFlag = false;
-                year = Integer.parseInt(line);
-                badInfoFlag = false;
-
-                if(year < 2016){
-                    System.out.println(year + " is not a valid Year, please enter a number greater than " + (timePoint.getYear()-1) + ".");
-                }
-                if(year < timePoint.getYear()){
-
-                    badInfoFlag = true;
-                }
-            } catch (NumberFormatException e) {
-                numberFlag = true;
-            }
-        } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
-        return year;
-    }
-
-    public static int getHour(String n){
-        do {
-            System.out.println("What hour is " + n + " due? (1-24)");  //prompt user for hour
-            line = kb.nextLine();
-
-            if(line.startsWith("0")){   //this will prevent a parsing error from string to int
-                line = line.replaceFirst("0", "");
-            }
-
-            try {   //promt the user for an integer number
-                numberFlag = false;
-                hour = Integer.parseInt(line);
-                badInfoFlag = false;
-
-                if(hour < 1 || hour > 24){
-                    System.out.println(hour + " is not a valid Hour, please enter a number between 1 and 24.");
-                }
-                if(hour < 1 || hour > 24 || (day == timePoint.getDayOfMonth() && hour < timePoint.getHour())){
-
-                    badInfoFlag = true;
-                }
-            } catch (NumberFormatException e) {
-                numberFlag = true;
-            }
-        } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
-        return hour;
-    }
-
-    public static int getMinute(String n){
-        do {
-            System.out.println("What minute is " + n + " due? (1-59)");  //prompt user for minute
-            line = kb.nextLine();
-
-            if(line.startsWith("0")){   //this will prevent a parsing error from string to int
-                line = line.replaceFirst("0", "");
-            }
-
-            try {   //promt the user for an integer number
-                numberFlag = false;
-                minute = Integer.parseInt(line);
-                badInfoFlag = false;
-
-                if(minute < 0 || minute > 59){
-                    System.out.println(minute + " is not a valid Minute, please enter a number between 1 and 60.");
-                }
-                if(minute < 0 || minute > 59 || (hour == timePoint.getHour() && minute < timePoint.getMinute())){
-
-                    badInfoFlag = true;
-                }
-            } catch (NumberFormatException e) {
-                numberFlag = true;
-            }
-        } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
-        return minute;
-    }
-
-    public static int getPriority(String n){
-        do {
-            System.out.println("What is the priority of " + n + " (1-3)");  //prompt user for priority
-            line = kb.nextLine();
-            if(line == null){   //assign a default priority value for no input
-                    priority = 1;
-                }
-            else{
-                try {   //promt the user for an integer number
-                    numberFlag = false;
-                    priority = Integer.parseInt(line);
-                    badInfoFlag = false;
-                    if(priority < 1 || priority > 3){
-                        System.out.println(priority + " is not a valid Priority, please enter a number between 1 and 3.");
-                        badInfoFlag = true;
-                    }
-                } catch (NumberFormatException e) {
-                    numberFlag = true;
-                }
-            }
-        } while (numberFlag || badInfoFlag);
-        return priority;
     }
 }

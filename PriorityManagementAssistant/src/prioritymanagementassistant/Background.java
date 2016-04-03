@@ -26,13 +26,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import static prioritymanagementassistant.Assignment.timePoint;
-import static prioritymanagementassistant.Assignment.getTask;
+import static prioritymanagementassistant.Main.timePoint;
 
 public class Background {
-    private static ArrayList<String> list = new ArrayList<>();
+    private static Assignment assignment;
+    private static ArrayList<Assignment> list = new ArrayList<>();
     private static PrintWriter backgroundFile, userFile;
-    private static String filePath, assignment;
+    private static String filePath;
     private static int track = 0;
     
     public static String getDestinationFolder(){
@@ -50,8 +50,8 @@ public class Background {
         userFile = new PrintWriter(path, "UTF-8");
         
         // write to the file
-        for(String content : list){
-            userFile.print(content);
+        for(Assignment content : list){
+            userFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());
             userFile.println();
         }
 
@@ -75,8 +75,8 @@ public class Background {
         backgroundFile.println();
         
         // write to the file the contents of the list
-        for(String content : list){
-            backgroundFile.print(content);
+        for(Assignment content : list){
+            backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());
             backgroundFile.println();
         }
 
@@ -92,19 +92,20 @@ public class Background {
         if((line = read.readLine()) != null)//store line 0 as the file path
             filePath = line;
         while ((line = read.readLine()) != null) {  //load the list
-            list.add(line);
+            assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]));
+            list.add(assignment);
         }
         return filePath;
     }
     
-    public static void buildList(String build){
+    public static void buildList(Assignment build){
         list.add(build);
     }
     
     public static void printList() {
         //display all tasks
-        for(String content : list){
-            System.out.println(content.substring(0, content.indexOf("---")));
+        for(Assignment content : list){
+            System.out.println(content.getName());
         }
     }
     
@@ -112,9 +113,9 @@ public class Background {
         //search for the task in the list using the task name
         boolean taskFound = true;
         int count = 0;
-        for(String content : list){
-            if(content.substring(0, content.indexOf("---")).equalsIgnoreCase(s)){
-                System.out.println(content.replaceAll("---", "\t"));
+        for(Assignment content : list){
+            if(content.getName().equalsIgnoreCase(s)){
+                System.out.println(content.getName() + "\t" + content.getMonth() + "\t" + content.getDay() + "\t" + content.getYear() + "\t" + content.getHour() + "\t" + content.getMinute() + "\t" + content.getPriority());
                 taskFound = false;
                 break;
             }
@@ -125,15 +126,15 @@ public class Background {
     
     public static void removeOnLoad(){
         for(int i = 0; i < list.size(); i++){
-            if(Integer.parseInt(list.get(i).split("---")[3]) < timePoint.getYear()){
+            if(list.get(i).getYear() < timePoint.getYear()){
                 list.remove(i);
-            } else if(Integer.parseInt(list.get(i).split("---")[1]) < timePoint.getMonthValue()) {
+            } else if(list.get(i).getMonth() < timePoint.getMonthValue()) {
                 list.remove(i);
-            } else if(Integer.parseInt(list.get(i).split("---")[2]) < timePoint.getDayOfMonth()) {
+            } else if(list.get(i).getDay() < timePoint.getDayOfMonth()) {
                 list.remove(i);
-            } else if(Integer.parseInt(list.get(i).split("---")[4]) < timePoint.getHour()) {
+            } else if(list.get(i).getHour() < timePoint.getHour()) {
                 list.remove(i);
-            } else if(Integer.parseInt(list.get(i).split("---")[5]) < timePoint.getMinute()) {
+            } else if(list.get(i).getMinute() < timePoint.getMinute()) {
                 list.remove(i);
             }
         }
@@ -143,8 +144,8 @@ public class Background {
         //search for the task in the list using the task name
         boolean taskFound = true;
         int count = 0;
-        for(String content : list){
-            if(content.substring(0, content.indexOf("---")).equalsIgnoreCase(s)){
+        for(Assignment content : list){
+            if(content.getName().equalsIgnoreCase(s)){
                 list.remove(count);
                 taskFound = false;
                 break;
@@ -158,10 +159,10 @@ public class Background {
         return list.isEmpty();
     }
     
-    public static void printWholeList() {    //DEBUG :`PRINT ALL CONTENTS OF THE LIST
+    public static void printWholeList() {    //DEBUG :`PRINT ALL Assignments OF THE LIST
         //display all tasks
-        for(String content : list){
-            System.out.println(content);
+        for(Assignment content : list){
+            System.out.println(content.getName());
         }
     }
     
@@ -169,7 +170,7 @@ public class Background {
         //search for the task in the list using the task name
         boolean taskFound = false;  //assignment not present in list
         for(int i = 0; i < list.size(); i++){
-            if(list.get(i).substring(0, list.get(i).indexOf("---")).equalsIgnoreCase(s)){
+            if(list.get(i).getName().equalsIgnoreCase(s)){
                 taskFound = true;   //assignment present in list
                 assignment = list.get(i);
                 track = i;
@@ -181,14 +182,14 @@ public class Background {
     
     public static void setTask(String s){
         int year, month, day, hour, minute, priority;
-        month = Integer.parseInt(assignment.split("---")[1]);
-        day = Integer.parseInt(assignment.split("---")[2]);
-        year = Integer.parseInt(assignment.split("---")[3]);
-        hour = Integer.parseInt(assignment.split("---")[4]);
-        minute = Integer.parseInt(assignment.split("---")[5]);
-        priority = Integer.parseInt(assignment.split("---")[6]);
+        month = assignment.getMonth();
+        day = assignment.getDay();
+        year = assignment.getYear();
+        hour = assignment.getHour();
+        minute = assignment.getMinute();
+        priority = assignment.getPriority();
         //adjust the value for assignment
-        assignment = s + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority;
+        assignment = new Assignment(s, month, day, year, hour, minute, priority);
         //build the list
         list.add(assignment);
     }
@@ -196,10 +197,10 @@ public class Background {
     public static void setTime(int y, int mo, int d, int h, int mi){
         String name;
         int priority;
-        name = assignment.split("---")[0];
-        priority = Integer.parseInt(assignment.split("---")[6]);
+        name = assignment.getName();
+        priority = assignment.getPriority();
         //adjust the value for assignment
-        assignment = name + "---" + mo + "---" + d + "---" + y + "---" + h + "---" + mi + "---" + priority;
+        assignment = new Assignment(name, mo, d, y, h, mi, priority);
         //build the list
         list.add(assignment);
     }
@@ -207,14 +208,14 @@ public class Background {
     public static void setPriority(int p){
         String name;
         int year, month, day, hour, minute;
-        name = assignment.split("---")[0];
-        month = Integer.parseInt(assignment.split("---")[1]);
-        day = Integer.parseInt(assignment.split("---")[2]);
-        year = Integer.parseInt(assignment.split("---")[3]);
-        hour = Integer.parseInt(assignment.split("---")[4]);
-        minute = Integer.parseInt(assignment.split("---")[5]);
+        name = assignment.getName();
+        month = assignment.getMonth();
+        day = assignment.getDay();
+        year = assignment.getYear();
+        hour = assignment.getHour();
+        minute = assignment.getMinute();
         //adjust the value for assignment
-        assignment = name + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + p;
+        assignment = new Assignment(name, month, day, year, hour, minute, p);
         //build the list
         list.add(assignment);
     }
@@ -225,41 +226,39 @@ public class Background {
     }
     
     private static void switchElements(int currentIndex){   //flips the values stored between the current and preivous elements of the list
-        String current = list.set(currentIndex, list.get(currentIndex-1));
+        Assignment current = list.set(currentIndex, list.get(currentIndex-1));
         list.set(currentIndex-1, current);
     }
     
     public static void sort(){      //bubblesort method b/c the list will likely never be beyond 100 assignments
         for (int i = 0; i < list.size(); i++) {
             for (int j = 1; j < list.size(); j++) {
-//                System.out.println(Integer.parseInt(list.get(j).split("---")[3]));    //DEBUG
-//                System.out.println(Integer.parseInt(list.get(j-1).split("---")[3]));  //DEBUG
-                if(Integer.parseInt(list.get(j).split("---")[3]) < Integer.parseInt(list.get(j-1).split("---")[3])) {   //checks year
+                if(list.get(j).getYear() < list.get(j-1).getYear()) {   //checks year
                     //switch
                     switchElements(j);
-                } else if(Integer.parseInt(list.get(j).split("---")[3]) == Integer.parseInt(list.get(j-1).split("---")[3])) {   //checks year
+                } else if(list.get(j).getYear() == list.get(j-1).getYear()) {   //checks year
                     //more checks
-                    if(Integer.parseInt(list.get(j).split("---")[1]) < Integer.parseInt(list.get(j-1).split("---")[1])) {   //checks month
+                    if(list.get(j).getMonth() < list.get(j-1).getMonth()) {   //checks month
                         //switch
                         switchElements(j);
-                    } else if(Integer.parseInt(list.get(j).split("---")[1]) == Integer.parseInt(list.get(j-1).split("---")[1])) {   //checks month
+                    } else if(list.get(j).getMonth() == list.get(j-1).getMonth()) {   //checks month
                         //more checks
-                        if(Integer.parseInt(list.get(j).split("---")[2]) < Integer.parseInt(list.get(j-1).split("---")[2])) {   //checks day
+                        if(list.get(j).getDay() < list.get(j-1).getDay()) {   //checks day
                             //switch
                             switchElements(j);
-                        } else if(Integer.parseInt(list.get(j).split("---")[2]) == Integer.parseInt(list.get(j-1).split("---")[2])) {   //checks day
+                        } else if(list.get(j).getDay() == list.get(j-1).getDay()) {   //checks day
                             //more checks
-                            if(Integer.parseInt(list.get(j).split("---")[4]) < Integer.parseInt(list.get(j-1).split("---")[4])) {   //checks hour
+                            if(list.get(j).getHour() < list.get(j-1).getHour()) {   //checks hour
                                 //switch
                                 switchElements(j);
-                            } else if(Integer.parseInt(list.get(j).split("---")[4]) == Integer.parseInt(list.get(j-1).split("---")[4])) {   //checks hour
+                            } else if(list.get(j).getHour() == list.get(j-1).getHour()) {   //checks hour
                                 //more checks
-                                if(Integer.parseInt(list.get(j).split("---")[5]) < Integer.parseInt(list.get(j-1).split("---")[5])) {   //checks minute
+                                if(list.get(j).getMinute() < list.get(j-1).getMinute()) {   //checks minute
                                     //switch
                                     switchElements(j);
-                                } else if(Integer.parseInt(list.get(j).split("---")[5]) == Integer.parseInt(list.get(j-1).split("---")[5])) {   //checks minute
+                                } else if(list.get(j).getMinute() == list.get(j-1).getMinute()) {   //checks minute
                                     //more checks
-                                    if(Integer.parseInt(list.get(j).split("---")[6]) < Integer.parseInt(list.get(j-1).split("---")[6])) {   //checks priority
+                                    if(list.get(j).getPriority() < list.get(j-1).getPriority()) {   //checks priority
                                         //switch
                                         switchElements(j);
                                     }
