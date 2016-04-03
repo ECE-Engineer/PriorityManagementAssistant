@@ -163,19 +163,17 @@ import static prioritymanagementassistant.Assignment.setDefaultPath;
 import static prioritymanagementassistant.Background.writeFile;
 import static prioritymanagementassistant.Background.buildList;
 import static prioritymanagementassistant.Background.createBackgroundFile;
+import static prioritymanagementassistant.Background.getAssignment;
 import static prioritymanagementassistant.Background.getDestinationFolder;
 import static prioritymanagementassistant.Background.isFile;
 import static prioritymanagementassistant.Background.isNull;
 import static prioritymanagementassistant.Background.loadList;
 import static prioritymanagementassistant.Background.printList;
 import static prioritymanagementassistant.Background.removeTask;
-import static prioritymanagementassistant.Background.getTask;
+import static prioritymanagementassistant.Background.getTaskInfo;
 import static prioritymanagementassistant.Background.isAssignmentPresent;
-import static prioritymanagementassistant.Background.removeElement;
+//import static prioritymanagementassistant.Background.removeElement;
 import static prioritymanagementassistant.Background.removeOnLoad;
-import static prioritymanagementassistant.Background.setTask;
-import static prioritymanagementassistant.Background.setTime;
-import static prioritymanagementassistant.Background.setPriority;
 import static prioritymanagementassistant.Background.sort;
 
 /**
@@ -188,6 +186,7 @@ public class Main {
     private static int month, day, year, hour, minute, priority, numberOption;
     private static boolean create = true, numberFlag = false, badInfoFlag = true;
 
+    private static Assignment assignment;
     public static LocalDateTime timePoint = LocalDateTime.now();    // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
     private static Scanner kb = new Scanner(System.in);
     
@@ -427,7 +426,7 @@ public class Main {
                         }
                     } while (numberFlag || badInfoFlag);
                     
-                    Assignment assignment = new Assignment(name, month, day, year, hour, minute, priority);
+                    assignment = new Assignment(name, month, day, year, hour, minute, priority);
                     buildList(assignment);
                     sort(); //sort the list according to due date and priority just before saving the file
                 }
@@ -630,7 +629,7 @@ public class Main {
                         }
                     } while (numberFlag || badInfoFlag);
                     
-                    Assignment assignment = new Assignment(name, month, day, year, hour, minute, priority);
+                    assignment = new Assignment(name, month, day, year, hour, minute, priority);
                     buildList(assignment);
                     sort(); //sort the list according to due date and priority just before saving the file
                 }
@@ -668,8 +667,9 @@ public class Main {
                                 System.out.println("Please enter a name for your Assignment:");  //prompt user for task
                                 name = kb.nextLine();
                             } while (name == null || name.contains("---") || isAssignmentPresent(name)); //prompt the user for no input
+                            assignment = getAssignment();
                             //set the name
-                            setTask(name);
+                            assignment.setName(name);
                         }
                         //check if the time is to be changed
                         else if(editContent.equalsIgnoreCase("T")) {
@@ -816,8 +816,13 @@ public class Main {
                                     numberFlag = true;
                                 }
                             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
+                            assignment = getAssignment();
                             //set the time
-                            setTime(year, month, day, hour, minute);
+                            assignment.setMonth(month);
+                            assignment.setDay(day);
+                            assignment.setYear(year);
+                            assignment.setHour(hour);
+                            assignment.setMinute(minute);
                         }
                         else {  //I know that the user wants to change the priority
                             //give a new priority for the task
@@ -841,8 +846,9 @@ public class Main {
                                     }
                                 }
                             } while (numberFlag || badInfoFlag);
+                            assignment = getAssignment();
                             //set the priority
-                            setPriority(priority);
+                            assignment.setPriority(priority);
                         }
                         do {    //run until user answers correctly
                             System.out.println("Would you like to change your assignment again??\t" + "Y | N");
@@ -850,7 +856,6 @@ public class Main {
                         } while(!editSameChoice.equalsIgnoreCase("Y") && !editSameChoice.equalsIgnoreCase("N"));
                     } while (editSameChoice.equalsIgnoreCase("Y"));
 
-                    removeElement();    //this removes the older version of that assignment
                     sort(); //sort the list according to due date and priority just before saving the file
                 }
                 if(numberOption == 4){
@@ -864,7 +869,7 @@ public class Main {
                     do {    //the user will be prompted again for invalid input
                         System.out.println("Please enter the name of the task you'd like additional information about");
                         info = kb.nextLine();
-                    } while (getTask(info));
+                    } while (getTaskInfo(info));
                 }
             }
         }

@@ -33,7 +33,6 @@ public class Background {
     private static ArrayList<Assignment> list = new ArrayList<>();
     private static PrintWriter backgroundFile, userFile;
     private static String filePath;
-    private static int track = 0;
     
     public static String getDestinationFolder(){
         int count = 0;
@@ -51,6 +50,7 @@ public class Background {
         
         // write to the file
         for(Assignment content : list){
+            //System.out.println("DEBUG\t" + "WRITING\t\t" + content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());   //DEBUG
             userFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());
             userFile.println();
         }
@@ -92,6 +92,7 @@ public class Background {
         if((line = read.readLine()) != null)//store line 0 as the file path
             filePath = line;
         while ((line = read.readLine()) != null) {  //load the list
+            //System.out.println("DEBUG\t" + "LOADING\t\t" + line);   //DEBUG
             assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]));
             list.add(assignment);
         }
@@ -109,7 +110,7 @@ public class Background {
         }
     }
     
-    public static boolean getTask(String s){    //prints all information about a given task
+    public static boolean getTaskInfo(String s){    //prints all information about a given task
         //search for the task in the list using the task name
         boolean taskFound = true;
         int count = 0;
@@ -126,15 +127,20 @@ public class Background {
     
     public static void removeOnLoad(){
         for(int i = 0; i < list.size(); i++){
-            if(list.get(i).getYear() < timePoint.getYear()){
+            if(list.get(i).getYear() < timePoint.getYear()) {
+                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
                 list.remove(i);
-            } else if(list.get(i).getMonth() < timePoint.getMonthValue()) {
+            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() < timePoint.getMonthValue()) {
+                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
                 list.remove(i);
-            } else if(list.get(i).getDay() < timePoint.getDayOfMonth()) {
+            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() == timePoint.getMonthValue() && list.get(i).getDay() < timePoint.getDayOfMonth()) {
+                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
                 list.remove(i);
-            } else if(list.get(i).getHour() < timePoint.getHour()) {
+            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() == timePoint.getMonthValue() && list.get(i).getDay() == timePoint.getDayOfMonth() && list.get(i).getHour() < timePoint.getHour()) {
+                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
                 list.remove(i);
-            } else if(list.get(i).getMinute() < timePoint.getMinute()) {
+            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() == timePoint.getMonthValue() && list.get(i).getDay() == timePoint.getDayOfMonth() && list.get(i).getHour() == timePoint.getHour() && list.get(i).getMinute() < timePoint.getMinute()) {
+                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
                 list.remove(i);
             }
         }
@@ -173,56 +179,14 @@ public class Background {
             if(list.get(i).getName().equalsIgnoreCase(s)){
                 taskFound = true;   //assignment present in list
                 assignment = list.get(i);
-                track = i;
                 break;
             }
         }
         return taskFound;
     }
     
-    public static void setTask(String s){
-        int year, month, day, hour, minute, priority;
-        month = assignment.getMonth();
-        day = assignment.getDay();
-        year = assignment.getYear();
-        hour = assignment.getHour();
-        minute = assignment.getMinute();
-        priority = assignment.getPriority();
-        //adjust the value for assignment
-        assignment = new Assignment(s, month, day, year, hour, minute, priority);
-        //build the list
-        list.add(assignment);
-    }
-    
-    public static void setTime(int y, int mo, int d, int h, int mi){
-        String name;
-        int priority;
-        name = assignment.getName();
-        priority = assignment.getPriority();
-        //adjust the value for assignment
-        assignment = new Assignment(name, mo, d, y, h, mi, priority);
-        //build the list
-        list.add(assignment);
-    }
-    
-    public static void setPriority(int p){
-        String name;
-        int year, month, day, hour, minute;
-        name = assignment.getName();
-        month = assignment.getMonth();
-        day = assignment.getDay();
-        year = assignment.getYear();
-        hour = assignment.getHour();
-        minute = assignment.getMinute();
-        //adjust the value for assignment
-        assignment = new Assignment(name, month, day, year, hour, minute, p);
-        //build the list
-        list.add(assignment);
-    }
-    
-    public static void removeElement(){    //this removes the older version of that edited assignment
-        //System.out.println(track);    //DEBUG
-        list.remove(track);
+    public static Assignment getAssignment(){
+        return assignment;
     }
     
     private static void switchElements(int currentIndex){   //flips the values stored between the current and preivous elements of the list
