@@ -51,7 +51,18 @@ public class Background {
         // write to the file
         for(Assignment content : list){
             //System.out.println("DEBUG\t" + "WRITING\t\t" + content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());   //DEBUG
-            userFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());
+            String minute = "" + content.getMinute();
+            if(content.getHour() < 12){
+                if(minute.length() == 1){
+                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" + content.getPriority());
+                } else
+                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" + content.getPriority());
+            } else {
+                if(minute.length() == 1){
+                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" + content.getPriority());
+                } else
+                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" + content.getPriority());
+            }
             userFile.println();
         }
 
@@ -116,7 +127,18 @@ public class Background {
         int count = 0;
         for(Assignment content : list){
             if(content.getName().equalsIgnoreCase(s)){
-                System.out.println(content.getName() + "\t" + content.getMonth() + "\t" + content.getDay() + "\t" + content.getYear() + "\t" + content.getHour() + "\t" + content.getMinute() + "\t" + content.getPriority());
+                String minute = "" + content.getMinute();
+                if(content.getHour() < 12){
+                    if(minute.length() == 1){
+                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" + content.getPriority());
+                    } else
+                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" + content.getPriority());
+                } else {
+                    if(minute.length() == 1){
+                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" + content.getPriority());
+                    } else
+                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" + content.getPriority());
+                }
                 taskFound = false;
                 break;
             }

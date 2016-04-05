@@ -172,7 +172,6 @@ import static prioritymanagementassistant.Background.printList;
 import static prioritymanagementassistant.Background.removeTask;
 import static prioritymanagementassistant.Background.getTaskInfo;
 import static prioritymanagementassistant.Background.isAssignmentPresent;
-//import static prioritymanagementassistant.Background.removeElement;
 import static prioritymanagementassistant.Background.removeOnLoad;
 import static prioritymanagementassistant.Background.sort;
 
