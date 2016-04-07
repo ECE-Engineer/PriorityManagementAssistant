@@ -32,9 +32,13 @@ public class Background {
     private static Assignment assignment;
     private static ArrayList<Assignment> list = new ArrayList<>();
     private static PrintWriter backgroundFile, userFile;
-    private static String filePath;
+    private static String savedFile, filePath;
     
-    public static String getDestinationFolder(){
+    public Background(){
+        //default constructor
+    }
+    
+    public String getDestinationFolder(){
         int count = 0;
         for (int i = 0; i < filePath.length(); i++) {
             if((filePath.substring(i, i+1)).equalsIgnoreCase("\\"))
@@ -44,7 +48,7 @@ public class Background {
         return (filePath.substring((filePath.lastIndexOf("\\", filePath.lastIndexOf("\\", filePath.length())-1))+1, filePath.lastIndexOf("\\", filePath.length())));
     }
     
-    public static void writeFile(String path) throws FileNotFoundException, UnsupportedEncodingException{//line ZERO must contain the path of the list file
+    public void writeFile(String path) throws FileNotFoundException, UnsupportedEncodingException{//line ZERO must contain the path of the list file
         //open the text file
         userFile = new PrintWriter(path, "UTF-8");
         
@@ -70,14 +74,14 @@ public class Background {
         userFile.close();
     }
     
-    public static boolean isFile(){ //check to see if this is the first time the user has run the program
+    public boolean isFile(){ //check to see if this is the first time the user has run the program
         if((new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt")).exists())
             return true;    //file exists
         else
             return false;   //file dose not exist
     }
     
-    public static void createBackgroundFile(String s) throws FileNotFoundException, UnsupportedEncodingException{  //make a background file to store all logs / program runs
+    public void createBackgroundFile(String s) throws FileNotFoundException, UnsupportedEncodingException{  //make a background file to store all logs / program runs
         //make the file
         backgroundFile = new PrintWriter("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt", "UTF-8");
         
@@ -95,7 +99,7 @@ public class Background {
         backgroundFile.close();
     }
     
-    public static String loadList() throws FileNotFoundException, IOException{    //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
+    public String loadList() throws FileNotFoundException, IOException{    //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
         File f = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt");
         BufferedReader read = new BufferedReader(new FileReader(f));
         
@@ -110,18 +114,18 @@ public class Background {
         return filePath;
     }
     
-    public static void buildList(Assignment build){
+    public void buildList(Assignment build){
         list.add(build);
     }
     
-    public static void printList() {
+    public void printList() {
         //display all tasks
         for(Assignment content : list){
             System.out.println(content.getName());
         }
     }
     
-    public static boolean getTaskInfo(String s){    //prints all information about a given task
+    public boolean getTaskInfo(String s){    //prints all information about a given task
         //search for the task in the list using the task name
         boolean taskFound = true;
         int count = 0;
@@ -147,7 +151,7 @@ public class Background {
         return taskFound;
     }
     
-    public static void removeOnLoad(){
+    public void removeOnLoad(){
         for(int i = 0; i < list.size(); i++){
             if(list.get(i).getYear() < timePoint.getYear()) {
                 //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
@@ -168,7 +172,7 @@ public class Background {
         }
     }
     
-    public static boolean removeTask(String s){
+    public boolean removeTask(String s){
         //search for the task in the list using the task name
         boolean taskFound = true;
         int count = 0;
@@ -183,11 +187,11 @@ public class Background {
         return taskFound;
     }
     
-    public static boolean isNull(){
+    public boolean isNull(){
         return list.isEmpty();
     }
     
-    public static void printWholeList() {    //DEBUG :`PRINT ALL Assignments OF THE LIST
+    public void printWholeList() {    //DEBUG :`PRINT ALL Assignments OF THE LIST
         //display all tasks
         for(Assignment content : list){
             System.out.println(content.getName());
@@ -207,16 +211,16 @@ public class Background {
         return taskFound;
     }
     
-    public static Assignment getAssignment(){
+    public Assignment getAssignment(){
         return assignment;
     }
     
-    private static void switchElements(int currentIndex){   //flips the values stored between the current and preivous elements of the list
+    private void switchElements(int currentIndex){   //flips the values stored between the current and preivous elements of the list
         Assignment current = list.set(currentIndex, list.get(currentIndex-1));
         list.set(currentIndex-1, current);
     }
     
-    public static void sort(){      //bubblesort method b/c the list will likely never be beyond 100 assignments
+    public void sort(){      //bubblesort method b/c the list will likely never be beyond 100 assignments
         for (int i = 0; i < list.size(); i++) {
             for (int j = 1; j < list.size(); j++) {
                 if(list.get(j).getYear() < list.get(j-1).getYear()) {   //checks year

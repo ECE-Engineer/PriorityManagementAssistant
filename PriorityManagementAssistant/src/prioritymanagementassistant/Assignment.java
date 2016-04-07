@@ -15,17 +15,9 @@
  */
 package prioritymanagementassistant;
 
-import java.util.Scanner;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 //Kyle Zeller
 
 public class Assignment {
-    private static String line;
-    private static boolean badInfoFlag = true;    //set default value here
-    private static Scanner kb = new Scanner(System.in);
-    
     private String name;
     private int month, day, year, hour, minute, priority;
     
@@ -94,37 +86,5 @@ public class Assignment {
     
     public void setPriority(int p){
         this.priority = p;
-    }
-
-    public static String setDefaultPath(){
-        do {
-            System.out.println("Name Your List File???");
-            System.out.println("EX :\t" + "\"newFile\"");
-            line = kb.nextLine();
-
-            try {  // Catch errors in I/O if necessary.
-                badInfoFlag = false;
-                PrintWriter writer = new PrintWriter(("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\" + line + ".txt"), "UTF-8");
-            } catch(IOException e){
-                badInfoFlag = true;
-            }
-        } while (line == null || badInfoFlag);
-        return "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\" + line + ".txt";
-    }
-    
-    public static String getPath(){  //get prefered file path
-        do {
-            System.out.println("Where Do You Want Your Assignments to Be Saved???");
-            System.out.println("Specify Path Name\t" + "\"C:\\\\person\\\\Desktop\\\\test\\\\newFile.txt\"");
-            line = kb.nextLine();
-
-            try {  // Catch errors in I/O if necessary.
-                badInfoFlag = false;
-                PrintWriter writer = new PrintWriter(line, "UTF-8");
-            } catch(IOException e){
-                badInfoFlag = true;
-            }
-        } while (line == null || badInfoFlag);
-        return line;
     }
 }

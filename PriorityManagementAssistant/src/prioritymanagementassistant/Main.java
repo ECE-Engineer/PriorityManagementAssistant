@@ -154,26 +154,9 @@ package prioritymanagementassistant;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-
-import static prioritymanagementassistant.Assignment.getPath;
-import static prioritymanagementassistant.Assignment.setDefaultPath;
-
-import static prioritymanagementassistant.Background.writeFile;
-import static prioritymanagementassistant.Background.buildList;
-import static prioritymanagementassistant.Background.createBackgroundFile;
-import static prioritymanagementassistant.Background.getAssignment;
-import static prioritymanagementassistant.Background.getDestinationFolder;
-import static prioritymanagementassistant.Background.isFile;
-import static prioritymanagementassistant.Background.isNull;
-import static prioritymanagementassistant.Background.loadList;
-import static prioritymanagementassistant.Background.printList;
-import static prioritymanagementassistant.Background.removeTask;
-import static prioritymanagementassistant.Background.getTaskInfo;
-import static prioritymanagementassistant.Background.isAssignmentPresent;
-import static prioritymanagementassistant.Background.removeOnLoad;
-import static prioritymanagementassistant.Background.sort;
 
 /**
  * @author Kyle Z
@@ -185,12 +168,13 @@ public class Main {
     private static int month, day, year, hour, minute, priority, numberOption;
     private static boolean create = true, numberFlag = false, badInfoFlag = true;
 
+    private static Background backgroundProcess;
     private static Assignment assignment;
     public static LocalDateTime timePoint = LocalDateTime.now();    // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
     private static Scanner kb = new Scanner(System.in);
     
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
-        if(!isFile()) {   //this is the first run of the program & there will be a welcome message with a user prompt to give the file path
+        if(!backgroundProcess.isFile()) {   //this is the first run of the program & there will be a welcome message with a user prompt to give the file path
             System.out.println("Welcome I am your Priority Management Assistant");
             do {
                 System.out.println("Would you like the list to be saved in your Desktop folder?\t" + ("Y / N"));    //setting a default saving location
@@ -198,15 +182,41 @@ public class Main {
             } while (!fLocation.equalsIgnoreCase("Y") && !fLocation.equalsIgnoreCase("N"));
             
             if(fLocation.equalsIgnoreCase("Y")) {
-                filePath = setDefaultPath();
-            } else  filePath = getPath();  //user specifeied path
+                do {
+                    System.out.println("Name Your List File???");
+                    System.out.println("EX :\t" + "\"newFile\"");
+                    line = kb.nextLine();
+
+                    try {  // Catch errors in I/O if necessary.
+                        badInfoFlag = false;
+                        PrintWriter writer = new PrintWriter(("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\" + line + ".txt"), "UTF-8");
+                    } catch(IOException e){
+                        badInfoFlag = true;
+                    }
+                } while (line == null || badInfoFlag);
+                filePath = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\" + line + ".txt";
+            } else  {
+                do {
+                    System.out.println("Where Do You Want Your Assignments to Be Saved???");
+                    System.out.println("Specify Path Name\t" + "\"C:\\\\person\\\\Desktop\\\\test\\\\newFile.txt\"");
+                    line = kb.nextLine();
+
+                    try {  // Catch errors in I/O if necessary.
+                        badInfoFlag = false;
+                        PrintWriter writer = new PrintWriter(line, "UTF-8");
+                    } catch(IOException e){
+                        badInfoFlag = true;
+                    }
+                } while (line == null || badInfoFlag);
+                filePath = line;  //user specified path
+            }
         } else {   //ELSE I NEED TO ADD TO THE LIST THE PREVIOUS CONTENTS OF THE LIST
             //method to read contents from the list file into the arraylist
-            filePath = loadList();
+            filePath = backgroundProcess.loadList();
             //remove all overdue assignments
-            removeOnLoad();
+            backgroundProcess.removeOnLoad();
             //tell the user the current path destination folder & ask them if they want to change it
-            System.out.println("Your list file is currently stored in your " + getDestinationFolder() + " folder");
+            System.out.println("Your list file is currently stored in your " + backgroundProcess.getDestinationFolder() + " folder");
             
             
             
@@ -214,8 +224,21 @@ public class Main {
                 System.out.println("Would you like to change the folder that the list file is stored in??\t" + ("Y / N"));
                 fLocation = kb.nextLine();
             } while (!fLocation.equalsIgnoreCase("Y") && !fLocation.equalsIgnoreCase("N"));
-            if(fLocation.equalsIgnoreCase("Y"))
-                filePath = getPath();
+            if(fLocation.equalsIgnoreCase("Y")){
+                do {
+                    System.out.println("Where Do You Want Your Assignments to Be Saved???");
+                    System.out.println("Specify Path Name\t" + "\"C:\\\\person\\\\Desktop\\\\test\\\\newFile.txt\"");
+                    line = kb.nextLine();
+
+                    try {  // Catch errors in I/O if necessary.
+                        badInfoFlag = false;
+                        PrintWriter writer = new PrintWriter(line, "UTF-8");
+                    } catch(IOException e){
+                        badInfoFlag = true;
+                    }
+                } while (line == null || badInfoFlag);
+                filePath = line;
+            }
         }
         
         //START-UP//    is EMPTY            FORCE          CASE 1:
@@ -232,7 +255,7 @@ public class Main {
         
         outerloop:        //break only if the user is done with everything
         while(true){
-            while(isNull()){    //CASE 1 & 3
+            while(backgroundProcess.isNull()){    //CASE 1 & 3
                 do{
                     try{
                         numberFlag = false;
@@ -253,15 +276,15 @@ public class Main {
                 } while(line == null || numberFlag || numberOption > 1 || numberOption < 0);
 
                 if(numberOption == 0){
-                    writeFile(filePath);    //write to & save file
-                    createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
+                    backgroundProcess.writeFile(filePath);    //write to & save file
+                    backgroundProcess.createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
                     break outerloop;
                 }
                 if(numberOption == 1){
                     do {
                         System.out.println("Please enter a name for your Assignment:");  //prompt user for task
                         name = kb.nextLine();
-                    } while (name == null || name.contains("---") || isAssignmentPresent(name)); //prompt the user for no input
+                    } while (name == null || name.contains("---") || backgroundProcess.isAssignmentPresent(name)); //prompt the user for no input
                     do {
                         System.out.println("What year is " + name + " due?");  //prompt user for year
                         line = kb.nextLine();
@@ -426,12 +449,12 @@ public class Main {
                     } while (numberFlag || badInfoFlag);
                     
                     assignment = new Assignment(name, month, day, year, hour, minute, priority);
-                    buildList(assignment);
-                    sort(); //sort the list according to due date and priority just before saving the file
+                    backgroundProcess.buildList(assignment);
+                    backgroundProcess.sort(); //sort the list according to due date and priority just before saving the file
                 }
             }
 
-            while(!isNull()){   //CASE 2 & 4
+            while(!backgroundProcess.isNull()){   //CASE 2 & 4
                 do{
                     try{
                         numberFlag = false;
@@ -456,15 +479,15 @@ public class Main {
                 } while(line == null || numberFlag || numberOption > 5 || numberOption < 0);
 
                 if(numberOption == 0){
-                    writeFile(filePath);    //write to & save file
-                    createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
+                    backgroundProcess.writeFile(filePath);    //write to & save file
+                    backgroundProcess.createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
                     break outerloop;
                 }
                 if(numberOption == 1){
                     do {
                         System.out.println("Please enter a name for your Assignment:");  //prompt user for task
                         name = kb.nextLine();
-                    } while (name == null || name.contains("---") || isAssignmentPresent(name)); //prompt the user for no input
+                    } while (name == null || name.contains("---") || backgroundProcess.isAssignmentPresent(name)); //prompt the user for no input
                     do {
                         System.out.println("What year is " + name + " due?");  //prompt user for year
                         line = kb.nextLine();
@@ -629,8 +652,8 @@ public class Main {
                     } while (numberFlag || badInfoFlag);
                     
                     assignment = new Assignment(name, month, day, year, hour, minute, priority);
-                    buildList(assignment);
-                    sort(); //sort the list according to due date and priority just before saving the file
+                    backgroundProcess.buildList(assignment);
+                    backgroundProcess.sort(); //sort the list according to due date and priority just before saving the file
                 }
                 if(numberOption == 2){
                     //prompt to delete
@@ -638,9 +661,9 @@ public class Main {
                         //select a file to delete
                         System.out.println("Please enter the name of the task you'd like to delete");
                         delFile = kb.nextLine();
-                    } while (removeTask(delFile));  //the user will be prompted again for invalid input
+                    } while (backgroundProcess.removeTask(delFile));  //the user will be prompted again for invalid input
                     
-                    sort(); //sort the list according to due date and priority just before saving the file
+                    backgroundProcess.sort(); //sort the list according to due date and priority just before saving the file
                 }
                 if(numberOption == 3){
                     //prompt to edit
@@ -648,7 +671,7 @@ public class Main {
                         //select an assignment to edit
                         System.out.println("Please enter the name of the task you'd like to edit");
                         editInfo = kb.nextLine();
-                    } while (!isAssignmentPresent(editInfo));  //the user will be prompted again for invalid input
+                    } while (!backgroundProcess.isAssignmentPresent(editInfo));  //the user will be prompted again for invalid input
 
                     do {    //THIS WILL RUN FOR AS LONG AS THE USER PREVIOUSLY WANTED TO EDIT THE SAME ASSIGNMENT SOME MORE
                         //prompt the user to change task name, time, or priority
@@ -665,8 +688,8 @@ public class Main {
                             do {
                                 System.out.println("Please enter a name for your Assignment:");  //prompt user for task
                                 name = kb.nextLine();
-                            } while (name == null || name.contains("---") || isAssignmentPresent(name)); //prompt the user for no input
-                            assignment = getAssignment();
+                            } while (name == null || name.contains("---") || backgroundProcess.isAssignmentPresent(name)); //prompt the user for no input
+                            assignment = backgroundProcess.getAssignment();
                             //set the name
                             assignment.setName(name);
                         }
@@ -815,7 +838,7 @@ public class Main {
                                     numberFlag = true;
                                 }
                             } while (line == null || numberFlag || badInfoFlag); //prompt the user for no input
-                            assignment = getAssignment();
+                            assignment = backgroundProcess.getAssignment();
                             //set the time
                             assignment.setMonth(month);
                             assignment.setDay(day);
@@ -845,7 +868,7 @@ public class Main {
                                     }
                                 }
                             } while (numberFlag || badInfoFlag);
-                            assignment = getAssignment();
+                            assignment = backgroundProcess.getAssignment();
                             //set the priority
                             assignment.setPriority(priority);
                         }
@@ -855,20 +878,20 @@ public class Main {
                         } while(!editSameChoice.equalsIgnoreCase("Y") && !editSameChoice.equalsIgnoreCase("N"));
                     } while (editSameChoice.equalsIgnoreCase("Y"));
 
-                    sort(); //sort the list according to due date and priority just before saving the file
+                    backgroundProcess.sort(); //sort the list according to due date and priority just before saving the file
                 }
                 if(numberOption == 4){
                     //prompt to view all assignments
                     System.out.println("These are all your assignments so far:");
                     //display all tasks
-                    printList();
+                    backgroundProcess.printList();
                 }
                 if(numberOption == 5){
                     //prompt to view assignment contents
                     do {    //the user will be prompted again for invalid input
                         System.out.println("Please enter the name of the task you'd like additional information about");
                         info = kb.nextLine();
-                    } while (getTaskInfo(info));
+                    } while (backgroundProcess.getTaskInfo(info));
                 }
             }
         }
