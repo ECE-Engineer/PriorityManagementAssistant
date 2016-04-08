@@ -13,7 +13,7 @@
  * 
  * 
  */
-package prioritymanagementassistant;
+package gui;
 
 //Kyle Zeller
 

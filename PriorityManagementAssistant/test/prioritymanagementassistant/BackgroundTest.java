@@ -43,8 +43,11 @@ public class BackgroundTest {
     @Test
     public void testGetDestinationFolder() {
         System.out.println("getDestinationFolder");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
+        
         String expResult = "";
-        String result = Background.getDestinationFolder();
+        String result = b.getDestinationFolder();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -56,8 +59,10 @@ public class BackgroundTest {
     @Test
     public void testWriteFile() throws Exception {
         System.out.println("writeFile");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
         String path = "";
-        Background.writeFile(path);
+        b.writeFile(path);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -68,8 +73,10 @@ public class BackgroundTest {
     @Test
     public void testIsFile() {
         System.out.println("isFile");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
         boolean expResult = false;
-        boolean result = Background.isFile();
+        boolean result = b.isFile();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -81,8 +88,10 @@ public class BackgroundTest {
     @Test
     public void testCreateBackgroundFile() throws Exception {
         System.out.println("createBackgroundFile");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
         String s = "";
-        Background.createBackgroundFile(s);
+        b.createBackgroundFile(s);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -93,8 +102,10 @@ public class BackgroundTest {
     @Test
     public void testLoadList() throws Exception {
         System.out.println("loadList");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
         String expResult = "";
-        String result = Background.loadList();
+        String result = b.loadList();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -106,8 +117,10 @@ public class BackgroundTest {
     @Test
     public void testBuildList() {
         System.out.println("buildList");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
         String build = "";
-        Background.buildList(build);
+        b.buildList(a);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -118,20 +131,24 @@ public class BackgroundTest {
     @Test
     public void testPrintList() {
         System.out.println("printList");
-        Background.printList();
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
+        b.printList();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of getTask method, of class Background.
+     * Test of getTaskInfo method, of class Background.
      */
     @Test
-    public void testGetTask() {
-        System.out.println("getTask");
+    public void testGetTaskInfo() {
+        System.out.println("getTaskInfo");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
         String s = "";
         boolean expResult = false;
-        boolean result = Background.getTask(s);
+        boolean result = b.getTaskInfo(s);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -143,7 +160,9 @@ public class BackgroundTest {
     @Test
     public void testRemoveOnLoad() {
         System.out.println("removeOnLoad");
-        Background.removeOnLoad();
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
+        b.removeOnLoad();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -154,9 +173,11 @@ public class BackgroundTest {
     @Test
     public void testRemoveTask() {
         System.out.println("removeTask");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
         String s = "";
         boolean expResult = false;
-        boolean result = Background.removeTask(s);
+        boolean result = b.removeTask(s);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -168,8 +189,10 @@ public class BackgroundTest {
     @Test
     public void testIsNull() {
         System.out.println("isNull");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
         boolean expResult = false;
-        boolean result = Background.isNull();
+        boolean result = b.isNull();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -181,7 +204,9 @@ public class BackgroundTest {
     @Test
     public void testPrintWholeList() {
         System.out.println("printWholeList");
-        Background.printWholeList();
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
+        b.printWholeList();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
         
@@ -202,63 +227,14 @@ public class BackgroundTest {
     }
 
     /**
-     * Test of setTask method, of class Background.
-     */
-    @Test
-    public void testSetTask() {
-        System.out.println("setTask");
-        String s = "";
-        Background.setTask(s);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setTime method, of class Background.
-     */
-    @Test
-    public void testSetTime() {
-        System.out.println("setTime");
-        int y = 0;
-        int mo = 0;
-        int d = 0;
-        int h = 0;
-        int mi = 0;
-        Background.setTime(y, mo, d, h, mi);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setPriority method, of class Background.
-     */
-    @Test
-    public void testSetPriority() {
-        System.out.println("setPriority");
-        int p = 0;
-        Background.setPriority(p);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of removeElement method, of class Background.
-     */
-    @Test
-    public void testRemoveElement() {
-        System.out.println("removeElement");
-        Background.removeElement();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of sort method, of class Background.
      */
     @Test
     public void testSort() {
         System.out.println("sort");
-        Background.sort();
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+        Background b = new Background();
+        b.sort();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

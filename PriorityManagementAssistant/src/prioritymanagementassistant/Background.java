@@ -21,6 +21,7 @@ package prioritymanagementassistant;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilePermission;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -58,14 +59,14 @@ public class Background {
             String minute = "" + content.getMinute();
             if(content.getHour() < 12){
                 if(minute.length() == 1){
-                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" + content.getPriority());
+                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" +  "PRIORITY:\t" + content.getPriority() +  "\tPOPUPS:\t" + content.getPopup());
                 } else
-                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" + content.getPriority());
+                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" +  "PRIORITY:\t" + content.getPriority() +  "\tPOPUPS:\t" + content.getPopup());
             } else {
                 if(minute.length() == 1){
-                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" + content.getPriority());
+                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" +  "PRIORITY:\t" + content.getPriority() +  "\tPOPUPS:\t" + content.getPopup());
                 } else
-                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" + content.getPriority());
+                    userFile.print(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" +  "PRIORITY:\t" + content.getPriority() +  "\tPOPUPS:\t" + content.getPopup());
             }
             userFile.println();
         }
@@ -91,9 +92,31 @@ public class Background {
         
         // write to the file the contents of the list
         for(Assignment content : list){
-            backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());
+            backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority() + "---" + content.getPopup());
             backgroundFile.println();
         }
+
+        //close the file
+        backgroundFile.close();
+    }
+    
+    public void createBatchFile() throws FileNotFoundException, UnsupportedEncodingException{
+        FilePermission permission = new FilePermission("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\", "write");
+        //make the file
+        backgroundFile = new PrintWriter("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\startup_PMA_popup_check.bat", "UTF-8");
+        
+        backgroundFile.print("javaw -Xmx200m -jar \"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\PriorityManagementAssistant\\POPUPS\\dist\\POPUPS.jar\"");
+        backgroundFile.println();
+        //backgroundFile.print("PAUSE");
+        //line ZERO must contain the path of the list file
+//        backgroundFile.print(s);
+//        backgroundFile.println();
+        
+        // write to the file the contents of the list
+//        for(Assignment content : list){
+//            backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority() + "---" + content.getPopup());
+//            backgroundFile.println();
+//        }
 
         //close the file
         backgroundFile.close();
@@ -108,7 +131,7 @@ public class Background {
             filePath = line;
         while ((line = read.readLine()) != null) {  //load the list
             //System.out.println("DEBUG\t" + "LOADING\t\t" + line);   //DEBUG
-            assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]));
+            assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]), Boolean.parseBoolean(line.split("---")[7]));
             list.add(assignment);
         }
         return filePath;
@@ -134,14 +157,14 @@ public class Background {
                 String minute = "" + content.getMinute();
                 if(content.getHour() < 12){
                     if(minute.length() == 1){
-                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" + content.getPriority());
+                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" +  "PRIORITY:\t" + content.getPriority() +  "\tPOPUPS:\t" + content.getPopup());
                     } else
-                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" + content.getPriority());
+                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" +  "PRIORITY:\t" + content.getPriority() +  "\tPOPUPS:\t" + content.getPopup());
                 } else {
                     if(minute.length() == 1){
-                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" + content.getPriority());
+                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t" +  "PRIORITY:\t" + content.getPriority() +  "\tPOPUPS:\t" + content.getPopup());
                     } else
-                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" + content.getPriority());
+                        System.out.println(content.getName() + "\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t" +  "PRIORITY:\t" + content.getPriority() +  "\tPOPUPS:\t" + content.getPopup());
                 }
                 taskFound = false;
                 break;
@@ -185,6 +208,18 @@ public class Background {
             count++;
         }
         return taskFound;
+    }
+    
+    public void enableAllPopups(){
+        for(Assignment content : list){
+            content.setPopup(true);
+        }
+    }
+    
+    public void disableAllPopups(){
+        for(Assignment content : list){
+            content.setPopup(false);
+        }
     }
     
     public boolean isNull(){

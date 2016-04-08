@@ -156,12 +156,11 @@ public class AssignmentTest {
         String input = "cschw";
         String expectedInput = "cschw";
         assertEquals(expectedInput, input);
-        
-        
-        
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
+                
         String n = "";
         int expResult = 0;
-        int result = Assignment.getMonth(n);//how do I set the values in this!!!!!!!!!!!!
+        int result = a.getMonth();//how do I set the values in this!!!!!!!!!!!!
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -199,10 +198,11 @@ public class AssignmentTest {
     @Test
     public void testGetDay() {
         System.out.println("getDay");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
         int m = 0;
         String n = "";
         int expResult = 0;
-        int result = Assignment.getDay(m, n);
+        int result = a.getDay();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
@@ -229,9 +229,10 @@ public class AssignmentTest {
     @Test
     public void testGetYear() {
         System.out.println("getYear");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
         String n = "";
         int expResult = 0;
-        int result = Assignment.getYear(n);
+        int result = a.getYear();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -258,9 +259,10 @@ public class AssignmentTest {
     @Test
     public void testGetHour() {
         System.out.println("getHour");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
         String n = "";
         int expResult = 0;
-        int result = Assignment.getHour(n);
+        int result = a.getHour();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
@@ -287,9 +289,10 @@ public class AssignmentTest {
     @Test
     public void testGetMinute() {
         System.out.println("getMinute");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
         String n = "";
         int expResult = 0;
-        int result = Assignment.getMinute(n);
+        int result = a.getMinute();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
@@ -316,9 +319,10 @@ public class AssignmentTest {
     @Test
     public void testGetPriority() {
         System.out.println("getPriority");
+        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
         String n = "";
         int expResult = 0;
-        int result = Assignment.getPriority(n);
+        int result = a.getPriority();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");

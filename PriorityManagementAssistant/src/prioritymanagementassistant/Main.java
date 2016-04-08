@@ -166,9 +166,9 @@ public class Main {
     private static String name, filePath, fLocation, delFile, info, editInfo,
                           editContent, editSameChoice, line;
     private static int month, day, year, hour, minute, priority, numberOption;
-    private static boolean create = true, numberFlag = false, badInfoFlag = true;
+    private static boolean create = true, numberFlag = false, badInfoFlag = true, popup = false;
 
-    private static Background backgroundProcess;
+    private static Background backgroundProcess = new Background();
     private static Assignment assignment;
     public static LocalDateTime timePoint = LocalDateTime.now();    // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
     private static Scanner kb = new Scanner(System.in);
@@ -447,8 +447,7 @@ public class Main {
                             }
                         }
                     } while (numberFlag || badInfoFlag);
-                    
-                    assignment = new Assignment(name, month, day, year, hour, minute, priority);
+                    assignment = new Assignment(name, month, day, year, hour, minute, priority, popup);
                     backgroundProcess.buildList(assignment);
                     backgroundProcess.sort(); //sort the list according to due date and priority just before saving the file
                 }
@@ -468,6 +467,10 @@ public class Main {
                         System.out.println("[3]\tEDIT");
                         System.out.println("[4]\tVIEW ASSIGNMENTS");
                         System.out.println("[5]\tVIEW CONTENTS");
+                        System.out.println("[6]\tENABLE POPUP\t[INDIVIDUAL]");
+                        System.out.println("[7]\tDISABLE POPUP\t[INDIVIDUAL]");
+                        System.out.println("[8]\tENABLE POPUPS\t[ALL]");
+                        System.out.println("[9]\tDISABLE POPUPS\t[ALL]");
 
                         System.out.println("\nPLEASE SELECT A NUMBER");
                         
@@ -650,8 +653,7 @@ public class Main {
                             }
                         }
                     } while (numberFlag || badInfoFlag);
-                    
-                    assignment = new Assignment(name, month, day, year, hour, minute, priority);
+                    assignment = new Assignment(name, month, day, year, hour, minute, priority, popup);
                     backgroundProcess.buildList(assignment);
                     backgroundProcess.sort(); //sort the list according to due date and priority just before saving the file
                 }
@@ -893,7 +895,38 @@ public class Main {
                         info = kb.nextLine();
                     } while (backgroundProcess.getTaskInfo(info));
                 }
+                if(numberOption == 6){
+                    //prompt to enable a popup for an assignment
+                    do {    //the user will be prompted again for invalid input
+                        System.out.println("Please enter the name of the task you'd like to set a popup for");
+                        info = kb.nextLine();
+                    } while (backgroundProcess.getTaskInfo(info));
+                    assignment = backgroundProcess.getAssignment();
+                    //enable the popup
+                    assignment.setPopup(true);
+                }
+                if(numberOption == 7){
+                    //prompt to disable a popup for an assignment
+                    do {    //the user will be prompted again for invalid input
+                        System.out.println("Please enter the name of the task you'd like to set a popup for");
+                        info = kb.nextLine();
+                    } while (backgroundProcess.getTaskInfo(info));
+                    assignment = backgroundProcess.getAssignment();
+                    //disable the popup
+                    assignment.setPopup(false);
+                }
+                if(numberOption == 8){
+                    //enable popups for all assignments
+                    backgroundProcess.enableAllPopups();
+                }
+                if(numberOption == 9){
+                    //disable popups for all assignments
+                    backgroundProcess.disableAllPopups();
+                }
             }
         }
+        //create the batch file here
+        //later on add conditionals to only create the batch once, do this only if necessary
+        backgroundProcess.createBatchFile();
     }
 }
