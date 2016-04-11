@@ -206,7 +206,7 @@ public class BackgroundTest {
         System.out.println("printWholeList");
         Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
         Background b = new Background();
-        b.printWholeList();
+        b.printListDetails();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
         

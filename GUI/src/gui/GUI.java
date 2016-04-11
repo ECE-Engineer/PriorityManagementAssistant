@@ -1,15 +1,56 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* REQ 1 & 2
+ * The Priority Management Assistant (PMA):
+ * currently allows the user to make an assignment and sucessfully save it to
+ * the file. We have made many changes to the program to ensure that the program
+ * at it's current state, won't break with invalid input.
+
+ * REQ 3
+ * The PMA is now capable of reading the previous written data from the file
+ * to the list. The program will run and update its list from the list file
+ * before the user starts adding information to the list. A second file is also
+ * generated to keep track of these logs and acts as a failsafe in-case the
+ * list file generated was deleted or moved.
+
+ * REQ 4
+ * Show the user all the tasks with (optional) additional information & allow
+ * the user to delete assignments. DELETE THE ASSIGNMENTS BY TITLE.
+
+ * REQ 5
+ * The program will delete overdue assignments after the due date has passed.
+ * The program will delete these overdue assignments on start-up.
+
+ * REQ 6
+ * The program will allow the user to edit any assignment, including any
+ * specific content of that assignment.
+
+ * REQ 7    --->    (IN GUI PROGRAM)
+ * The program will allow the user to pick the priority of an assignent by
+ * color.
+
+ * REQ 8
+ * The program will automatically order assignments by due date and priority,
+ * before they are added to the list.
+
+ * REQ 9
+ * Create pop-ups for the assignments, where as the priority level determines
+ * the color of the pop-up & the close-ness to the dealine determines the size
+ * of the pop-ups. This part of the program must be able to run at different
+ * time intervals than that of the program. This will be the "smart" part of the
+ * program because of what it will require the program to do. In other words the
+ * program will at random times look at the current time and compare that to the
+ * items in the list and at 24, 12, 6, 3, 2, 1 hr notification times. The
+ * program will have to know when to check the list and when to notify the user.
+
+ * REQ 10
+ * Create a dialog box that allows the user to enable & disable popups for
+ * assignments.
+
+ * REQ 11
+ * Create & implement a GUI to easily configure and manage assignments.
  */
+
 package gui;
 
-/**
- *
- * @author Kyle Z
- */
-
 import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,19 +78,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
- *
- * @author Andrew
+ * Kyle Zeller
+ * Andrew B
  */
 public class GUI extends javax.swing.JFrame {
+    
+    
+    
+    private static Background backgroundProcess = new Background();
+    private static Assignment assignment;
+    public static LocalDateTime timePoint = LocalDateTime.now();    // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
 
     private Component frame;
-    public static LocalDateTime timePoint = LocalDateTime.now();
 
     public GUI() {
         initComponents();

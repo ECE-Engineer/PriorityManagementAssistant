@@ -9,7 +9,7 @@
  * prompt the user to specify the path name for their list file as well as other
  * user prompts and messages (Ex. the welcoming message).
  */
-package prioritymanagementassistant;
+package gui;
 
 //Kyle Zeller
 
@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import static prioritymanagementassistant.Main.timePoint;
+import static gui.GUI.timePoint;
 
 public class Background {
     private static Assignment assignment;
