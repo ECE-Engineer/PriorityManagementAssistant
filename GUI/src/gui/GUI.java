@@ -84,7 +84,38 @@ import javax.swing.JOptionPane;
  */
 public class GUI extends javax.swing.JFrame {
     
-    
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton a1_button;
+    private javax.swing.JButton a2_button;
+    private javax.swing.JButton a3_button;
+    private javax.swing.JButton a4_button;
+    private javax.swing.JButton a5_button;
+    private javax.swing.JButton createButton;
+    private javax.swing.JComboBox<String> dayComboBox;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JComboBox<String> hourComboBox;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JComboBox<String> minuteComboBox;
+    private javax.swing.JComboBox<String> monthComboBox;
+    private javax.swing.JTextField nameTextBox;
+    private javax.swing.JComboBox<String> priorityComboBox;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JTextField searchTextBox;
+    private javax.swing.JComboBox<String> yearComboBox;
+    // End of variables declaration//GEN-END:variables
+    private static ArrayList<Assignment> assignments = new ArrayList<Assignment>();
     
     private static Background backgroundProcess = new Background();
     private static Assignment assignment;
@@ -401,20 +432,14 @@ public class GUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-        String name;
-    int month;
-    int day;
-    int year;
-    int hour;
-    int minute;
-    int priority;
-    String build;
-    Assignment Temp;
+    String name;
+    int month, day, year, hour, minute, priority;
+    boolean popup = false;
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
         deleteButton.setVisible(false);
 
-        if (isAssignmentPresent(nameTextBox.getText())) {
+        if (backgroundProcess.isAssignmentPresent(nameTextBox.getText())) {
             //Checks to see if the name already exists, if it does, pops up error. names must be unique. 
             JOptionPane.showMessageDialog(frame, nameTextBox.getText() + " already exists, please try a new name.", "Repeated Name Error", JOptionPane.ERROR_MESSAGE);
         } else {
@@ -439,8 +464,8 @@ public class GUI extends javax.swing.JFrame {
             hour = Integer.parseInt(hourComboBox.getSelectedItem().toString());
             minute = Integer.parseInt(minuteComboBox.getSelectedItem().toString());
             priority = Integer.parseInt(priorityComboBox.getSelectedItem().toString());
-            build = name + "---" + month + "---" + day + "---" + year + "---" + hour + "---" + minute + "---" + priority + "\n";
-            assignments.add(build);
+            assignment = new Assignment(name, month, day, year, hour, minute, priority, popup);
+            assignments.add(assignment);
             monthComboBox.setSelectedIndex(0);
             dayComboBox.setSelectedIndex(0);
             yearComboBox.setSelectedIndex(0);
@@ -456,15 +481,16 @@ public class GUI extends javax.swing.JFrame {
 
     public void refreshList() {
         for (int i = 0; i < assignments.size() || i < 5; i++) {
-            if (!assignments.get(i).isEmpty()) {
-                String line = assignments.get(i);
-                String name = line.split("---")[0];
-                String month = line.split("---")[1];
-                String day = line.split("---")[2];
-                String year = line.split("---")[3];
-                String hour = line.split("---")[4];
-                String minute = line.split("---")[5];
-                String priority = line.split("---")[6];
+            if (!assignments.get(i).getName().isEmpty()) {
+                assignment = assignments.get(i);
+                name = assignment.getName();
+                month = assignment.getMonth();
+                day = assignment.getDay();
+                year = assignment.getYear();
+                hour = assignment.getHour();
+                minute = assignment.getMinute();
+                priority = assignment.getPriority();
+                popup = assignment.getPopup();
 
                 if (i == 0) {
                     a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\t Priority: \t" + priority + "\t");
@@ -778,39 +804,10 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_searchTextBoxActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        removeTask(nameTextBox.getText());
+        backgroundProcess.removeTask(nameTextBox.getText());
         deleteButton.setVisible(false);
         refreshList();
     }//GEN-LAST:event_deleteButtonActionPerformed
-
-    public static boolean isAssignmentPresent(String s) {
-        //search for the task in the list using the task name
-        boolean taskFound = false;  //assignment not present in list
-        int track = 0;
-        for (String content : assignments) {
-            if (content.substring(0, content.indexOf("---")).equalsIgnoreCase(s)) {
-                taskFound = true;   //assignment present in list
-                break;
-            }
-            track++;
-        }
-        return taskFound;
-    }
-
-    public static boolean removeTask(String s) {
-        //search for the task in the list using the task name
-        boolean taskFound = true;
-        int count = 0;
-        for (String content : assignments) {
-            if (content.substring(0, content.indexOf("---")).equalsIgnoreCase(s)) {
-                assignments.remove(count);
-                taskFound = false;
-                break;
-            }
-            count++;
-        }
-        return taskFound;
-    }
 
     static String filepath;
 
@@ -843,85 +840,19 @@ public class GUI extends javax.swing.JFrame {
             public void run() {
                     new GUI().setVisible(true);
                 try {
-                    File f = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt");
-                    BufferedReader read = new BufferedReader(new FileReader(f));
-                    String line;
-                    String filePath = "";
-                    if ((line = read.readLine()) != null) {
-                        filePath = line;
-                    }
-                    while ((line = read.readLine()) != null) {  //load the list
-                        assignments.add(line);
-                    }
-                } catch (FileNotFoundException ex) {
-
+                    backgroundProcess.loadList();
                 } catch (IOException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                removeOnLoad();
-
-                
-                
-
+                    backgroundProcess.removeOnLoad();
             }
         });
     }
 
-    public static void removeOnLoad() {
-        for (int i = 0; i < assignments.size(); i++) {
-            if (Integer.parseInt(assignments.get(i).split("---")[3]) < timePoint.getYear()) {
-                assignments.remove(i);
-            } else if (Integer.parseInt(assignments.get(i).split("---")[1]) < timePoint.getMonthValue()) {
-                assignments.remove(i);
-            } else if (Integer.parseInt(assignments.get(i).split("---")[2]) < timePoint.getDayOfMonth()) {
-                assignments.remove(i);
-            } else if (Integer.parseInt(assignments.get(i).split("---")[4]) < timePoint.getHour()) {
-                assignments.remove(i);
-            } else if (Integer.parseInt(assignments.get(i).split("---")[5]) < timePoint.getMinute()) {
-                assignments.remove(i);
-            }
-        }
-        
-        GUI rh = new GUI(/* constructor args here */);
-        rh.refreshList();
-        
-    }
 
     public void hideDeleteButton() {
         deleteButton.setVisible(false);
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton a1_button;
-    private javax.swing.JButton a2_button;
-    private javax.swing.JButton a3_button;
-    private javax.swing.JButton a4_button;
-    private javax.swing.JButton a5_button;
-    private javax.swing.JButton createButton;
-    private javax.swing.JComboBox<String> dayComboBox;
-    private javax.swing.JButton deleteButton;
-    private javax.swing.JComboBox<String> hourComboBox;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JComboBox<String> minuteComboBox;
-    private javax.swing.JComboBox<String> monthComboBox;
-    private javax.swing.JTextField nameTextBox;
-    private javax.swing.JComboBox<String> priorityComboBox;
-    private javax.swing.JButton searchButton;
-    private javax.swing.JTextField searchTextBox;
-    private javax.swing.JComboBox<String> yearComboBox;
-    // End of variables declaration//GEN-END:variables
-    private static ArrayList<String> assignments = new ArrayList<String>();
 ;
 }

@@ -176,6 +176,8 @@ public class Background {
                 list.remove(i);
             }
         }
+        GUI rh = new GUI(/* constructor args here */);
+        rh.refreshList();
     }
     
     public boolean removeTask(String s){
