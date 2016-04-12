@@ -7,6 +7,7 @@ package prioritymanagementassistant;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,187 +41,117 @@ public class AssignmentTest {
     }
 
     @Rule
-    public ExpectedException exception = ExpectedException.none();    
-    
-    
-    
-    
+    public ExpectedException exception = ExpectedException.none();
     
     /**
-     * Test of setDefaultPath method, of class Assignment.
+     * Test of getName method, of class Assignment.
      */
     @Test
-    public void testSetDefaultPath1() {
-        System.out.println("setDefaultPath");
-        String input = "C:\\\\person\\\\Desktop\\";
-        exception.expectMessage("C:\\\\person\\\\Desktop\\");  //any invalid path like this will evoke the program to ask the user again, so this is expected to fail
+    public void testGetName() {
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        String expResult = "test1";
+        assertEquals(expResult, instance.getName());
+        try {
+            assertEquals(expResult, instance.getName());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }   
     }
 
     /**
-     * Test of setDefaultPath method, of class Assignment.
+     * Test of setName method, of class Assignment.
      */
     @Test
-    public void testSetDefaultPath2() {
-        System.out.println("setDefaultPath");
-        String input = "C:\\\\person\\\\Desktop\\\\test\\\\newFile.txt";
-        String expectedInput = "C:\\\\person\\\\Desktop\\\\test\\\\newFile.txt";
-        assertEquals(expectedInput, input);  //this path is valid and would generate the default path for the saved file
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /**
-     * Test of getPath method, of class Assignment.
-     */
-    @Test
-    public void testGetPath1() {
-        System.out.println("getPath");
-        String input = "C:\\\\person\\\\Desktop\\\\test";
-        exception.expectMessage("C:\\\\person\\\\Desktop\\\\test");  //any invalid path like this will evoke the program to ask the user again, so this is expected to fail
+    public void testSetName() {
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        String expResult = "test1.1";
+        instance.setName("test1.1");
+        
+        try {
+            assertEquals(expResult, instance.getName());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }   
     }
 
-    /**
-     * Test of getPath method, of class Assignment.
-     */
-    @Test
-    public void testGetPath2() {
-        System.out.println("getPath");
-        String input = "C:\\\\person\\\\Desktop\\\\newFile.txt";
-        String expectedInput = "C:\\\\person\\\\Desktop\\\\newFile.txt";
-        assertEquals(expectedInput, input);  //this path is valid and would generate the path for the saved file
-    }
-    
-    
-    
-    
-    
-    
-    
-    /**
-     * Test of getTask method, of class Assignment.
-     */
-    @Test
-    public void testGetTask1() {
-        System.out.println("getTask");
-        String input = "---";
-        exception.expectMessage("---");     //this is expected to fail because --- is the delimeter for reading the saved file
-    }
-
-    /**
-     * Test of getTask method, of class Assignment.
-     */
-    @Test
-    public void testGetTask2() {
-        System.out.println("getTask");
-        String input = "cschw";
-        String expectedInput = "cschw";
-        assertEquals(expectedInput, input);     //this will pass because any string except for --- can be the name of a task
-    }
-    
-    
-    
-    
-//            String[] testInfo = {"blah\n",
-//                             "hw\n",
-//                             "MEETING\n",
-//                             "Foo Bar\n",
-//                             "HeLlOwOrLd\n",
-//                             "     \n",
-//                             "---\n",       //this will cause the program to ask again
-//                             "6879786b5986v475\n",
-//                             "*(^&RV HGHUYF\n",
-//                             "%E&*$V&*^%V(**B)\n"};
-//        ByteArrayInputStream input;
-//        for(String elements : testInfo){
-//            input = new ByteArrayInputStream(elements.getBytes());
-//            System.setIn(input);
-//            System.setIn(System.in);
-//        }
-    
-    
-    
-    
     /**
      * Test of getMonth method, of class Assignment.
      */
     @Test
     public void testGetMonth() {
-        System.out.println("getMonth");
-        String input = "cschw";
-        String expectedInput = "cschw";
-        assertEquals(expectedInput, input);
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-                
-        String n = "";
-        int expResult = 0;
-        int result = a.getMonth();//how do I set the values in this!!!!!!!!!!!!
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 4;
         
-//                String[] testInfo = {"12\n",
-//                             " \n",
-//                             "324\n",
-//                             "11\n",
-//                             "3\n",
-//                             "7\n",
-//                             "gdf\n",
-//                             "4\n",
-//                             "3\n"};
-//        ByteArrayInputStream input;
-//        for(String elements : testInfo){
-//            input = new ByteArrayInputStream(elements.getBytes());
-//            System.setIn(input);
-//            System.setIn(System.in);
-//        }
+        try {
+            assertEquals(expResult, instance.getMonth());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }  
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+    /**
+     * Test of setMonth method, of class Assignment.
+     */
+    @Test
+    public void testSetMonth() {
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 5;
+        instance.setMonth(5);
+        
+        try {
+            assertEquals(expResult, instance.getMonth());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }  
+    }
 
     /**
      * Test of getDay method, of class Assignment.
      */
     @Test
     public void testGetDay() {
-        System.out.println("getDay");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        int m = 0;
-        String n = "";
-        int expResult = 0;
-        int result = a.getDay();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//                String[] testInfo = {"12\n",
-//                             " \n",
-//                             "30\n",
-//                             "11\n",
-//                             "3\n",
-//                             "7\n",
-//                             "31\n",
-//                             "4\n",
-//                             "3\n"};
-//        ByteArrayInputStream input;
-//        for(String elements : testInfo){
-//            input = new ByteArrayInputStream(elements.getBytes());
-//            System.setIn(input);
-//            System.setIn(System.in);
-//        }
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 20;
+        
+        try {
+            assertEquals(expResult, instance.getDay());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
+    }
+
+    /**
+     * Test of setDay method, of class Assignment.
+     */
+    @Test
+    public void testSetDay() {
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 21;
+        instance.setDay(21);
+        
+        try {
+            assertEquals(expResult, instance.getDay());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
     }
 
     /**
@@ -228,29 +159,36 @@ public class AssignmentTest {
      */
     @Test
     public void testGetYear() {
-        System.out.println("getYear");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        String n = "";
-        int expResult = 0;
-        int result = a.getYear();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-//                String[] testInfo = {"1253\n",
-//                             " \n",
-//                             "3540\n",
-//                             "11\n",
-//                             "2016\n",
-//                             "7\n",
-//                             "2017\n",
-//                             "4\n",
-//                             "3\n"};
-//        ByteArrayInputStream input;
-//        for(String elements : testInfo){
-//            input = new ByteArrayInputStream(elements.getBytes());
-//            System.setIn(input);
-//            System.setIn(System.in);
-//        }
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 2016;
+        
+        try {
+            assertEquals(expResult, instance.getYear());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
+    }
+
+    /**
+     * Test of setYear method, of class Assignment.
+     */
+    @Test
+    public void testSetYear() {
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 2017;
+        instance.setYear(2017);
+        
+        try {
+            assertEquals(expResult, instance.getYear());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
     }
 
     /**
@@ -258,29 +196,36 @@ public class AssignmentTest {
      */
     @Test
     public void testGetHour() {
-        System.out.println("getHour");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        String n = "";
-        int expResult = 0;
-        int result = a.getHour();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//                String[] testInfo = {"12\n",
-//                             " \n",
-//                             "30\n",
-//                             "11\n",
-//                             "3\n",
-//                             "7\n",
-//                             "31\n",
-//                             "24\n",
-//                             "23\n"};
-//        ByteArrayInputStream input;
-//        for(String elements : testInfo){
-//            input = new ByteArrayInputStream(elements.getBytes());
-//            System.setIn(input);
-//            System.setIn(System.in);
-//        }
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 13;
+        
+        try {
+            assertEquals(expResult, instance.getHour());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
+    }
+
+    /**
+     * Test of setHour method, of class Assignment.
+     */
+    @Test
+    public void testSetHour() {
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 14;
+        instance.setHour(14);
+        
+        try {
+            assertEquals(expResult, instance.getHour());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
     }
 
     /**
@@ -288,29 +233,36 @@ public class AssignmentTest {
      */
     @Test
     public void testGetMinute() {
-        System.out.println("getMinute");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        String n = "";
-        int expResult = 0;
-        int result = a.getMinute();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//                String[] testInfo = {"56\n",
-//                             " \n",
-//                             "30\n",
-//                             "11\n",
-//                             "300\n",
-//                             "7\n",
-//                             "31\n",
-//                             "4\n",
-//                             "3\n"};
-//        ByteArrayInputStream input;
-//        for(String elements : testInfo){
-//            input = new ByteArrayInputStream(elements.getBytes());
-//            System.setIn(input);
-//            System.setIn(System.in);
-//        }
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 59;
+        
+        try {
+            assertEquals(expResult, instance.getMinute());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
+    }
+
+    /**
+     * Test of setMinute method, of class Assignment.
+     */
+    @Test
+    public void testSetMinute() {
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 45;
+        instance.setMinute(45);
+        
+        try {
+            assertEquals(expResult, instance.getMinute());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
     }
 
     /**
@@ -318,29 +270,73 @@ public class AssignmentTest {
      */
     @Test
     public void testGetPriority() {
-        System.out.println("getPriority");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        String n = "";
-        int expResult = 0;
-        int result = a.getPriority();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//                String[] testInfo = {"C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-//                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-//                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-//                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-//                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-//                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-//                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-//                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",
-//                             "C:\\Users\\Kyle Z\\Desktop\\testFile.txt\n",};
-//        ByteArrayInputStream input;
-//        for(String elements : testInfo){
-//            input = new ByteArrayInputStream(elements.getBytes());
-//            System.setIn(input);
-//            System.setIn(System.in);
-//        }
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 2;
+        
+        try {
+            assertEquals(expResult, instance.getPriority());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
+    }
+
+    /**
+     * Test of setPriority method, of class Assignment.
+     */
+    @Test
+    public void testSetPriority() {
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        int expResult = 3;
+        instance.setPriority(3);
+        
+        try {
+            assertEquals(expResult, instance.getPriority());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
+    }
+
+    /**
+     * Test of getPopup method, of class Assignment.
+     */
+    @Test
+    public void testGetPopup() {
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        boolean expResult = false;
+        
+        try {
+            assertEquals(expResult, instance.getPopup());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
+    }
+
+    /**
+     * Test of setPopup method, of class Assignment.
+     */
+    @Test
+    public void testSetPopup() {
+        Assignment instance = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        boolean expResult = true;
+        instance.setPopup(true);
+        
+        try {
+            assertEquals(expResult, instance.getPopup());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
     }
     
 }

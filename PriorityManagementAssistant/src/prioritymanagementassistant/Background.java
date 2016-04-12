@@ -25,11 +25,11 @@ import java.util.ArrayList;
 import static prioritymanagementassistant.Main.timePoint;
 
 public class Background {
-    private static Assignment assignment;
-    private static ArrayList<Assignment> list = new ArrayList<>();
-    private static PrintWriter backgroundFile, userFile;
-    private static String filePath;
-    private static int track = 0;
+    Assignment assignment;
+    ArrayList<Assignment> list = new ArrayList<>();
+    PrintWriter backgroundFile, userFile;
+    String filePath;
+    int track = 0;
     
     public Background(){
         //default constructor
@@ -230,7 +230,7 @@ public class Background {
         }
     }
     
-    public static boolean isAssignmentPresent(String s){
+    public boolean isAssignmentPresent(String s){
         //search for the task in the list using the task name
         boolean taskFound = false;  //assignment not present in list
         for(int i = 0; i < list.size(); i++){

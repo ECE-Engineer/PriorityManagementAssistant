@@ -7,10 +7,13 @@ package prioritymanagementassistant;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 
 /**
  *
@@ -37,20 +40,28 @@ public class BackgroundTest {
     public void tearDown() {
     }
 
+    
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+    
+    
     /**
      * Test of getDestinationFolder method, of class Background.
      */
     @Test
     public void testGetDestinationFolder() {
-        System.out.println("getDestinationFolder");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
+        Background instance = new Background();
+        instance.filePath = "C:\\Users\\Kyle Z\\Desktop\\test.txt";
+        String expResult = "Desktop";
         
-        String expResult = "";
-        String result = b.getDestinationFolder();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            assertEquals(expResult, instance.getDestinationFolder());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }   
     }
 
     /**
@@ -58,28 +69,37 @@ public class BackgroundTest {
      */
     @Test
     public void testWriteFile() throws Exception {
-        System.out.println("writeFile");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        String path = "";
-        b.writeFile(path);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String path = "C:\\Users\\Kyle Z\\Documents\\runPMA.txt";
+        Background instance = new Background();
+        instance.writeFile(path);
+        boolean expResult = true;
+        
+        try {
+            assertEquals(expResult, instance.isFile());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
     }
-
+    
     /**
      * Test of isFile method, of class Background.
      */
     @Test
     public void testIsFile() {
-        System.out.println("isFile");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        boolean expResult = false;
-        boolean result = b.isFile();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Background instance = new Background();
+        boolean expResult = true;
+        
+        try {
+            assertEquals(expResult, instance.isFile());
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
     }
 
     /**
@@ -87,13 +107,45 @@ public class BackgroundTest {
      */
     @Test
     public void testCreateBackgroundFile() throws Exception {
-        System.out.println("createBackgroundFile");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        String s = "";
-        b.createBackgroundFile(s);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Background instance = new Background();
+        String s = "C:\\Users\\Kyle Z\\Documents\\runPMA.txt";
+        instance.filePath = "C:\\Users\\Kyle Z\\Documents\\runPMA.txt";
+        instance.createBackgroundFile(s);
+        boolean expResult = true;
+        boolean result;
+        if(instance.isFile() && (instance.getDestinationFolder().equals("Documents"))){
+            result = true;
+        }else{
+            result = false;
+        }
+        
+        try {
+            assertEquals(expResult, result);
+            //Assert.fail( "Should have thrown an exception" );
+        } 
+        catch (Exception e) {
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
+    }
+
+    /**
+     * Test of createBatchFile method, of class Background.
+     */
+    @Test
+    public void testCreateBatchFile() throws Exception {
+        Background instance = new Background();
+        
+        try {
+            instance.createBatchFile();
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
     }
 
     /**
@@ -101,14 +153,18 @@ public class BackgroundTest {
      */
     @Test
     public void testLoadList() throws Exception {
-        System.out.println("loadList");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        String expResult = "";
-        String result = b.loadList();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Background instance = new Background();
+        
+        try {
+            instance.loadList();
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
     }
 
     /**
@@ -116,13 +172,19 @@ public class BackgroundTest {
      */
     @Test
     public void testBuildList() {
-        System.out.println("buildList");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        String build = "";
-        b.buildList(a);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        Background instance = new Background();
+        
+        try {
+            instance.buildList(test);
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
     }
 
     /**
@@ -130,12 +192,18 @@ public class BackgroundTest {
      */
     @Test
     public void testPrintList() {
-        System.out.println("printList");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        b.printList();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Background instance = new Background();
+        
+        try {
+            instance.printList();
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
     }
 
     /**
@@ -143,15 +211,21 @@ public class BackgroundTest {
      */
     @Test
     public void testGetTaskInfo() {
-        System.out.println("getTaskInfo");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        String s = "";
-        boolean expResult = false;
-        boolean result = b.getTaskInfo(s);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        Background instance = new Background();
+        
+        instance.list.add(test);
+        
+        try {
+            instance.getTaskInfo("test1");
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
     }
 
     /**
@@ -159,12 +233,18 @@ public class BackgroundTest {
      */
     @Test
     public void testRemoveOnLoad() {
-        System.out.println("removeOnLoad");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        b.removeOnLoad();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Background instance = new Background();
+        
+        try {
+            instance.removeOnLoad();
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
     }
 
     /**
@@ -172,15 +252,59 @@ public class BackgroundTest {
      */
     @Test
     public void testRemoveTask() {
-        System.out.println("removeTask");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        String s = "";
-        boolean expResult = false;
-        boolean result = b.removeTask(s);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        Background instance = new Background();
+        
+        instance.list.add(test);
+        
+        try {
+            instance.removeTask("test1");
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
+    }
+
+    /**
+     * Test of enableAllPopups method, of class Background.
+     */
+    @Test
+    public void testEnableAllPopups() {
+        Background instance = new Background();
+        
+        try {
+            instance.enableAllPopups();
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
+    }
+
+    /**
+     * Test of disableAllPopups method, of class Background.
+     */
+    @Test
+    public void testDisableAllPopups() {
+        Background instance = new Background();
+        
+        try {
+            instance.disableAllPopups();
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
     }
 
     /**
@@ -188,28 +312,37 @@ public class BackgroundTest {
      */
     @Test
     public void testIsNull() {
-        System.out.println("isNull");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        boolean expResult = false;
-        boolean result = b.isNull();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Background instance = new Background();
+        
+        try {
+            instance.isNull();
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
     }
 
     /**
-     * Test of printWholeList method, of class Background.
+     * Test of printListDetails method, of class Background.
      */
     @Test
-    public void testPrintWholeList() {
-        System.out.println("printWholeList");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        b.printListDetails();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testPrintListDetails() {
+        Background instance = new Background();
         
+        try {
+            instance.printListDetails();
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
     }
 
     /**
@@ -217,13 +350,40 @@ public class BackgroundTest {
      */
     @Test
     public void testIsAssignmentPresent() {
-        System.out.println("isAssignmentPresent");
-        String s = "";
-        boolean expResult = false;
-        boolean result = Background.isAssignmentPresent(s);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        Background instance = new Background();
+        instance.list.add(test);
+        
+        try {
+            //Assert.fail( "Should have thrown an exception" );
+            assertEquals(true, instance.isAssignmentPresent("test1"));
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
+    }
+
+    /**
+     * Test of getAssignment method, of class Background.
+     */
+    @Test
+    public void testGetAssignment() {
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        Background instance = new Background();
+        instance.list.add(test);
+        instance.isAssignmentPresent("test1");
+        
+        try {
+            //Assert.fail( "Should have thrown an exception" );
+            assertEquals(test, instance.getAssignment());
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
     }
 
     /**
@@ -231,12 +391,20 @@ public class BackgroundTest {
      */
     @Test
     public void testSort() {
-        System.out.println("sort");
-        Assignment a = new Assignment("test", 5, 5, 2017, 24, 59, 3, false);
-        Background b = new Background();
-        b.sort();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        Background instance = new Background();
+        instance.list.add(test);
+        
+        try {
+            instance.sort();
+            //Assert.fail( "Should have thrown an exception" );
+            Assert.assertTrue(true);
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
     }
     
 }

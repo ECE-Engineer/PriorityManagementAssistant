@@ -575,7 +575,7 @@ public class Main {
                             }catch(NumberFormatException e){
                                 numberFlag = true;
                             }
-                        } while(line == null || numberFlag || numberOption > 1 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
+                        } while(line == null || numberFlag || numberOption > 3 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
                         if(numberOption == 0){  //EDIT NAME
                             //prompt to edit
                             do {
