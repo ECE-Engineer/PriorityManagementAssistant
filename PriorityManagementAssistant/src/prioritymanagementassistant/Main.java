@@ -63,9 +63,12 @@ import javax.swing.JOptionPane;
 
 public class Main {
 
+    final static String ANSI_CLS = "\u001b[2J";
+    
     private static String name, filePath, fLocation, delFile, info, editInfo,
-                          editContent, editSameChoice, line;
-    private static int month, day, year, hour, minute, priority, numberOption;
+                          editSameChoice, line;
+    private static int month, day, year, hour, minute, priority, numberOption,
+                       numOp1, numOp2, numOp3, numOp4;
     private static boolean create = true, numberFlag = false,
                            badInfoFlag = true, popup = false,
                            popupCapture = false;
@@ -349,11 +352,12 @@ public class Main {
                         
                         line = kb.nextLine();
                         numberOption = Integer.parseInt(line);
+                        
                     }catch(NumberFormatException e){
                         numberFlag = true;
                     }
                 } while(line == null || numberFlag || numberOption > 4 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
-
+                
                 if(numberOption == 0){
                     backgroundProcess.writeFile(filePath);    //write to & save file
                     backgroundProcess.createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
@@ -548,16 +552,20 @@ public class Main {
 
                             System.out.println("\tOPTIONS:");
                             System.out.println("------------------------");
-                            System.out.println("[0]\tASSIGNMENT");
-                            System.out.println("[1]\tFILE");
+                            System.out.println("[0]\tQUIT TO MAIN MENU");
+                            System.out.println("[1]\tASSIGNMENT");
+                            System.out.println("[2]\tFILE");
                             System.out.println("\nPLEASE SELECT A NUMBER");
                             line = kb.nextLine();
-                            numberOption = Integer.parseInt(line);
+                            numOp1 = Integer.parseInt(line);
                         }catch(NumberFormatException e){
                             numberFlag = true;
                         }
-                    } while(line == null || numberFlag || numberOption > 1 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
-                    if(numberOption == 0){  //EDIT ASSIGNMENT
+                    } while(line == null || numberFlag || numOp1 > 2 || numOp1 < 0);    //when additional options are added the upper bound on this line MUST be changed
+                    if(numOp1 == 0){
+                        //this basically does nothing & immediately jumps back to the main menu
+                    }
+                    if(numOp1 == 1){  //EDIT ASSIGNMENT
                         do{
                             try{
                                 numberFlag = false;
@@ -565,18 +573,22 @@ public class Main {
 
                                 System.out.println("\tOPTIONS:");
                                 System.out.println("------------------------");
-                                System.out.println("[0]\tNAME");
-                                System.out.println("[1]\tTIME");
-                                System.out.println("[2]\tPRIORITY");
-                                System.out.println("[3]\tPOPUPS");
+                                System.out.println("[0]\tQUIT TO MAIN MENU");
+                                System.out.println("[1]\tNAME");
+                                System.out.println("[2]\tTIME");
+                                System.out.println("[3]\tPRIORITY");
+                                System.out.println("[4]\tPOPUPS");
                                 System.out.println("\nPLEASE SELECT A NUMBER");
                                 line = kb.nextLine();
-                                numberOption = Integer.parseInt(line);
+                                numOp2 = Integer.parseInt(line);
                             }catch(NumberFormatException e){
                                 numberFlag = true;
                             }
-                        } while(line == null || numberFlag || numberOption > 3 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
-                        if(numberOption == 0){  //EDIT NAME
+                        } while(line == null || numberFlag || numOp2 > 4 || numOp2 < 0);    //when additional options are added the upper bound on this line MUST be changed
+                        if(numOp2 == 0){
+                            //this basically does nothing & immediately jumps back to the main menu
+                        }
+                        if(numOp2 == 1){  //EDIT NAME
                             //prompt to edit
                             do {
                                 //select an assignment to edit
@@ -598,7 +610,7 @@ public class Main {
                                 } while(!editSameChoice.equalsIgnoreCase("Y") && !editSameChoice.equalsIgnoreCase("N"));
                             } while (editSameChoice.equalsIgnoreCase("Y"));
                         }
-                        if(numberOption == 1){  //EDIT TIME
+                        if(numOp2 == 2){  //EDIT TIME
                             //prompt to edit
                             do {
                                 //select an assignment to edit
@@ -762,7 +774,7 @@ public class Main {
                                 } while(!editSameChoice.equalsIgnoreCase("Y") && !editSameChoice.equalsIgnoreCase("N"));
                             } while (editSameChoice.equalsIgnoreCase("Y"));
                         }
-                        if(numberOption == 2){  //EDIT PRIORITY
+                        if(numOp2 == 3){  //EDIT PRIORITY
                             //prompt to edit
                             do {
                                 //select an assignment to edit
@@ -800,7 +812,7 @@ public class Main {
                                 } while(!editSameChoice.equalsIgnoreCase("Y") && !editSameChoice.equalsIgnoreCase("N"));
                             } while (editSameChoice.equalsIgnoreCase("Y"));
                         }
-                        if(numberOption == 3){  //EDIT POPUPS
+                        if(numOp2 == 4){  //EDIT POPUPS
                             do{
                                 try{
                                     numberFlag = false;
@@ -808,16 +820,20 @@ public class Main {
 
                                     System.out.println("\tOPTIONS:");
                                     System.out.println("------------------------");
-                                    System.out.println("[0]\tENABLE");
-                                    System.out.println("[1]\tDISABLE");
+                                    System.out.println("[0]\tQUIT TO MAIN MENU");
+                                    System.out.println("[1]\tENABLE");
+                                    System.out.println("[2]\tDISABLE");
                                     System.out.println("\nPLEASE SELECT A NUMBER");
                                     line = kb.nextLine();
-                                    numberOption = Integer.parseInt(line);
+                                    numOp3 = Integer.parseInt(line);
                                 }catch(NumberFormatException e){
                                     numberFlag = true;
                                 }
-                            } while(line == null || numberFlag || numberOption > 1 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
-                            if(numberOption == 0){  //ENABLE
+                            } while(line == null || numberFlag || numOp3 > 2 || numOp3 < 0);    //when additional options are added the upper bound on this line MUST be changed
+                            if(numOp3 == 0){
+                                //this basically does nothing & immediately jumps back to the main menu
+                            }
+                            if(numOp3 == 1){  //ENABLE
                                 do{
                                     try{
                                         numberFlag = false;
@@ -825,16 +841,20 @@ public class Main {
 
                                         System.out.println("\tOPTIONS:");
                                         System.out.println("------------------------");
-                                        System.out.println("[0]\tINDIVIDUAL");
-                                        System.out.println("[1]\tALL");
+                                        System.out.println("[0]\tQUIT TO MAIN MENU");
+                                        System.out.println("[1]\tINDIVIDUAL");
+                                        System.out.println("[2]\tALL");
                                         System.out.println("\nPLEASE SELECT A NUMBER");
                                         line = kb.nextLine();
-                                        numberOption = Integer.parseInt(line);
+                                        numOp4 = Integer.parseInt(line);
                                     }catch(NumberFormatException e){
                                         numberFlag = true;
                                     }
-                                } while(line == null || numberFlag || numberOption > 1 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
-                                if(numberOption == 0){  //INDIVIDUAL
+                                } while(line == null || numberFlag || numOp4 > 2 || numOp4 < 0);    //when additional options are added the upper bound on this line MUST be changed
+                                if(numOp4 == 0){
+                                    //this basically does nothing & immediately jumps back to the main menu
+                                }
+                                if(numOp4 == 1){  //INDIVIDUAL
                                     //prompt to enable a popup for an assignment
                                     do {    //the user will be prompted again for invalid input
                                         System.out.println("Please enter the name of the task you'd like to set a popup for");
@@ -845,13 +865,13 @@ public class Main {
                                     assignment.setPopup(true);
                                     popupCapture = true;
                                 }
-                                if(numberOption == 1){  //ALL
+                                if(numOp4 == 2){  //ALL
                                     //enable popups for all assignments
                                     backgroundProcess.enableAllPopups();
                                     popupCapture = true;
                                 }
                             }
-                            if(numberOption == 1){  //DISABLE
+                            if(numOp3 == 2){  //DISABLE
                                 do{
                                     try{
                                         numberFlag = false;
@@ -859,16 +879,20 @@ public class Main {
 
                                         System.out.println("\tOPTIONS:");
                                         System.out.println("------------------------");
-                                        System.out.println("[0]\tINDIVIDUAL");
-                                        System.out.println("[1]\tALL");
+                                        System.out.println("[0]\tQUIT TO MAIN MENU");
+                                        System.out.println("[1]\tINDIVIDUAL");
+                                        System.out.println("[2]\tALL");
                                         System.out.println("\nPLEASE SELECT A NUMBER");
                                         line = kb.nextLine();
-                                        numberOption = Integer.parseInt(line);
+                                        numOp4 = Integer.parseInt(line);
                                     }catch(NumberFormatException e){
                                         numberFlag = true;
                                     }
-                                } while(line == null || numberFlag || numberOption > 1 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
-                                if(numberOption == 0){  //INDIVIDUAL
+                                } while(line == null || numberFlag || numOp4 > 2 || numOp4 < 0);    //when additional options are added the upper bound on this line MUST be changed
+                                if(numOp4 == 0){
+                                    //this basically does nothing & immediately jumps back to the main menu
+                                }
+                                if(numOp4 == 1){  //INDIVIDUAL
                                     //prompt to disable a popup for an assignment
                                     do {    //the user will be prompted again for invalid input
                                         System.out.println("Please enter the name of the task you'd like to set a popup for");
@@ -878,7 +902,7 @@ public class Main {
                                     //disable the popup
                                     assignment.setPopup(false);
                                 }
-                                if(numberOption == 1){  //ALL
+                                if(numOp4 == 2){  //ALL
                                     //disable popups for all assignments
                                     backgroundProcess.disableAllPopups();
                                 }
@@ -886,7 +910,7 @@ public class Main {
                         }
                     }
                     backgroundProcess.sort(); //sort the list according to due date and priority just before saving the file
-                    if(numberOption == 1){  //EDIT FILE
+                    if(numOp1 == 2){  //EDIT FILE
                         do {
                             System.out.println("Where Do You Want Your Assignments to Be Saved???");
                             System.out.println("Specify Path Name\t" + "\"C:\\\\person\\\\Desktop\\\\test\\\\newFile.txt\"");
@@ -910,21 +934,25 @@ public class Main {
 
                             System.out.println("\tOPTIONS:");
                             System.out.println("------------------------");
-                            System.out.println("[0]\tFILE");
-                            System.out.println("[1]\tASSIGNMENT");
+                            System.out.println("[0]\tQUIT TO MAIN MENU");
+                            System.out.println("[1]\tFILE");
+                            System.out.println("[2]\tASSIGNMENT");
 
                             System.out.println("\nPLEASE SELECT A NUMBER");
 
                             line = kb.nextLine();
-                            numberOption = Integer.parseInt(line);
+                            numOp1 = Integer.parseInt(line);
                         }catch(NumberFormatException e){
                             numberFlag = true;
                         }
-                    } while(line == null || numberFlag || numberOption > 1 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
-                    if(numberOption == 0){  //VIEW FILE
+                    } while(line == null || numberFlag || numOp1 > 2 || numOp1 < 0);    //when additional options are added the upper bound on this line MUST be changed
+                    if(numOp1 == 0){
+                            //this basically does nothing & immediately jumps back to the main menu
+                        }
+                    if(numOp1 == 1){  //VIEW FILE
                         System.out.println("Your list file is currently stored in your " + backgroundProcess.getDestinationFolder() + " folder");
                     }
-                    if(numberOption == 1){  //VIEW ASSIGNMENT
+                    if(numOp1 == 2){  //VIEW ASSIGNMENT
                         do{
                             try{
                                 numberFlag = false;
@@ -932,24 +960,28 @@ public class Main {
 
                                 System.out.println("\tOPTIONS:");
                                 System.out.println("------------------------");
-                                System.out.println("[0]\tVIEW ASSIGNMENTS");
-                                System.out.println("[1]\tVIEW CONTENTS\t");
+                                System.out.println("[0]\tQUIT TO MAIN MENU");
+                                System.out.println("[1]\tVIEW ASSIGNMENTS");
+                                System.out.println("[2]\tVIEW CONTENTS\t");
 
                                 System.out.println("\nPLEASE SELECT A NUMBER");
 
                                 line = kb.nextLine();
-                                numberOption = Integer.parseInt(line);
+                                numOp2 = Integer.parseInt(line);
                             }catch(NumberFormatException e){
                                 numberFlag = true;
                             }
-                        } while(line == null || numberFlag || numberOption > 1 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
-                        if(numberOption == 0){
+                        } while(line == null || numberFlag || numOp2 > 2 || numOp2 < 0);    //when additional options are added the upper bound on this line MUST be changed
+                        if(numOp2 == 0){
+                            //this basically does nothing & immediately jumps back to the main menu
+                        }
+                        if(numOp2 == 1){
                             //prompt to view all assignments
                             System.out.println("These are all your assignments so far:");
                             //display all tasks
                             backgroundProcess.printList();
                         }
-                        if(numberOption == 1){  //VIEW CONTENTS
+                        if(numOp2 == 2){  //VIEW CONTENTS
                             do{
                                 try{
                                     numberFlag = false;
@@ -957,25 +989,29 @@ public class Main {
 
                                     System.out.println("\tOPTIONS:");
                                     System.out.println("------------------------");
-                                    System.out.println("[0]\tINDIVIDUAL");
-                                    System.out.println("[1]\tALL\t");
+                                    System.out.println("[0]\tQUIT TO MAIN MENU");
+                                    System.out.println("[1]\tINDIVIDUAL");
+                                    System.out.println("[2]\tALL\t");
 
                                     System.out.println("\nPLEASE SELECT A NUMBER");
 
                                     line = kb.nextLine();
-                                    numberOption = Integer.parseInt(line);
+                                    numOp3 = Integer.parseInt(line);
                                 }catch(NumberFormatException e){
                                     numberFlag = true;
                                 }
-                            } while(line == null || numberFlag || numberOption > 1 || numberOption < 0);    //when additional options are added the upper bound on this line MUST be changed
-                            if(numberOption == 0){  //VIEW INDIVIDUAL
+                            } while(line == null || numberFlag || numOp3 > 2 || numOp3 < 0);    //when additional options are added the upper bound on this line MUST be changed
+                            if(numOp3 == 0){
+                                //this basically does nothing & immediately jumps back to the main menu
+                            }
+                            if(numOp3 == 1){  //VIEW INDIVIDUAL
                                 //prompt to view assignment contents
                                 do {    //the user will be prompted again for invalid input
                                     System.out.println("Please enter the name of the task you'd like additional information about");
                                     info = kb.nextLine();
                                 } while (backgroundProcess.getTaskInfo(info));
                             }
-                            if(numberOption == 1){  //VIEW ALL
+                            if(numOp3 == 2){  //VIEW ALL
                                 backgroundProcess.printListDetails();
                             }
                         }

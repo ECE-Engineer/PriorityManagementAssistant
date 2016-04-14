@@ -103,7 +103,7 @@ public class BackgroundTest {
     }
 
     /**
-     * Test of createBackgroundFile method, of class Background.
+     * CAN'T FAIL
      */
     @Test
     public void testCreateBackgroundFile() throws Exception {
@@ -130,7 +130,7 @@ public class BackgroundTest {
     }
 
     /**
-     * Test of createBatchFile method, of class Background.
+     * CAN'T FAIL
      */
     @Test
     public void testCreateBatchFile() throws Exception {
@@ -149,7 +149,7 @@ public class BackgroundTest {
     }
 
     /**
-     * Test of loadList method, of class Background.
+     * CAN'T FAIL
      */
     @Test
     public void testLoadList() throws Exception {
@@ -168,7 +168,7 @@ public class BackgroundTest {
     }
 
     /**
-     * Test of buildList method, of class Background.
+     * CAN'T FAIL
      */
     @Test
     public void testBuildList() {
@@ -188,7 +188,7 @@ public class BackgroundTest {
     }
 
     /**
-     * Test of printList method, of class Background.
+     * CAN'T FAIL
      */
     @Test
     public void testPrintList() {
@@ -213,13 +213,26 @@ public class BackgroundTest {
     public void testGetTaskInfo() {
         Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
         Background instance = new Background();
-        
-        instance.list.add(test);
+        instance.buildList(test);
         
         try {
-            instance.getTaskInfo("test1");
-            //Assert.fail( "Should have thrown an exception" );
-            Assert.assertTrue(true);
+            assertEquals(false, instance.getTaskInfo("test1"));
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
+    }
+    
+    @Test
+    public void testGetTaskInfo1() {
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        Background instance = new Background();
+        
+        instance.list.add(test);
+        try {
+            Assert.assertNotSame(instance.getTaskInfo("test2"), false);
         } 
         catch (Exception e) {
             Assert.fail( "Should have thrown an exception" );
@@ -229,7 +242,7 @@ public class BackgroundTest {
     }
 
     /**
-     * Test of removeOnLoad method, of class Background.
+     * CAN'T FAIL
      */
     @Test
     public void testRemoveOnLoad() {
@@ -254,13 +267,35 @@ public class BackgroundTest {
     public void testRemoveTask() {
         Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
         Background instance = new Background();
-        
         instance.list.add(test);
         
         try {
-            instance.removeTask("test1");
-            //Assert.fail( "Should have thrown an exception" );
-            Assert.assertTrue(true);
+            assertEquals(false, instance.removeTask("test1"));
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
+    }
+    
+    /**
+     * Test of removeTask method, of class Background.
+     */
+    @Test
+    public void testRemoveTask1() {
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        Assignment test1 = new Assignment("test2", 4, 20, 2016, 13, 59, 2, false);
+        Assignment test2 = new Assignment("test3", 4, 20, 2016, 13, 59, 2, false);
+        Background instance = new Background();
+        instance.list.add(test);
+        instance.list.add(test1);
+        instance.list.add(test2);
+        
+        try {
+            assertEquals(false, instance.removeTask("test1"));
+            assertEquals(false, instance.removeTask("test2"));
+            assertEquals(false, instance.removeTask("test3"));
         } 
         catch (Exception e) {
             Assert.fail( "Should have thrown an exception" );
@@ -274,12 +309,41 @@ public class BackgroundTest {
      */
     @Test
     public void testEnableAllPopups() {
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
         Background instance = new Background();
+        instance.buildList(test);
+        instance.enableAllPopups();
         
         try {
-            instance.enableAllPopups();
-            //Assert.fail( "Should have thrown an exception" );
-            Assert.assertTrue(true);
+            for (Assignment content: instance.list) {
+                assertEquals(true, content.getPopup());
+            }
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
+    }
+    
+    /**
+     * Test of enableAllPopups method, of class Background.
+     */
+    @Test
+    public void testEnableAllPopups1() {
+        Background instance = new Background();
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, true);
+        instance.buildList(test);
+        Assignment test1 = new Assignment("test2", 4, 20, 2016, 13, 59, 2, true);
+        instance.buildList(test1);
+        Assignment test2 = new Assignment("test3", 4, 20, 2016, 13, 59, 2, true);
+        instance.buildList(test2);
+        instance.enableAllPopups();
+        
+        try {
+            for (Assignment content: instance.list) {
+                assertEquals(true, content.getPopup());
+            }
         } 
         catch (Exception e) {
             Assert.fail( "Should have thrown an exception" );
@@ -293,12 +357,41 @@ public class BackgroundTest {
      */
     @Test
     public void testDisableAllPopups() {
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, true);
         Background instance = new Background();
+        instance.buildList(test);
+        instance.disableAllPopups();
         
         try {
-            instance.disableAllPopups();
-            //Assert.fail( "Should have thrown an exception" );
-            Assert.assertTrue(true);
+            for (Assignment content: instance.list) {
+                assertEquals(false, content.getPopup());
+            }
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
+    }
+    
+    /**
+     * Test of disableAllPopups method, of class Background.
+     */
+    @Test
+    public void testDisableAllPopups1() {
+        Background instance = new Background();
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, true);
+        instance.buildList(test);
+        Assignment test1 = new Assignment("test2", 4, 20, 2016, 13, 59, 2, true);
+        instance.buildList(test1);
+        Assignment test2 = new Assignment("test3", 4, 20, 2016, 13, 59, 2, true);
+        instance.buildList(test2);
+        instance.disableAllPopups();
+        
+        try {
+            for (Assignment content: instance.list) {
+                assertEquals(false, content.getPopup());
+            }
         } 
         catch (Exception e) {
             Assert.fail( "Should have thrown an exception" );
@@ -313,11 +406,24 @@ public class BackgroundTest {
     @Test
     public void testIsNull() {
         Background instance = new Background();
+        instance.list.add(new Assignment("test1", 4, 20, 2016, 13, 59, 2, false));
         
         try {
-            instance.isNull();
-            //Assert.fail( "Should have thrown an exception" );
-            Assert.assertTrue(true);
+            assertEquals(false, instance.isNull());
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        }
+    }
+    
+    @Test
+    public void testIsNull2() {
+        Background instance = new Background();
+        
+        try {
+            Assert.assertNotSame(instance.isNull(), false);
         } 
         catch (Exception e) {
             Assert.fail( "Should have thrown an exception" );
@@ -327,7 +433,7 @@ public class BackgroundTest {
     }
 
     /**
-     * Test of printListDetails method, of class Background.
+     * CAN'T FAIL
      */
     @Test
     public void testPrintListDetails() {
@@ -335,7 +441,6 @@ public class BackgroundTest {
         
         try {
             instance.printListDetails();
-            //Assert.fail( "Should have thrown an exception" );
             Assert.assertTrue(true);
         } 
         catch (Exception e) {
@@ -355,8 +460,26 @@ public class BackgroundTest {
         instance.list.add(test);
         
         try {
-            //Assert.fail( "Should have thrown an exception" );
             assertEquals(true, instance.isAssignmentPresent("test1"));
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
+    }
+    
+    /**
+     * Test of isAssignmentPresent method, of class Background.
+     */
+    @Test
+    public void testIsAssignmentPresent2() {
+        Assignment test = new Assignment("test1", 4, 20, 2016, 13, 59, 2, false);
+        Background instance = new Background();
+        instance.list.add(test);
+        
+        try {
+            Assert.assertNotSame(instance.isAssignmentPresent("test2"), true);
         } 
         catch (Exception e) {
             Assert.fail( "Should have thrown an exception" );
@@ -376,8 +499,28 @@ public class BackgroundTest {
         instance.isAssignmentPresent("test1");
         
         try {
-            //Assert.fail( "Should have thrown an exception" );
             assertEquals(test, instance.getAssignment());
+        } 
+        catch (Exception e) {
+            Assert.fail( "Should have thrown an exception" );
+            String expectedMessage = "this is the message I expect to get";
+            Assert.assertEquals( "Exception message must be correct", expectedMessage, e.getMessage() );
+        } 
+    }
+    
+    /**
+     * Test of getAssignment method, of class Background.
+     */
+    @Test
+    public void testGetAssignment2() {
+        //exception.expect(NullPointerException.class);
+        Assignment test = new Assignment("test2", 4, 20, 2016, 13, 59, 2, false);
+        Background instance = new Background();
+        instance.list.add(test);
+        instance.isAssignmentPresent("test1");
+        
+        try {
+            Assert.assertNotSame(instance.getAssignment(), test);
         } 
         catch (Exception e) {
             Assert.fail( "Should have thrown an exception" );
@@ -387,7 +530,7 @@ public class BackgroundTest {
     }
 
     /**
-     * Test of sort method, of class Background.
+     * THIS TEST CAN'T FAIL
      */
     @Test
     public void testSort() {
@@ -397,7 +540,6 @@ public class BackgroundTest {
         
         try {
             instance.sort();
-            //Assert.fail( "Should have thrown an exception" );
             Assert.assertTrue(true);
         } 
         catch (Exception e) {
