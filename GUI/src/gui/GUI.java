@@ -14,46 +14,31 @@ import javax.swing.JOptionPane;
  */
 public class GUI extends javax.swing.JFrame {
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JButton a1_button;
-    public javax.swing.JButton a2_button;
-    public javax.swing.JButton a3_button;
-    public javax.swing.JButton a4_button;
-    public javax.swing.JButton a5_button;
+    
+    private javax.swing.JButton a1_button, a2_button, a3_button, a4_button, a5_button,
+        browseButton, createButton, deleteButton, searchButton;
     private javax.swing.JCheckBox allowPopupCheckBox;
-    private javax.swing.JButton browseButton;
-    private javax.swing.JButton createButton;
-    private javax.swing.JComboBox<String> dayComboBox;
-    private javax.swing.JButton deleteButton;
-    private javax.swing.JComboBox<String> hourComboBox;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JComboBox<String> minuteComboBox;
-    private javax.swing.JComboBox<String> monthComboBox;
-    private javax.swing.JTextField nameTextBox;
-    private javax.swing.JComboBox<String> priorityComboBox;
-    private javax.swing.JButton searchButton;
-    private javax.swing.JTextField searchTextBox;
-    private javax.swing.JComboBox<String> yearComboBox;
-    // End of variables declaration//GEN-END:variables
+    private javax.swing.JComboBox<String> dayComboBox, hourComboBox, minuteComboBox,
+            monthComboBox, priorityComboBox, yearComboBox;
+    private javax.swing.JLabel jLabel1, jLabel10, jLabel2, jLabel3, jLabel4, jLabel5,
+            jLabel6, jLabel7, jLabel8,jLabel9;
+    private javax.swing.JPanel jPanel1, jPanel2, jPanel3;
+    private javax.swing.JTextField nameTextBox, searchTextBox;
+    
+    
+    
+    
+    private Component frame;
+    
     public static LocalDateTime timePoint = LocalDateTime.now();    // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
     public static Background backgroundProcess = new Background();
     public static Assignment assignment;
+    
+    
     String name;
     int month, day, year, hour, minute, priority;
     boolean popup;
-    private Component frame;
+    
     static String filePath;
 
     public GUI() {
@@ -264,7 +249,7 @@ public class GUI extends javax.swing.JFrame {
         jLabel9.setText("Priority");
 
         priorityComboBox.setMaximumRowCount(3);
-        priorityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3" }));
+        priorityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 NOT IMPORTANT", "2 IMPORTANT", "3 VERY IMPORTANT" }));
 
         createButton.setText("Create Assignment");
         createButton.addActionListener(new java.awt.event.ActionListener() {
