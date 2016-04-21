@@ -1,28 +1,10 @@
 package gui;
 
 import java.awt.Component;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-
-import java.awt.Component;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -450,7 +432,7 @@ public class GUI extends javax.swing.JFrame {
     
     
     
-    //CREATE AN ASSIGNMENT BUTTON CONTROL
+    //CREATE AN ASSIGNMENT BUTTON PRESSED
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) throws FileNotFoundException, UnsupportedEncodingException {
         boolean noNameError = false, badNameError = false, yearFlagError = false, monthFlagError = false, dayFlagError = false, hourFlagError = false, minuteFlagError = false;
 
@@ -1086,7 +1068,7 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         }
-        name = a1_button.getText().split("\t")[0];
+        name = a2_button.getText().split("\t")[0];
 
         editList();
         
@@ -1185,7 +1167,7 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         }
-        name = a1_button.getText().split("\t")[0];
+        name = a3_button.getText().split("\t")[0];
 
         editList();
         
@@ -1284,7 +1266,7 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         }
-        name = a1_button.getText().split("\t")[0];
+        name = a4_button.getText().split("\t")[0];
 
         editList();
         
@@ -1383,7 +1365,7 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         }
-        name = a1_button.getText().split("\t")[0];
+        name = a5_button.getText().split("\t")[0];
 
         editList();
         

@@ -219,7 +219,7 @@ public class Main {
                                 numberFlag = false;
                                 day = Integer.parseInt(line);
                                 badInfoFlag = false;
-                                if(day < 1 || day > 31 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
+                                if(day < 1 || day > 31 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
                                     System.out.println(day + " is not a valid Day, please enter a number between 1 and 31.");
                                     badInfoFlag = true;
                                 }
@@ -235,7 +235,7 @@ public class Main {
                                 numberFlag = false;
                                 day = Integer.parseInt(line);
                                 badInfoFlag = false;
-                                if(day < 1 || day > 30 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
+                                if(day < 1 || day > 30 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
                                     System.out.println(day + " is not a valid Day, please enter a number between 1 and 30.");
                                     badInfoFlag = true;
                                 }
@@ -251,7 +251,7 @@ public class Main {
                                 numberFlag = false;
                                 day = Integer.parseInt(line);
                                 badInfoFlag = false;
-                                if(day < 1 || day > 28 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
+                                if(day < 1 || day > 28 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
                                     System.out.println(day + " is not a valid Day, please enter a number between 1 and 28.");
                                     badInfoFlag = true;
                                 }
@@ -276,7 +276,7 @@ public class Main {
                             if(hour < 1 || hour > 24){
                                 System.out.println(hour + " is not a valid Hour, please enter a number between 1 and 24.");
                             }
-                            if(hour < 1 || hour > 24 || (day == timePoint.getDayOfMonth() && hour < timePoint.getHour())){
+                            if(hour < 1 || hour > 24 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day == timePoint.getDayOfMonth() && hour < timePoint.getHour())){
 
                                 badInfoFlag = true;
                             }
@@ -300,7 +300,7 @@ public class Main {
                             if(minute < 0 || minute > 59){
                                 System.out.println(minute + " is not a valid Minute, please enter a number between 1 and 60.");
                             }
-                            if(minute < 0 || minute > 59 || (hour == timePoint.getHour() && minute < timePoint.getMinute())){
+                            if(minute < 0 || minute > 59 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day == timePoint.getDayOfMonth() && hour == timePoint.getHour() && minute < timePoint.getMinute())){
 
                                 badInfoFlag = true;
                             }
@@ -421,7 +421,7 @@ public class Main {
                                 numberFlag = false;
                                 day = Integer.parseInt(line);
                                 badInfoFlag = false;
-                                if(day < 1 || day > 31 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
+                                if(day < 1 || day > 31 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
                                     System.out.println(day + " is not a valid Day, please enter a number between 1 and 31.");
                                     badInfoFlag = true;
                                 }
@@ -437,7 +437,7 @@ public class Main {
                                 numberFlag = false;
                                 day = Integer.parseInt(line);
                                 badInfoFlag = false;
-                                if(day < 1 || day > 30 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
+                                if(day < 1 || day > 30 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
                                     System.out.println(day + " is not a valid Day, please enter a number between 1 and 30.");
                                     badInfoFlag = true;
                                 }
@@ -453,7 +453,7 @@ public class Main {
                                 numberFlag = false;
                                 day = Integer.parseInt(line);
                                 badInfoFlag = false;
-                                if(day < 1 || day > 28 || (month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
+                                if(day < 1 || day > 28 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth())){
                                     System.out.println(day + " is not a valid Day, please enter a number between 1 and 28.");
                                     badInfoFlag = true;
                                 }
@@ -478,7 +478,7 @@ public class Main {
                             if(hour < 1 || hour > 24){
                                 System.out.println(hour + " is not a valid Hour, please enter a number between 1 and 24.");
                             }
-                            if(hour < 1 || hour > 24 || (day == timePoint.getDayOfMonth() && hour < timePoint.getHour())){
+                            if(hour < 1 || hour > 24 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day == timePoint.getDayOfMonth() && hour < timePoint.getHour())){
 
                                 badInfoFlag = true;
                             }
@@ -502,7 +502,7 @@ public class Main {
                             if(minute < 0 || minute > 59){
                                 System.out.println(minute + " is not a valid Minute, please enter a number between 1 and 60.");
                             }
-                            if(minute < 0 || minute > 59 || (hour == timePoint.getHour() && minute < timePoint.getMinute())){
+                            if(minute < 0 || minute > 59 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day == timePoint.getDayOfMonth() && hour == timePoint.getHour() && minute < timePoint.getMinute())){
 
                                 badInfoFlag = true;
                             }
