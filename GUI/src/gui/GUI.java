@@ -730,31 +730,6 @@ public class GUI extends javax.swing.JFrame {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
     public void editList() {
         if(!backgroundProcess.isNull()){
@@ -965,6 +940,11 @@ public class GUI extends javax.swing.JFrame {
                         priorityComboBox.setSelectedIndex(2);
                         break;
                 }
+                if(backgroundProcess.list.get(i).getPopup()){
+                    allowPopupCheckBox.setSelected(true);
+                } else{
+                    allowPopupCheckBox.setSelected(false);
+                }
             }
         }
         
@@ -1066,6 +1046,11 @@ public class GUI extends javax.swing.JFrame {
                         priorityComboBox.setSelectedIndex(2);
                         break;
                 }
+                if(backgroundProcess.list.get(i).getPopup()){
+                    allowPopupCheckBox.setSelected(true);
+                } else{
+                    allowPopupCheckBox.setSelected(false);
+                }
             }
         }
         name = a2_button.getText().split("\t")[0];
@@ -1164,6 +1149,11 @@ public class GUI extends javax.swing.JFrame {
                     default:
                         priorityComboBox.setSelectedIndex(2);
                         break;
+                }
+                if(backgroundProcess.list.get(i).getPopup()){
+                    allowPopupCheckBox.setSelected(true);
+                } else{
+                    allowPopupCheckBox.setSelected(false);
                 }
             }
         }
@@ -1264,6 +1254,11 @@ public class GUI extends javax.swing.JFrame {
                         priorityComboBox.setSelectedIndex(2);
                         break;
                 }
+                if(backgroundProcess.list.get(i).getPopup()){
+                    allowPopupCheckBox.setSelected(true);
+                } else{
+                    allowPopupCheckBox.setSelected(false);
+                }
             }
         }
         name = a4_button.getText().split("\t")[0];
@@ -1362,6 +1357,11 @@ public class GUI extends javax.swing.JFrame {
                     default:
                         priorityComboBox.setSelectedIndex(2);
                         break;
+                }
+                if(backgroundProcess.list.get(i).getPopup()){
+                    allowPopupCheckBox.setSelected(true);
+                } else{
+                    allowPopupCheckBox.setSelected(false);
                 }
             }
         }
