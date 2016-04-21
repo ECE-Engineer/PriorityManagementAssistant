@@ -43,6 +43,21 @@ public class Background {
         list.add(build);
     }
     
+    public String loadList() throws FileNotFoundException, IOException{    //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
+        File f = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt");
+        BufferedReader read = new BufferedReader(new FileReader(f));
+        
+        String line;
+        if((line = read.readLine()) != null)//store line 0 as the file path
+            filePath = line;
+        while ((line = read.readLine()) != null) {  //load the list
+            //System.out.println("DEBUG\t" + "LOADING\t\t" + line);   //DEBUG
+            assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]), Boolean.parseBoolean(line.split("---")[7]));
+            list.add(assignment);
+        }
+        return filePath;
+    }
+    
     public void removeOnLoad(){
         for(int i = 0; i < list.size(); i++){
             if(list.get(i).getYear() < timePoint.getYear()) {
@@ -137,7 +152,74 @@ public class Background {
         return filePath;
     }
     
+    public void writeFile(String path) throws FileNotFoundException, UnsupportedEncodingException{//line ZERO must contain the path of the list file
+        //open the text file
+        userFile = new PrintWriter(path, "UTF-8");
+        
+        // write to the file
+        for(Assignment content : list){
+            //System.out.println("DEBUG\t" + "WRITING\t\t" + content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());   //DEBUG
+            String minute = Integer.toString(content.getMinute());
+            //System.out.println(minute);     //DEBUG
+            if(content.getHour() <= 12){
+                if(minute.length() == 1){
+                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" +  "PRIORITY:\t\t\t" + content.getPriority() +  "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                } else
+                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" +  "PRIORITY:\t\t\t" + content.getPriority() +  "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            } else {
+                if(minute.length() == 1){
+                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" +  "PRIORITY:\t\t\t" + content.getPriority() +  "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                } else
+                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" +  "PRIORITY:\t\t\t" + content.getPriority() +  "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            }
+            userFile.println();
+        }
+
+        // Close the file.
+        userFile.close();
+    }
     
+    public void createBackgroundFile(String s) throws FileNotFoundException, UnsupportedEncodingException{  //make a background file to store all logs / program runs
+        //make the file
+        backgroundFile = new PrintWriter("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt", "UTF-8");
+        
+        //line ZERO must contain the path of the list file
+        backgroundFile.print(s);
+        backgroundFile.println();
+        
+        // write to the file the contents of the list
+        for(Assignment content : list){
+            backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority() + "---" + content.getPopup());
+            backgroundFile.println();
+        }
+
+        //close the file
+        backgroundFile.close();
+    }
+    
+    public void createBatchFile() throws FileNotFoundException, UnsupportedEncodingException{
+        //FilePermission permission = new FilePermission("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\", "write");
+        //make the file
+        backgroundFile = new PrintWriter("C:\\Users\\" + System.getProperty("user.name") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\startup_PMA_popup_check.bat", "UTF-8");
+        backgroundFile.print("javaw -Xmx200m -jar \"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\PriorityManagementAssistant\\POPUPS\\dist\\POPUPS.jar\"");
+        backgroundFile.println();
+        //close the file
+        backgroundFile.close();
+    }
+    
+    public static boolean isAssignmentPresent(String s){
+        //search for the task in the list using the task name
+        boolean taskFound = false;  //assignment not present in list
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).getName().equalsIgnoreCase(s)){
+                taskFound = true;   //assignment present in list
+                assignment = list.get(i);
+                track = i;  //this will be used to perform a debug
+                break;
+            }
+        }
+        return taskFound;
+    }
     
     
     
@@ -205,32 +287,7 @@ public class Background {
         return (filePath.substring((filePath.lastIndexOf("\\", filePath.lastIndexOf("\\", filePath.length())-1))+1, filePath.lastIndexOf("\\", filePath.length())));
     }
     
-    public void writeFile(String path) throws FileNotFoundException, UnsupportedEncodingException{//line ZERO must contain the path of the list file
-        //open the text file
-        userFile = new PrintWriter(path, "UTF-8");
-        
-        // write to the file
-        for(Assignment content : list){
-            //System.out.println("DEBUG\t" + "WRITING\t\t" + content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());   //DEBUG
-            String minute = Integer.toString(content.getMinute());
-            //System.out.println(minute);     //DEBUG
-            if(content.getHour() <= 12){
-                if(minute.length() == 1){
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" +  "PRIORITY:\t\t\t" + content.getPriority() +  "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                } else
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" +  "PRIORITY:\t\t\t" + content.getPriority() +  "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-            } else {
-                if(minute.length() == 1){
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" +  "PRIORITY:\t\t\t" + content.getPriority() +  "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                } else
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" +  "PRIORITY:\t\t\t" + content.getPriority() +  "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-            }
-            userFile.println();
-        }
-
-        // Close the file.
-        userFile.close();
-    }
+    
     
     public boolean validFilePath(String s){
         int count = 0;
@@ -251,48 +308,11 @@ public class Background {
         return (new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt").exists());
     }
     
-    public void createBackgroundFile(String s) throws FileNotFoundException, UnsupportedEncodingException{  //make a background file to store all logs / program runs
-        //make the file
-        backgroundFile = new PrintWriter("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt", "UTF-8");
-        
-        //line ZERO must contain the path of the list file
-        backgroundFile.print(s);
-        backgroundFile.println();
-        
-        // write to the file the contents of the list
-        for(Assignment content : list){
-            backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority() + "---" + content.getPopup());
-            backgroundFile.println();
-        }
-
-        //close the file
-        backgroundFile.close();
-    }
     
-    public void createBatchFile() throws FileNotFoundException, UnsupportedEncodingException{
-        //FilePermission permission = new FilePermission("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\", "write");
-        //make the file
-        backgroundFile = new PrintWriter("C:\\Users\\" + System.getProperty("user.name") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\startup_PMA_popup_check.bat", "UTF-8");
-        backgroundFile.print("javaw -Xmx200m -jar \"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\PriorityManagementAssistant\\POPUPS\\dist\\POPUPS.jar\"");
-        backgroundFile.println();
-        //close the file
-        backgroundFile.close();
-    }
     
-    public String loadList() throws FileNotFoundException, IOException{    //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
-        File f = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt");
-        BufferedReader read = new BufferedReader(new FileReader(f));
-        
-        String line;
-        if((line = read.readLine()) != null)//store line 0 as the file path
-            filePath = line;
-        while ((line = read.readLine()) != null) {  //load the list
-            //System.out.println("DEBUG\t" + "LOADING\t\t" + line);   //DEBUG
-            assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]), Boolean.parseBoolean(line.split("---")[7]));
-            list.add(assignment);
-        }
-        return filePath;
-    }
+    
+    
+    
     
     
     
@@ -371,19 +391,7 @@ public class Background {
     
     
     
-    public static boolean isAssignmentPresent(String s){
-        //search for the task in the list using the task name
-        boolean taskFound = false;  //assignment not present in list
-        for(int i = 0; i < list.size(); i++){
-            if(list.get(i).getName().equalsIgnoreCase(s)){
-                taskFound = true;   //assignment present in list
-                assignment = list.get(i);
-                track = i;  //this will be used to perform a debug
-                break;
-            }
-        }
-        return taskFound;
-    }
+    
     
     
     

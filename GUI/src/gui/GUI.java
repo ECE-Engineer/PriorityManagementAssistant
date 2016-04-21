@@ -70,9 +70,9 @@ public class GUI extends javax.swing.JFrame {
     public static Assignment assignment;
     String name;
     int month, day, year, hour, minute, priority;
-    boolean popup = false;
+    boolean popup;
     private Component frame;
-    static String filepath;
+    static String filePath;
 
     public GUI() {
         initComponents();
@@ -184,12 +184,6 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        searchTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchTextBoxActionPerformed(evt);
-            }
-        });
-
         searchButton.setText("Search");
         searchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -293,21 +287,40 @@ public class GUI extends javax.swing.JFrame {
         createButton.setText("Create Assignment");
         createButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createButtonActionPerformed(evt);
+                try {
+                    createButtonActionPerformed(evt);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
         deleteButton.setText("Delete");
+        deleteButton.setVisible(false);
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
+                try {
+                    deleteButtonActionPerformed(evt);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
         allowPopupCheckBox.setText("Allow Popups");
         allowPopupCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                allowPopupCheckBoxActionPerformed(evt);
+                try {
+                    allowPopupCheckBoxActionPerformed(evt);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
@@ -416,7 +429,7 @@ public class GUI extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
     
     
     
@@ -438,8 +451,8 @@ public class GUI extends javax.swing.JFrame {
     
     
     //CREATE AN ASSIGNMENT BUTTON CONTROL
-    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        boolean nameAlreadyExits = false, noNameError = false, badNameError = false, yearFlagError = false, monthFlagError = false, dayFlagError = false, hourFlagError = false, minuteFlagError = false;
+    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) throws FileNotFoundException, UnsupportedEncodingException {
+        boolean noNameError = false, badNameError = false, yearFlagError = false, monthFlagError = false, dayFlagError = false, hourFlagError = false, minuteFlagError = false;
 
         deleteButton.setVisible(false);
 
@@ -463,15 +476,11 @@ public class GUI extends javax.swing.JFrame {
         else
             minute = Integer.parseInt(minuteComboBox.getSelectedItem().toString());
         priority = Integer.parseInt(priorityComboBox.getSelectedItem().toString());
-
-
+        
+        //ALL POPUPS SHOULD BE FALSE BY DEFAULT
+        popup = false;
 
         //checking all the data for validity
-        if(backgroundProcess.isAssignmentPresent(name)) {
-            //Checks to see if the name already exists
-            JOptionPane.showMessageDialog(frame, name + " already exists, please try a new name.", "Repeated Name Error", JOptionPane.ERROR_MESSAGE);
-            nameAlreadyExits = true;
-        }
         if(name == null || name.equalsIgnoreCase("")) {
             //Checks to see if no name was given
             JOptionPane.showMessageDialog(frame, name + " no name was given.", "No Name Error", JOptionPane.ERROR_MESSAGE);
@@ -498,7 +507,7 @@ public class GUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(frame, day + " is not a valid Day, please enter a number between 1 and 31.", "Bad Day Error", JOptionPane.ERROR_MESSAGE);
                 dayFlagError = true;
             }
-            if(month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth()) {
+            if(year == timePoint.getYear() && month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth()) {
                 //Checks to see if the day is invalid
                 JOptionPane.showMessageDialog(frame, day + " is not a valid Day, please enter a number greater than " + (timePoint.getDayOfMonth()-1), "Bad Day Error", JOptionPane.ERROR_MESSAGE);
                 dayFlagError = true;
@@ -509,7 +518,7 @@ public class GUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(frame, day + " is not a valid Day, please enter a number between 1 and 30.", "Bad Day Error", JOptionPane.ERROR_MESSAGE);
                 dayFlagError = true;
             }
-            if(month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth()) {
+            if(year == timePoint.getYear() && month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth()) {
                 //Checks to see if the day is invalid
                 JOptionPane.showMessageDialog(frame, day + " is not a valid Day, please enter a number greater than " + (timePoint.getDayOfMonth()-1), "Bad Day Error", JOptionPane.ERROR_MESSAGE);
                 dayFlagError = true;
@@ -520,26 +529,42 @@ public class GUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(frame, day + " is not a valid Day, please enter a number between 1 and 28.", "Bad Day Error", JOptionPane.ERROR_MESSAGE);
                 dayFlagError = true;
             }
-            if(month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth()) {
+            if(year == timePoint.getYear() && month == timePoint.getMonthValue() && day < timePoint.getDayOfMonth()) {
                 //Checks to see if the day is invalid
                 JOptionPane.showMessageDialog(frame, day + " is not a valid Day, please enter a number greater than " + (timePoint.getDayOfMonth()-1), "Bad Day Error", JOptionPane.ERROR_MESSAGE);
                 dayFlagError = true;
             }           
         }
-        if(day == timePoint.getDayOfMonth() && hour < timePoint.getHour()) {
+        if(year == timePoint.getYear() && month == timePoint.getMonthValue() && day == timePoint.getDayOfMonth() && hour < timePoint.getHour()) {
             //Checks to see if the hour is invalid
             JOptionPane.showMessageDialog(frame, hour + " is not a valid Hour, please enter a number greater than " + (timePoint.getHour()-1) + ".", "Bad Hour Error", JOptionPane.ERROR_MESSAGE);
             hourFlagError = true;
         }
-        if(hour == timePoint.getHour() && minute < timePoint.getMinute()) {
+        if(year == timePoint.getYear() && month == timePoint.getMonthValue() && day == timePoint.getDayOfMonth() && hour == timePoint.getHour() && minute < timePoint.getMinute()) {
             //Checks to see if the minute is invalid
             JOptionPane.showMessageDialog(frame, minute + " is not a valid Minute, please enter a number greater than " + (timePoint.getMinute()-1) + ".", "Bad Minute Error", JOptionPane.ERROR_MESSAGE);
             minuteFlagError = true;
         }
-        if(!nameAlreadyExits && !noNameError && !badNameError && !yearFlagError && !monthFlagError && !dayFlagError && !hourFlagError && !minuteFlagError){
-            //set all the values
+        if(!noNameError && !badNameError && !yearFlagError && !monthFlagError && !dayFlagError && !hourFlagError && !minuteFlagError){
+            
+            
+            
+            
+            //delete the old version of the assignment if it exits
+            if(backgroundProcess.isAssignmentPresent(name)){
+                backgroundProcess.removeTask(name);
+            }
+            
+            
+            //make the assignment
             assignment = new Assignment(name, month, day, year, hour, minute, priority, popup);
+            
+            
+            //add the assignment to the list
             backgroundProcess.buildList(assignment);
+            
+            
+            //RESET ALL THE VALUES TO THEIR ORIGINAL SETTINGS
             monthComboBox.setSelectedIndex(0);
             dayComboBox.setSelectedIndex(0);
             yearComboBox.setSelectedIndex(0);
@@ -547,9 +572,19 @@ public class GUI extends javax.swing.JFrame {
             minuteComboBox.setSelectedIndex(0);
             priorityComboBox.setSelectedIndex(0);
             nameTextBox.setText("");
+            
+            
+            //display a reminder message if there are popups enabled
             if(allowPopupCheckBox.isSelected()){
                 assignment.setPopup(true);
+                JOptionPane.showMessageDialog(null, "Please Restart Your Computer For These New Changes To Be Made");
             }
+            
+            //RESET THE POPUPS CHECKBOX TO ITS ORIGINAL STATE
+            allowPopupCheckBox.setSelected(false);
+            
+            backgroundProcess.writeFile(filePath);    //write to & save file
+            backgroundProcess.createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
         }
         editList();
     }
@@ -559,24 +594,25 @@ public class GUI extends javax.swing.JFrame {
     
     
     //DELETE BUTTON PRESSED
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) throws FileNotFoundException, UnsupportedEncodingException {
 
         backgroundProcess.removeTask(nameTextBox.getText());
-
-        for (int i = 0; i < backgroundProcess.list.size(); i++) {
-            System.out.println(backgroundProcess.list.get(i).getName());
-        }
-
-        for (int i = 0; i < backgroundProcess.list.size(); i++) {
-            System.out.println("Textbox = " + nameTextBox.getText());
-            if (backgroundProcess.list.get(i).getName().equals(nameTextBox.getText())) {
-                backgroundProcess.list.remove(i);
-                System.out.println("removed");
-                break;
-            }
-            System.out.println("nothing removed");
-        }
-        //System.out.println(backgroundProcess.isAssignmentPresent(nameTextBox.getText()));
+        
+        //RESET ALL THE VALUES TO THEIR ORIGINAL SETTINGS
+        monthComboBox.setSelectedIndex(0);
+        dayComboBox.setSelectedIndex(0);
+        yearComboBox.setSelectedIndex(0);
+        hourComboBox.setSelectedIndex(0);
+        minuteComboBox.setSelectedIndex(0);
+        priorityComboBox.setSelectedIndex(0);
+        nameTextBox.setText("");
+        
+        //RESET THE POPUPS CHECKBOX TO ITS ORIGINAL STATE
+        allowPopupCheckBox.setSelected(false);
+        
+        
+        backgroundProcess.writeFile(filePath);    //write to & save file
+        backgroundProcess.createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
         deleteButtonText();
         deleteButton.setVisible(false);
         editList();
@@ -587,6 +623,7 @@ public class GUI extends javax.swing.JFrame {
     
     
     //BROWSE BUTTON PRESSED
+    //Browse Button brings up the written file in a notepad document
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             backgroundProcess.writeFile(backgroundProcess.getFilePath());
@@ -604,14 +641,8 @@ public class GUI extends javax.swing.JFrame {
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
     //SEARCH BUTTON PRESSED
+    //Search Button takes the name entered and sets the values for create assignment
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
         deleteButton.setVisible(true);
         for (int i = 0; i < backgroundProcess.list.size(); i++) {
@@ -690,9 +721,14 @@ public class GUI extends javax.swing.JFrame {
                         priorityComboBox.setSelectedIndex(2);
                         break;
                 }
+                if(backgroundProcess.list.get(i).getPopup()){
+                    allowPopupCheckBox.setSelected(true);
+                } else{
+                    allowPopupCheckBox.setSelected(false);
+                }
+                
             }
         }
-        deleteButton.setVisible(false);
     }
     
     
@@ -700,17 +736,33 @@ public class GUI extends javax.swing.JFrame {
     
     
     
-    private void searchTextBoxActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+    
+    
+    //IF THE USER PRESSED THE ALLOW POPUP CHECKBOX
+    private void allowPopupCheckBoxActionPerformed(java.awt.event.ActionEvent evt) throws FileNotFoundException, UnsupportedEncodingException {
+        //create the batch file here
+        //later on add conditionals to only create the batch once, do this only if necessary
+        backgroundProcess.createBatchFile();
     }
-
-    private void allowPopupCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    public void hideDeleteButton() {
-        deleteButton.setVisible(false);
-    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -735,11 +787,11 @@ public class GUI extends javax.swing.JFrame {
     }
 
     public void deleteButtonText() {
-        a1_button.setVisible(false);
-        a2_button.setVisible(false);
-        a3_button.setVisible(false);
-        a4_button.setVisible(false);
-        a5_button.setVisible(false);
+        a1_button.setText("");
+        a2_button.setText("");
+        a3_button.setText("");
+        a4_button.setText("");
+        a5_button.setText("");
     }
 
     public void setButtonOne() {
@@ -828,6 +880,9 @@ public class GUI extends javax.swing.JFrame {
         //remove the overdue assignments
         backgroundProcess.loadList();
         backgroundProcess.removeOnLoad();
+        filePath = backgroundProcess.getFilePath();
+        backgroundProcess.writeFile(filePath);    //write to & save file
+        backgroundProcess.createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
 
         //make the gui visible
         //make the assignments in the list visible
@@ -845,8 +900,13 @@ public class GUI extends javax.swing.JFrame {
     //IF THE USER PRESSED ON THE 1ST TASK
     private void a1_buttonActionPerformed(java.awt.event.ActionEvent evt) {
         deleteButton.setVisible(true);
+        
+        
+        
+        
+        
         String name = a1_button.getText().split("\t")[0];
-        deleteButton.setVisible(true);
+
         for (int i = 0; i < backgroundProcess.list.size(); i++) {
             if (backgroundProcess.list.get(i).getName().equals(name)) {
                 nameTextBox.setText(backgroundProcess.list.get(i).getName());
@@ -925,10 +985,13 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         }
-        backgroundProcess.removeTask(a1_button.getText().split("\t")[0]);
-        deleteButton.setVisible(false);
+        
+        name = a1_button.getText().split("\t")[0];
+        
 
         editList();
+        
+        
     }
     
     
@@ -939,8 +1002,12 @@ public class GUI extends javax.swing.JFrame {
     //IF THE USER PRESSED ON THE 2ND TASK
     private void a2_buttonActionPerformed(java.awt.event.ActionEvent evt) {
         deleteButton.setVisible(true);
+        
+        
+        
+        
         String name = a2_button.getText().split("\t")[0];
-        deleteButton.setVisible(true);
+        
         for (int i = 0; i < backgroundProcess.list.size(); i++) {
             if (backgroundProcess.list.get(i).getName().equals(name)) {
                 nameTextBox.setText(backgroundProcess.list.get(i).getName());
@@ -1019,10 +1086,11 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         }
-        backgroundProcess.removeTask(a2_button.getText().split("\t")[0]);
-        deleteButton.setVisible(false);
+        name = a1_button.getText().split("\t")[0];
 
         editList();
+        
+        
     }
     
     
@@ -1032,8 +1100,13 @@ public class GUI extends javax.swing.JFrame {
     //IF THE USER PRESSED ON THE 3RD TASK
     private void a3_buttonActionPerformed(java.awt.event.ActionEvent evt) {
         deleteButton.setVisible(true);
+        
+        
+        
+        
+        
         String name = a3_button.getText().split("\t")[0];
-        deleteButton.setVisible(true);
+        
         for (int i = 0; i < backgroundProcess.list.size(); i++) {
             if (backgroundProcess.list.get(i).getName().equals(name)) {
                 nameTextBox.setText(backgroundProcess.list.get(i).getName());
@@ -1112,10 +1185,11 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         }
-        backgroundProcess.removeTask(a3_button.getText().split("\t")[0]);
-        deleteButton.setVisible(false);
+        name = a1_button.getText().split("\t")[0];
 
         editList();
+        
+        
     }
     
     
@@ -1125,8 +1199,13 @@ public class GUI extends javax.swing.JFrame {
     //IF THE USER PRESSED ON THE 4TH TASK
     private void a4_buttonActionPerformed(java.awt.event.ActionEvent evt) {
         deleteButton.setVisible(true);
+        
+        
+        
+        
+        
         String name = a4_button.getText().split("\t")[0];
-        deleteButton.setVisible(true);
+        
         for (int i = 0; i < backgroundProcess.list.size(); i++) {
             if (backgroundProcess.list.get(i).getName().equals(name)) {
                 nameTextBox.setText(backgroundProcess.list.get(i).getName());
@@ -1205,10 +1284,11 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         }
-        backgroundProcess.removeTask(a4_button.getText().split("\t")[0]);
-        deleteButton.setVisible(false);
+        name = a1_button.getText().split("\t")[0];
 
         editList();
+        
+        
     }
     
     
@@ -1218,8 +1298,13 @@ public class GUI extends javax.swing.JFrame {
     //IF THE USER PRESSED ON THE 5TH TASK
     private void a5_buttonActionPerformed(java.awt.event.ActionEvent evt) {
         deleteButton.setVisible(true);
+        
+        
+        
+        
+        
         String name = a5_button.getText().split("\t")[0];
-        deleteButton.setVisible(true);
+        
         for (int i = 0; i < backgroundProcess.list.size(); i++) {
             if (backgroundProcess.list.get(i).getName().equals(name)) {
                 nameTextBox.setText(backgroundProcess.list.get(i).getName());
@@ -1298,9 +1383,10 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         }
-        backgroundProcess.removeTask(a5_button.getText().split("\t")[0]);
-        deleteButton.setVisible(false);
+        name = a1_button.getText().split("\t")[0];
 
         editList();
+        
+        
     }
 }
