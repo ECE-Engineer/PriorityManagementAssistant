@@ -26,7 +26,7 @@ import static gui.GUI.timePoint;
 
 public class Background {
     private static Assignment assignment;
-    private static ArrayList<Assignment> list = new ArrayList<>();
+    public static ArrayList<Assignment> list = new ArrayList<>();
     private static PrintWriter backgroundFile, userFile;
     private static String filePath;
     private static int track = 0;
@@ -34,6 +34,166 @@ public class Background {
     public Background(){
         //default constructor
     }
+    
+    public boolean isNull(){
+        return list.isEmpty();
+    }
+    
+    public void buildList(Assignment build){
+        list.add(build);
+    }
+    
+    public void removeOnLoad(){
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).getYear() < timePoint.getYear()) {
+                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
+                list.remove(i);
+            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() < timePoint.getMonthValue()) {
+                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
+                list.remove(i);
+            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() == timePoint.getMonthValue() && list.get(i).getDay() < timePoint.getDayOfMonth()) {
+                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
+                list.remove(i);
+            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() == timePoint.getMonthValue() && list.get(i).getDay() == timePoint.getDayOfMonth() && list.get(i).getHour() < timePoint.getHour()) {
+                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
+                list.remove(i);
+            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() == timePoint.getMonthValue() && list.get(i).getDay() == timePoint.getDayOfMonth() && list.get(i).getHour() == timePoint.getHour() && list.get(i).getMinute() < timePoint.getMinute()) {
+                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
+                list.remove(i);
+            }
+        }
+    }
+    
+    public Assignment getAssignment(){
+        return assignment;
+    }
+    
+    public Assignment getAssignment(int i){
+        return list.get(i);
+    }
+    
+    public boolean removeTask(String s){
+        //search for the task in the list using the task name
+        boolean taskFound = true;
+        int count = 0;
+        for(Assignment content : list){
+            if(content.getName().equalsIgnoreCase(s)){
+                list.remove(count);
+                taskFound = false;
+                break;
+            }
+            count++;
+        }
+        return taskFound;
+    }
+    
+    private void switchElements(int currentIndex){   //flips the values stored between the current and preivous elements of the list
+        Assignment current = list.set(currentIndex, list.get(currentIndex-1));
+        list.set(currentIndex-1, current);
+    }
+    
+    public void sort(){      //bubblesort method b/c the list will likely never be beyond 100 assignments
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = 1; j < list.size(); j++) {
+                if(list.get(j).getYear() < list.get(j-1).getYear()) {   //checks year
+                    //switch
+                    switchElements(j);
+                } else if(list.get(j).getYear() == list.get(j-1).getYear()) {   //checks year
+                    //more checks
+                    if(list.get(j).getMonth() < list.get(j-1).getMonth()) {   //checks month
+                        //switch
+                        switchElements(j);
+                    } else if(list.get(j).getMonth() == list.get(j-1).getMonth()) {   //checks month
+                        //more checks
+                        if(list.get(j).getDay() < list.get(j-1).getDay()) {   //checks day
+                            //switch
+                            switchElements(j);
+                        } else if(list.get(j).getDay() == list.get(j-1).getDay()) {   //checks day
+                            //more checks
+                            if(list.get(j).getHour() < list.get(j-1).getHour()) {   //checks hour
+                                //switch
+                                switchElements(j);
+                            } else if(list.get(j).getHour() == list.get(j-1).getHour()) {   //checks hour
+                                //more checks
+                                if(list.get(j).getMinute() < list.get(j-1).getMinute()) {   //checks minute
+                                    //switch
+                                    switchElements(j);
+                                } else if(list.get(j).getMinute() == list.get(j-1).getMinute()) {   //checks minute
+                                    //more checks
+                                    if(list.get(j).getPriority() < list.get(j-1).getPriority()) {   //checks priority
+                                        //switch
+                                        switchElements(j);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    public String getFilePath(){
+        return filePath;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     public String getDestinationFolder(){
         int count = 0;
@@ -70,6 +230,21 @@ public class Background {
 
         // Close the file.
         userFile.close();
+    }
+    
+    public boolean validFilePath(String s){
+        int count = 0;
+        if(s.contains("\\")){
+            for (int i = 0; i < s.length(); i++) {
+                if((s.substring(i, i+1)).equalsIgnoreCase("\\"))
+                    count++;
+            }
+            if(count > 1){
+                if(s.substring(s.indexOf("\\")+1, s.indexOf("\\", s.indexOf("\\")+1)).length() > 1)
+                    return true;
+            }
+        }
+        return false;
     }
     
     public boolean isFile(){ //check to see if this is the first time the user has run the program
@@ -119,9 +294,7 @@ public class Background {
         return filePath;
     }
     
-    public void buildList(Assignment build){
-        list.add(build);
-    }
+    
     
     public void printList() {
         //display all tasks
@@ -132,7 +305,7 @@ public class Background {
     
     public boolean getTaskInfo(String s){    //prints all information about a given task
         //search for the task in the list using the task name
-        boolean taskFound = true;
+        boolean taskFound = false;
         int count = 0;
         for(Assignment content : list){
             if(content.getName().equalsIgnoreCase(s)){
@@ -149,7 +322,7 @@ public class Background {
                     } else
                         System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" +  "PRIORITY:\t\t\t" + content.getPriority() +  "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
                 }
-                taskFound = false;
+                taskFound = true;
                 break;
             }
             count++;
@@ -157,43 +330,9 @@ public class Background {
         return taskFound;
     }
     
-    public void removeOnLoad(){
-        for(int i = 0; i < list.size(); i++){
-            if(list.get(i).getYear() < timePoint.getYear()) {
-                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
-                list.remove(i);
-            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() < timePoint.getMonthValue()) {
-                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
-                list.remove(i);
-            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() == timePoint.getMonthValue() && list.get(i).getDay() < timePoint.getDayOfMonth()) {
-                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
-                list.remove(i);
-            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() == timePoint.getMonthValue() && list.get(i).getDay() == timePoint.getDayOfMonth() && list.get(i).getHour() < timePoint.getHour()) {
-                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
-                list.remove(i);
-            } else if(list.get(i).getYear() == timePoint.getYear() && list.get(i).getMonth() == timePoint.getMonthValue() && list.get(i).getDay() == timePoint.getDayOfMonth() && list.get(i).getHour() == timePoint.getHour() && list.get(i).getMinute() < timePoint.getMinute()) {
-                //System.out.println("DEBUG\t" + "DELETING\t\t" + list.get(i).getName());   //DEBUG
-                list.remove(i);
-            }
-        }
-        GUI rh = new GUI(/* constructor args here */);
-        rh.refreshList();
-    }
     
-    public boolean removeTask(String s){
-        //search for the task in the list using the task name
-        boolean taskFound = true;
-        int count = 0;
-        for(Assignment content : list){
-            if(content.getName().equalsIgnoreCase(s)){
-                list.remove(count);
-                taskFound = false;
-                break;
-            }
-            count++;
-        }
-        return taskFound;
-    }
+    
+    
     
     public void enableAllPopups(){
         for(int i = 0; i < list.size(); i++){
@@ -209,9 +348,7 @@ public class Background {
         }
     }
     
-    public boolean isNull(){
-        return list.isEmpty();
-    }
+    
     
     public void printListDetails() {    //DEBUG :`PRINT ALL Assignments OF THE LIST
         //display all tasks & all their details
@@ -232,6 +369,8 @@ public class Background {
         }
     }
     
+    
+    
     public static boolean isAssignmentPresent(String s){
         //search for the task in the list using the task name
         boolean taskFound = false;  //assignment not present in list
@@ -246,53 +385,7 @@ public class Background {
         return taskFound;
     }
     
-    public Assignment getAssignment(){
-        return assignment;
-    }
     
-    private void switchElements(int currentIndex){   //flips the values stored between the current and preivous elements of the list
-        Assignment current = list.set(currentIndex, list.get(currentIndex-1));
-        list.set(currentIndex-1, current);
-    }
     
-    public void sort(){      //bubblesort method b/c the list will likely never be beyond 100 assignments
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = 1; j < list.size(); j++) {
-                if(list.get(j).getYear() < list.get(j-1).getYear()) {   //checks year
-                    //switch
-                    switchElements(j);
-                } else if(list.get(j).getYear() == list.get(j-1).getYear()) {   //checks year
-                    //more checks
-                    if(list.get(j).getMonth() < list.get(j-1).getMonth()) {   //checks month
-                        //switch
-                        switchElements(j);
-                    } else if(list.get(j).getMonth() == list.get(j-1).getMonth()) {   //checks month
-                        //more checks
-                        if(list.get(j).getDay() < list.get(j-1).getDay()) {   //checks day
-                            //switch
-                            switchElements(j);
-                        } else if(list.get(j).getDay() == list.get(j-1).getDay()) {   //checks day
-                            //more checks
-                            if(list.get(j).getHour() < list.get(j-1).getHour()) {   //checks hour
-                                //switch
-                                switchElements(j);
-                            } else if(list.get(j).getHour() == list.get(j-1).getHour()) {   //checks hour
-                                //more checks
-                                if(list.get(j).getMinute() < list.get(j-1).getMinute()) {   //checks minute
-                                    //switch
-                                    switchElements(j);
-                                } else if(list.get(j).getMinute() == list.get(j-1).getMinute()) {   //checks minute
-                                    //more checks
-                                    if(list.get(j).getPriority() < list.get(j-1).getPriority()) {   //checks priority
-                                        //switch
-                                        switchElements(j);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    
 }

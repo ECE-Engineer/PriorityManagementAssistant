@@ -72,6 +72,21 @@ public class Background {
         userFile.close();
     }
     
+    public boolean validFilePath(String s){
+        int count = 0;
+        if(s.contains("\\")){
+            for (int i = 0; i < s.length(); i++) {
+                if((s.substring(i, i+1)).equalsIgnoreCase("\\"))
+                    count++;
+            }
+            if(count > 1){
+                if(s.substring(s.indexOf("\\")+1, s.indexOf("\\", s.indexOf("\\")+1)).length() > 1)
+                    return true;
+            }
+        }
+        return false;
+    }
+    
     public boolean isFile(){ //check to see if this is the first time the user has run the program
         return (new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt").exists());
     }
@@ -132,7 +147,7 @@ public class Background {
     
     public boolean getTaskInfo(String s){    //prints all information about a given task
         //search for the task in the list using the task name
-        boolean taskFound = true;
+        boolean taskFound = false;
         int count = 0;
         for(Assignment content : list){
             if(content.getName().equalsIgnoreCase(s)){
@@ -149,7 +164,7 @@ public class Background {
                     } else
                         System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" +  "PRIORITY:\t\t\t" + content.getPriority() +  "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
                 }
-                taskFound = false;
+                taskFound = true;
                 break;
             }
             count++;

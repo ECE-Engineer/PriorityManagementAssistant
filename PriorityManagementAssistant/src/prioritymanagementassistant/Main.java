@@ -912,6 +912,7 @@ public class Main {
                     backgroundProcess.sort(); //sort the list according to due date and priority just before saving the file
                     if(numOp1 == 2){  //EDIT FILE
                         do {
+                            int count = 0;
                             System.out.println("Where Do You Want Your Assignments to Be Saved???");
                             System.out.println("Specify Path Name\t" + "\"C:\\\\person\\\\Desktop\\\\test\\\\newFile.txt\"");
                             line = kb.nextLine();
@@ -922,7 +923,7 @@ public class Main {
                             } catch(IOException e){
                                 badInfoFlag = true;
                             }
-                        } while (line == null || badInfoFlag);
+                        } while (line == null || badInfoFlag || !backgroundProcess.validFilePath(line));
                         filePath = line;
                     }
                 }
@@ -1009,7 +1010,7 @@ public class Main {
                                 do {    //the user will be prompted again for invalid input
                                     System.out.println("Please enter the name of the task you'd like additional information about");
                                     info = kb.nextLine();
-                                } while (backgroundProcess.getTaskInfo(info));
+                                } while (!backgroundProcess.getTaskInfo(info));
                             }
                             if(numOp3 == 2){  //VIEW ALL
                                 backgroundProcess.printListDetails();
