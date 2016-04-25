@@ -273,10 +273,10 @@ public class Main {
                             hour = Integer.parseInt(line);
                             badInfoFlag = false;
 
-                            if(hour < 1 || hour > 24){
-                                System.out.println(hour + " is not a valid Hour, please enter a number between 1 and 24.");
+                            if(hour < 0 || hour > 23){
+                                System.out.println(hour + " is not a valid Hour, please enter a number between 0 and 23.");
                             }
-                            if(hour < 1 || hour > 24 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day == timePoint.getDayOfMonth() && hour < timePoint.getHour())){
+                            if(hour < 0 || hour > 23 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day == timePoint.getDayOfMonth() && hour < timePoint.getHour())){
 
                                 badInfoFlag = true;
                             }
@@ -475,10 +475,10 @@ public class Main {
                             hour = Integer.parseInt(line);
                             badInfoFlag = false;
 
-                            if(hour < 1 || hour > 24){
-                                System.out.println(hour + " is not a valid Hour, please enter a number between 1 and 24.");
+                            if(hour < 0 || hour > 23){
+                                System.out.println(hour + " is not a valid Hour, please enter a number between 0 and 23.");
                             }
-                            if(hour < 1 || hour > 24 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day == timePoint.getDayOfMonth() && hour < timePoint.getHour())){
+                            if(hour < 0 || hour > 23 || (year == timePoint.getYear() && month == timePoint.getMonthValue() && day == timePoint.getDayOfMonth() && hour < timePoint.getHour())){
 
                                 badInfoFlag = true;
                             }

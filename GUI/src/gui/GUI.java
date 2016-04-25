@@ -239,7 +239,7 @@ public class GUI extends javax.swing.JFrame {
         jLabel7.setText("Hour Due:");
 
         hourComboBox.setMaximumRowCount(24);
-        hourComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24" }));
+        hourComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}));
 
         jLabel8.setText("Minute Due:");
 
@@ -419,6 +419,7 @@ public class GUI extends javax.swing.JFrame {
     
     //CREATE AN ASSIGNMENT BUTTON PRESSED
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) throws FileNotFoundException, UnsupportedEncodingException {
+        
         boolean noNameError = false, badNameError = false, yearFlagError = false, monthFlagError = false, dayFlagError = false, hourFlagError = false, minuteFlagError = false;
 
         deleteButton.setVisible(false);
@@ -435,14 +436,14 @@ public class GUI extends javax.swing.JFrame {
         else
             day = Integer.parseInt(dayComboBox.getSelectedItem().toString());
         if(hourComboBox.getSelectedItem().toString().startsWith("0"))   //this will prevent a parsing error from string to int
-           hour = Integer.parseInt((hourComboBox.getSelectedItem().toString()).replaceFirst("0", ""));
+           hour = Integer.parseInt((hourComboBox.getSelectedItem().toString()));
         else
             hour = Integer.parseInt(hourComboBox.getSelectedItem().toString());
         if(minuteComboBox.getSelectedItem().toString().startsWith("0"))   //this will prevent a parsing error from string to int
            minute = Integer.parseInt((minuteComboBox.getSelectedItem().toString()).replaceFirst("0", ""));
         else
             minute = Integer.parseInt(minuteComboBox.getSelectedItem().toString());
-        priority = Integer.parseInt(priorityComboBox.getSelectedItem().toString());
+        priority = Integer.parseInt(priorityComboBox.getSelectedItem().toString().split("\\s")[0]);
         
         //ALL POPUPS SHOULD BE FALSE BY DEFAULT
         popup = false;
@@ -634,7 +635,7 @@ public class GUI extends javax.swing.JFrame {
                         yearComboBox.setSelectedIndex(4);
                         break;
                 }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour() - 1);
+                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
                 switch (backgroundProcess.list.get(i).getMinute()) {
                     case 01:
                         minuteComboBox.setSelectedIndex(0);
@@ -748,7 +749,28 @@ public class GUI extends javax.swing.JFrame {
         priority = assignment.getPriority();
         popup = assignment.getPopup();
 
-        a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\t Priority: \t" + priority + "\t");
+        
+        if(hour < 12){
+            if(Integer.toString(minute).length() == 1){
+                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else if(hour == 12){
+            if(Integer.toString(minute).length() == 1){
+                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else
+                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+        } else if(hour == 24){
+             if(Integer.toString(minute).length() == 1){
+                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else {
+            if(Integer.toString(minute).length() == 1){
+                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else
+                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+        }
     }
 
     public void setButtonTwo() {
@@ -763,7 +785,27 @@ public class GUI extends javax.swing.JFrame {
         priority = assignment.getPriority();
         popup = assignment.getPopup();
 
-        a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\t Priority: \t" + priority + "\t");
+        if(hour < 12){
+            if(Integer.toString(minute).length() == 1){
+                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else if(hour == 12){
+            if(Integer.toString(minute).length() == 1){
+                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else
+                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+        } else if(hour == 24){
+             if(Integer.toString(minute).length() == 1){
+                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else {
+            if(Integer.toString(minute).length() == 1){
+                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else
+                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+        }
     }
 
     public void setButtonThree() {
@@ -778,7 +820,27 @@ public class GUI extends javax.swing.JFrame {
         priority = assignment.getPriority();
         popup = assignment.getPopup();
 
-        a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\t Priority: \t" + priority + "\t");
+        if(hour < 12){
+            if(Integer.toString(minute).length() == 1){
+                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else if(hour == 12){
+            if(Integer.toString(minute).length() == 1){
+                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else
+                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+        } else if(hour == 24){
+             if(Integer.toString(minute).length() == 1){
+                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else {
+            if(Integer.toString(minute).length() == 1){
+                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else
+                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+        }
     }
 
     public void setButtonFour() {
@@ -793,7 +855,27 @@ public class GUI extends javax.swing.JFrame {
         priority = assignment.getPriority();
         popup = assignment.getPopup();
 
-        a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\t Priority: \t" + priority + "\t");
+        if(hour < 12){
+            if(Integer.toString(minute).length() == 1){
+                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else if(hour == 12){
+            if(Integer.toString(minute).length() == 1){
+                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else
+                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+        } else if(hour == 24){
+             if(Integer.toString(minute).length() == 1){
+                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else {
+            if(Integer.toString(minute).length() == 1){
+                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else
+                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+        }
     }
 
     public void setButtonFive() {
@@ -808,16 +890,34 @@ public class GUI extends javax.swing.JFrame {
         priority = assignment.getPriority();
         popup = assignment.getPopup();
 
-        a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\t Priority: \t" + priority + "\t");
+        if(hour < 12){
+            if(Integer.toString(minute).length() == 1){
+                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else if(hour == 12){
+            if(Integer.toString(minute).length() == 1){
+                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else
+                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+        } else if(hour == 24){
+             if(Integer.toString(minute).length() == 1){
+                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else {
+            if(Integer.toString(minute).length() == 1){
+                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else
+                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+        }
     }
-
-    
-    
     
     
     
     //run the gui program
     public static void main(String args[]) throws FileNotFoundException, UnsupportedEncodingException, IOException {
+        //System.out.println(timePoint.getHour());//DEBUG TO PROVE THAT HOURS ARE FROM 0-23
         //load the assignments into the list
         //remove the overdue assignments
         backgroundProcess.loadList();
@@ -846,7 +946,6 @@ public class GUI extends javax.swing.JFrame {
         
         
         
-        
         String name = a1_button.getText().split("\t")[0];
 
         for (int i = 0; i < backgroundProcess.list.size(); i++) {
@@ -871,7 +970,7 @@ public class GUI extends javax.swing.JFrame {
                         yearComboBox.setSelectedIndex(4);
                         break;
                 }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour() - 1);
+                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
                 switch (backgroundProcess.list.get(i).getMinute()) {
                     case 01:
                         minuteComboBox.setSelectedIndex(0);
@@ -977,7 +1076,7 @@ public class GUI extends javax.swing.JFrame {
                         yearComboBox.setSelectedIndex(4);
                         break;
                 }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour() - 1);
+                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
                 switch (backgroundProcess.list.get(i).getMinute()) {
                     case 01:
                         minuteComboBox.setSelectedIndex(0);
@@ -1081,7 +1180,7 @@ public class GUI extends javax.swing.JFrame {
                         yearComboBox.setSelectedIndex(4);
                         break;
                 }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour() - 1);
+                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
                 switch (backgroundProcess.list.get(i).getMinute()) {
                     case 01:
                         minuteComboBox.setSelectedIndex(0);
@@ -1185,7 +1284,7 @@ public class GUI extends javax.swing.JFrame {
                         yearComboBox.setSelectedIndex(4);
                         break;
                 }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour() - 1);
+                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
                 switch (backgroundProcess.list.get(i).getMinute()) {
                     case 01:
                         minuteComboBox.setSelectedIndex(0);
@@ -1289,7 +1388,7 @@ public class GUI extends javax.swing.JFrame {
                         yearComboBox.setSelectedIndex(4);
                         break;
                 }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour() - 1);
+                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
                 switch (backgroundProcess.list.get(i).getMinute()) {
                     case 01:
                         minuteComboBox.setSelectedIndex(0);

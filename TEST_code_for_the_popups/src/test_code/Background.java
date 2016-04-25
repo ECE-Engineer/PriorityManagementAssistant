@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package popups;
+package test_code;
 
 /**
  *
@@ -11,18 +11,16 @@ package popups;
  */
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FilePermission;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import static popups.Main.timePoint;
+import static test_code.Main.timePoint;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
