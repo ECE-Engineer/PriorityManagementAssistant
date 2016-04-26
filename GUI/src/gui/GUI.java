@@ -749,8 +749,12 @@ public class GUI extends javax.swing.JFrame {
         priority = assignment.getPriority();
         popup = assignment.getPopup();
 
-        
-        if(hour < 12){
+        if(hour == 0){
+             if(Integer.toString(minute).length() == 1){
+                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else if(hour < 12){
             if(Integer.toString(minute).length() == 1){
                 a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
             } else
@@ -760,11 +764,6 @@ public class GUI extends javax.swing.JFrame {
                 a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
             } else
                 a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-        } else if(hour == 24){
-             if(Integer.toString(minute).length() == 1){
-                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
         } else {
             if(Integer.toString(minute).length() == 1){
                 a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
@@ -785,7 +784,12 @@ public class GUI extends javax.swing.JFrame {
         priority = assignment.getPriority();
         popup = assignment.getPopup();
 
-        if(hour < 12){
+        if(hour == 0){
+             if(Integer.toString(minute).length() == 1){
+                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else if(hour < 12){
             if(Integer.toString(minute).length() == 1){
                 a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
             } else
@@ -795,11 +799,6 @@ public class GUI extends javax.swing.JFrame {
                 a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
             } else
                 a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-        } else if(hour == 24){
-             if(Integer.toString(minute).length() == 1){
-                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
         } else {
             if(Integer.toString(minute).length() == 1){
                 a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
@@ -820,7 +819,12 @@ public class GUI extends javax.swing.JFrame {
         priority = assignment.getPriority();
         popup = assignment.getPopup();
 
-        if(hour < 12){
+        if(hour == 0){
+             if(Integer.toString(minute).length() == 1){
+                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else if(hour < 12){
             if(Integer.toString(minute).length() == 1){
                 a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
             } else
@@ -830,11 +834,6 @@ public class GUI extends javax.swing.JFrame {
                 a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
             } else
                 a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-        } else if(hour == 24){
-             if(Integer.toString(minute).length() == 1){
-                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
         } else {
             if(Integer.toString(minute).length() == 1){
                 a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
@@ -855,7 +854,12 @@ public class GUI extends javax.swing.JFrame {
         priority = assignment.getPriority();
         popup = assignment.getPopup();
 
-        if(hour < 12){
+        if(hour == 0){
+             if(Integer.toString(minute).length() == 1){
+                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else if(hour < 12){
             if(Integer.toString(minute).length() == 1){
                 a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
             } else
@@ -865,11 +869,6 @@ public class GUI extends javax.swing.JFrame {
                 a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
             } else
                 a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-        } else if(hour == 24){
-             if(Integer.toString(minute).length() == 1){
-                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
         } else {
             if(Integer.toString(minute).length() == 1){
                 a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
@@ -890,7 +889,12 @@ public class GUI extends javax.swing.JFrame {
         priority = assignment.getPriority();
         popup = assignment.getPopup();
 
-        if(hour < 12){
+        if(hour == 0){
+             if(Integer.toString(minute).length() == 1){
+                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+            } else
+                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+        } else if(hour < 12){
             if(Integer.toString(minute).length() == 1){
                 a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
             } else
@@ -900,11 +904,6 @@ public class GUI extends javax.swing.JFrame {
                 a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
             } else
                 a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-        } else if(hour == 24){
-             if(Integer.toString(minute).length() == 1){
-                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour-12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
         } else {
             if(Integer.toString(minute).length() == 1){
                 a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
