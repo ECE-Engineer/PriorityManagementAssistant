@@ -17,7 +17,7 @@ public class GUI extends javax.swing.JFrame {
     
     private javax.swing.JButton a1_button, a2_button, a3_button, a4_button, a5_button,
         browseButton, createButton, deleteButton, searchButton;
-    private javax.swing.JCheckBox allowPopupCheckBox;
+    private javax.swing.JCheckBox allowPopupCheckBox, allowEmailCheckBox;
     private javax.swing.JComboBox<String> dayComboBox, hourComboBox, minuteComboBox,
             monthComboBox, priorityComboBox, yearComboBox;
     private javax.swing.JLabel jLabel1, jLabel10, jLabel2, jLabel3, jLabel4, jLabel5,
@@ -35,9 +35,9 @@ public class GUI extends javax.swing.JFrame {
     public static Assignment assignment;
     
     
-    String name;
+    String name, userEmail;
     int month, day, year, hour, minute, priority;
-    boolean popup;
+    boolean popup, email;
     
     static String filePath;
 
@@ -46,7 +46,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -80,6 +80,7 @@ public class GUI extends javax.swing.JFrame {
         createButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         allowPopupCheckBox = new javax.swing.JCheckBox();
+        allowEmailCheckBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Priority Management Assistant");
@@ -290,10 +291,23 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         });
+        
+        allowEmailCheckBox.setText("Allow Emails");
+        allowEmailCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    allowEmailCheckBoxActionPerformed(evt);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
+        jPanel3Layout.setHorizontalGroup(                         //THIS CONTROLS THE HORIZONTAL ALIGNMENT OF OBJECT'S IN THE GUI
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(210, Short.MAX_VALUE)
@@ -329,11 +343,16 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(211, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(allowPopupCheckBox)
-                .addGap(290, 290, 290))
+                
+                  .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)    
+                  .addComponent(allowPopupCheckBox)
+                  .addGap(290, 290, 290))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                  .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)  
+                  .addComponent(allowEmailCheckBox)
+                  .addGap(290, 290, 290))
         );
-        jPanel3Layout.setVerticalGroup(
+        jPanel3Layout.setVerticalGroup(                         //THIS CONTROLS THE VERTICAL ALIGNMENT OF OBJECT'S IN THE GUI
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
@@ -370,8 +389,10 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(createButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(deleteButton)
-                .addGap(18, 18, 18)
+ 
                 .addComponent(allowPopupCheckBox)
+                .addComponent(allowEmailCheckBox) 
+                .addGap(18, 18, 18)
                 .addContainerGap(32, Short.MAX_VALUE))
         );
 
@@ -447,6 +468,9 @@ public class GUI extends javax.swing.JFrame {
         
         //ALL POPUPS SHOULD BE FALSE BY DEFAULT
         popup = false;
+        
+         //ALL EMAILS SHOULD BE FALSE BY DEFAULT
+        email = false;
 
         //checking all the data for validity
         if(name == null || name.equalsIgnoreCase("")) {
@@ -525,7 +549,7 @@ public class GUI extends javax.swing.JFrame {
             
             
             //make the assignment
-            assignment = new Assignment(name, month, day, year, hour, minute, priority, popup);
+            assignment = new Assignment(name, month, day, year, hour, minute, priority, popup, email);
             
             
             //add the assignment to the list
@@ -541,15 +565,25 @@ public class GUI extends javax.swing.JFrame {
             priorityComboBox.setSelectedIndex(0);
             nameTextBox.setText("");
             
-            
             //display a reminder message if there are popups enabled
-            if(allowPopupCheckBox.isSelected()){
-                assignment.setPopup(true);
+            if(allowPopupCheckBox.isSelected() || allowEmailCheckBox.isSelected()){
+                if(allowPopupCheckBox.isSelected())
+                    assignment.setPopup(true);
+                if(allowEmailCheckBox.isSelected()){
+                    assignment.setEmail(true);
+                    if(userEmail.isEmpty()){
+                        userEmail = JOptionPane.showInputDialog("Please Enter Your Email");
+                        backgroundProcess.setEmailAddress(userEmail);
+                    }
+                }
                 JOptionPane.showMessageDialog(null, "Please Restart Your Computer For These New Changes To Be Made");
             }
             
             //RESET THE POPUPS CHECKBOX TO ITS ORIGINAL STATE
             allowPopupCheckBox.setSelected(false);
+            
+            //RESET THE EMAILS CHECKBOX TO ITS ORIGINAL STATE
+            allowEmailCheckBox.setSelected(false);
             
             backgroundProcess.writeFile(filePath);    //write to & save file
             backgroundProcess.createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
@@ -577,6 +611,9 @@ public class GUI extends javax.swing.JFrame {
         
         //RESET THE POPUPS CHECKBOX TO ITS ORIGINAL STATE
         allowPopupCheckBox.setSelected(false);
+        
+        //RESET THE EMAILS CHECKBOX TO ITS ORIGINAL STATE
+        allowEmailCheckBox.setSelected(false);
         
         
         backgroundProcess.writeFile(filePath);    //write to & save file
@@ -694,12 +731,26 @@ public class GUI extends javax.swing.JFrame {
                 } else{
                     allowPopupCheckBox.setSelected(false);
                 }
+                if(backgroundProcess.list.get(i).getEmail()){
+                    allowEmailCheckBox.setSelected(true);
+                    userEmail = backgroundProcess.getEmailAddress();
+                } else{
+                    allowEmailCheckBox.setSelected(false);
+                }
                 
             }
         }
     }
     
     
+    
+    
+    //IF THE USER PRESSED THE ALLOW EMAIL CHECKBOX
+    private void allowEmailCheckBoxActionPerformed(java.awt.event.ActionEvent evt) throws FileNotFoundException, UnsupportedEncodingException {
+        //create the batch file here
+        //later on add conditionals to only create the batch once, do this only if necessary
+        backgroundProcess.createBatchFile();
+    }
     
     
     
@@ -740,175 +791,200 @@ public class GUI extends javax.swing.JFrame {
     public void setButtonOne() {
         a1_button.setVisible(true);
         assignment = backgroundProcess.getAssignment(0);
-        name = assignment.getName();
-        month = assignment.getMonth();
-        day = assignment.getDay();
-        year = assignment.getYear();
-        hour = assignment.getHour();
-        minute = assignment.getMinute();
-        priority = assignment.getPriority();
-        popup = assignment.getPopup();
+        if(assignment != null){
+            name = assignment.getName();
+            month = assignment.getMonth();
+            day = assignment.getDay();
+            year = assignment.getYear();
+            hour = assignment.getHour();
+            minute = assignment.getMinute();
+            priority = assignment.getPriority();
+            popup = assignment.getPopup();
+            email = assignment.getEmail();
+            if(email)
+                userEmail = backgroundProcess.getEmailAddress();
 
-        if(hour == 0){
-             if(Integer.toString(minute).length() == 1){
-                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
-        } else if(hour < 12){
-            if(Integer.toString(minute).length() == 1){
-                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
-        } else if(hour == 12){
-            if(Integer.toString(minute).length() == 1){
-                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-            } else
-                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-        } else {
-            if(Integer.toString(minute).length() == 1){
-                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-            } else
-                a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+            if(hour == 0){
+                 if(Integer.toString(minute).length() == 1){
+                    a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+                } else
+                    a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+            } else if(hour < 12){
+                if(Integer.toString(minute).length() == 1){
+                    a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+                } else
+                    a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+            } else if(hour == 12){
+                if(Integer.toString(minute).length() == 1){
+                    a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+                } else
+                    a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else {
+                if(Integer.toString(minute).length() == 1){
+                    a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+                } else
+                    a1_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+            }
         }
     }
 
     public void setButtonTwo() {
         a2_button.setVisible(true);
         assignment = backgroundProcess.getAssignment(1);
-        name = assignment.getName();
-        month = assignment.getMonth();
-        day = assignment.getDay();
-        year = assignment.getYear();
-        hour = assignment.getHour();
-        minute = assignment.getMinute();
-        priority = assignment.getPriority();
-        popup = assignment.getPopup();
+        if(assignment != null){
+            name = assignment.getName();
+            month = assignment.getMonth();
+            day = assignment.getDay();
+            year = assignment.getYear();
+            hour = assignment.getHour();
+            minute = assignment.getMinute();
+            priority = assignment.getPriority();
+            popup = assignment.getPopup();
+            email = assignment.getEmail();
+            if(email)
+                userEmail = backgroundProcess.getEmailAddress();
 
-        if(hour == 0){
-             if(Integer.toString(minute).length() == 1){
-                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
-        } else if(hour < 12){
-            if(Integer.toString(minute).length() == 1){
-                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
-        } else if(hour == 12){
-            if(Integer.toString(minute).length() == 1){
-                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-            } else
-                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-        } else {
-            if(Integer.toString(minute).length() == 1){
-                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-            } else
-                a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+            if(hour == 0){
+                 if(Integer.toString(minute).length() == 1){
+                    a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+                } else
+                    a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+            } else if(hour < 12){
+                if(Integer.toString(minute).length() == 1){
+                    a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+                } else
+                    a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+            } else if(hour == 12){
+                if(Integer.toString(minute).length() == 1){
+                    a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+                } else
+                    a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else {
+                if(Integer.toString(minute).length() == 1){
+                    a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+                } else
+                    a2_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+            }
         }
     }
 
     public void setButtonThree() {
         a3_button.setVisible(true);
         assignment = backgroundProcess.getAssignment(2);
-        name = assignment.getName();
-        month = assignment.getMonth();
-        day = assignment.getDay();
-        year = assignment.getYear();
-        hour = assignment.getHour();
-        minute = assignment.getMinute();
-        priority = assignment.getPriority();
-        popup = assignment.getPopup();
+        if(assignment != null){
+            name = assignment.getName();
+            month = assignment.getMonth();
+            day = assignment.getDay();
+            year = assignment.getYear();
+            hour = assignment.getHour();
+            minute = assignment.getMinute();
+            priority = assignment.getPriority();
+            popup = assignment.getPopup();
+            email = assignment.getEmail();
+            if(email)
+                userEmail = backgroundProcess.getEmailAddress();
 
-        if(hour == 0){
-             if(Integer.toString(minute).length() == 1){
-                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
-        } else if(hour < 12){
-            if(Integer.toString(minute).length() == 1){
-                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
-        } else if(hour == 12){
-            if(Integer.toString(minute).length() == 1){
-                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-            } else
-                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-        } else {
-            if(Integer.toString(minute).length() == 1){
-                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-            } else
-                a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+            if(hour == 0){
+                 if(Integer.toString(minute).length() == 1){
+                    a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+                } else
+                    a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+            } else if(hour < 12){
+                if(Integer.toString(minute).length() == 1){
+                    a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+                } else
+                    a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+            } else if(hour == 12){
+                if(Integer.toString(minute).length() == 1){
+                    a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+                } else
+                    a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else {
+                if(Integer.toString(minute).length() == 1){
+                    a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+                } else
+                    a3_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+            }
         }
     }
 
     public void setButtonFour() {
         a4_button.setVisible(true);
         assignment = backgroundProcess.getAssignment(3);
-        name = assignment.getName();
-        month = assignment.getMonth();
-        day = assignment.getDay();
-        year = assignment.getYear();
-        hour = assignment.getHour();
-        minute = assignment.getMinute();
-        priority = assignment.getPriority();
-        popup = assignment.getPopup();
+        if(assignment != null){
+            name = assignment.getName();
+            month = assignment.getMonth();
+            day = assignment.getDay();
+            year = assignment.getYear();
+            hour = assignment.getHour();
+            minute = assignment.getMinute();
+            priority = assignment.getPriority();
+            popup = assignment.getPopup();
+            email = assignment.getEmail();
+            if(email)
+                userEmail = backgroundProcess.getEmailAddress();
 
-        if(hour == 0){
-             if(Integer.toString(minute).length() == 1){
-                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
-        } else if(hour < 12){
-            if(Integer.toString(minute).length() == 1){
-                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
-        } else if(hour == 12){
-            if(Integer.toString(minute).length() == 1){
-                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-            } else
-                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-        } else {
-            if(Integer.toString(minute).length() == 1){
-                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-            } else
-                a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+            if(hour == 0){
+                 if(Integer.toString(minute).length() == 1){
+                    a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+                } else
+                    a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+            } else if(hour < 12){
+                if(Integer.toString(minute).length() == 1){
+                    a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+                } else
+                    a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+            } else if(hour == 12){
+                if(Integer.toString(minute).length() == 1){
+                    a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+                } else
+                    a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else {
+                if(Integer.toString(minute).length() == 1){
+                    a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+                } else
+                    a4_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+            }
         }
     }
 
     public void setButtonFive() {
         a5_button.setVisible(true);
         assignment = backgroundProcess.getAssignment(4);
-        name = assignment.getName();
-        month = assignment.getMonth();
-        day = assignment.getDay();
-        year = assignment.getYear();
-        hour = assignment.getHour();
-        minute = assignment.getMinute();
-        priority = assignment.getPriority();
-        popup = assignment.getPopup();
+        if(assignment != null){
+            name = assignment.getName();
+            month = assignment.getMonth();
+            day = assignment.getDay();
+            year = assignment.getYear();
+            hour = assignment.getHour();
+            minute = assignment.getMinute();
+            priority = assignment.getPriority();
+            popup = assignment.getPopup();
+            email = assignment.getEmail();
+            if(email)
+                userEmail = backgroundProcess.getEmailAddress();
 
-        if(hour == 0){
-             if(Integer.toString(minute).length() == 1){
-                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
-        } else if(hour < 12){
-            if(Integer.toString(minute).length() == 1){
-                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
-            } else
-                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
-        } else if(hour == 12){
-            if(Integer.toString(minute).length() == 1){
-                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-            } else
-                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-        } else {
-            if(Integer.toString(minute).length() == 1){
-                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
-            } else
-                a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+            if(hour == 0){
+                 if(Integer.toString(minute).length() == 1){
+                    a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+                } else
+                    a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour+12) + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+            } else if(hour < 12){
+                if(Integer.toString(minute).length() == 1){
+                    a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tAM Priority: \t" + priority);
+                } else
+                    a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:\t" + minute + "\tAM Priority: \t" + priority);
+            } else if(hour == 12){
+                if(Integer.toString(minute).length() == 1){
+                    a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+                } else
+                    a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + hour + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+            } else {
+                if(Integer.toString(minute).length() == 1){
+                    a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:0\t" + minute + "\tPM Priority: \t" + priority);
+                } else
+                    a5_button.setText(name + "\t Due: \t" + month + "\t/\t" + day + "\t/\t" + year + "\t \t" + (hour - 12) + "\t:\t" + minute + "\tPM Priority: \t" + priority);
+            }
         }
     }
     
@@ -940,103 +1016,110 @@ public class GUI extends javax.swing.JFrame {
     
     //IF THE USER PRESSED ON THE 1ST TASK
     private void a1_buttonActionPerformed(java.awt.event.ActionEvent evt) {
-        deleteButton.setVisible(true);
-        
-        
-        
-        
-        String name = a1_button.getText().split("\t")[0];
+        if(!backgroundProcess.isNull()){
+            deleteButton.setVisible(true);
 
-        for (int i = 0; i < backgroundProcess.list.size(); i++) {
-            if (backgroundProcess.list.get(i).getName().equals(name)) {
-                nameTextBox.setText(backgroundProcess.list.get(i).getName());
-                monthComboBox.setSelectedIndex(backgroundProcess.list.get(i).getMonth() - 1);
-                dayComboBox.setSelectedIndex(backgroundProcess.list.get(i).getDay() - 1);
-                switch (backgroundProcess.list.get(i).getYear()) {
-                    case 2016:
-                        yearComboBox.setSelectedIndex(0);
-                        break;
-                    case 2017:
-                        yearComboBox.setSelectedIndex(1);
-                        break;
-                    case 2018:
-                        yearComboBox.setSelectedIndex(2);
-                        break;
-                    case 2019:
-                        yearComboBox.setSelectedIndex(3);
-                        break;
-                    default:
-                        yearComboBox.setSelectedIndex(4);
-                        break;
-                }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
-                switch (backgroundProcess.list.get(i).getMinute()) {
-                    case 01:
-                        minuteComboBox.setSelectedIndex(0);
-                        break;
-                    case 05:
-                        minuteComboBox.setSelectedIndex(1);
-                        break;
-                    case 10:
-                        minuteComboBox.setSelectedIndex(2);
-                        break;
-                    case 15:
-                        minuteComboBox.setSelectedIndex(3);
-                        break;
-                    case 20:
-                        minuteComboBox.setSelectedIndex(4);
-                        break;
-                    case 25:
-                        minuteComboBox.setSelectedIndex(5);
-                        break;
-                    case 30:
-                        minuteComboBox.setSelectedIndex(6);
-                        break;
-                    case 35:
-                        minuteComboBox.setSelectedIndex(7);
-                        break;
-                    case 40:
-                        minuteComboBox.setSelectedIndex(8);
-                        break;
-                    case 45:
-                        minuteComboBox.setSelectedIndex(9);
-                        break;
-                    case 50:
-                        minuteComboBox.setSelectedIndex(10);
-                        break;
-                    case 55:
-                        minuteComboBox.setSelectedIndex(11);
-                        break;
-                    default:
-                        minuteComboBox.setSelectedIndex(12);
-                        break;
-                }
 
-                switch (backgroundProcess.list.get(i).getPriority()) {
-                    case 1:
-                        priorityComboBox.setSelectedIndex(0);
-                        break;
-                    case 2:
-                        priorityComboBox.setSelectedIndex(1);
-                        break;
-                    default:
-                        priorityComboBox.setSelectedIndex(2);
-                        break;
-                }
-                if(backgroundProcess.list.get(i).getPopup()){
-                    allowPopupCheckBox.setSelected(true);
-                } else{
-                    allowPopupCheckBox.setSelected(false);
+
+
+            String name = a1_button.getText().split("\t")[0];
+
+            for (int i = 0; i < backgroundProcess.list.size(); i++) {
+                if (backgroundProcess.list.get(i).getName().equals(name)) {
+                    nameTextBox.setText(backgroundProcess.list.get(i).getName());
+                    monthComboBox.setSelectedIndex(backgroundProcess.list.get(i).getMonth() - 1);
+                    dayComboBox.setSelectedIndex(backgroundProcess.list.get(i).getDay() - 1);
+                    switch (backgroundProcess.list.get(i).getYear()) {
+                        case 2016:
+                            yearComboBox.setSelectedIndex(0);
+                            break;
+                        case 2017:
+                            yearComboBox.setSelectedIndex(1);
+                            break;
+                        case 2018:
+                            yearComboBox.setSelectedIndex(2);
+                            break;
+                        case 2019:
+                            yearComboBox.setSelectedIndex(3);
+                            break;
+                        default:
+                            yearComboBox.setSelectedIndex(4);
+                            break;
+                    }
+                    hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
+                    switch (backgroundProcess.list.get(i).getMinute()) {
+                        case 01:
+                            minuteComboBox.setSelectedIndex(0);
+                            break;
+                        case 05:
+                            minuteComboBox.setSelectedIndex(1);
+                            break;
+                        case 10:
+                            minuteComboBox.setSelectedIndex(2);
+                            break;
+                        case 15:
+                            minuteComboBox.setSelectedIndex(3);
+                            break;
+                        case 20:
+                            minuteComboBox.setSelectedIndex(4);
+                            break;
+                        case 25:
+                            minuteComboBox.setSelectedIndex(5);
+                            break;
+                        case 30:
+                            minuteComboBox.setSelectedIndex(6);
+                            break;
+                        case 35:
+                            minuteComboBox.setSelectedIndex(7);
+                            break;
+                        case 40:
+                            minuteComboBox.setSelectedIndex(8);
+                            break;
+                        case 45:
+                            minuteComboBox.setSelectedIndex(9);
+                            break;
+                        case 50:
+                            minuteComboBox.setSelectedIndex(10);
+                            break;
+                        case 55:
+                            minuteComboBox.setSelectedIndex(11);
+                            break;
+                        default:
+                            minuteComboBox.setSelectedIndex(12);
+                            break;
+                    }
+
+                    switch (backgroundProcess.list.get(i).getPriority()) {
+                        case 1:
+                            priorityComboBox.setSelectedIndex(0);
+                            break;
+                        case 2:
+                            priorityComboBox.setSelectedIndex(1);
+                            break;
+                        default:
+                            priorityComboBox.setSelectedIndex(2);
+                            break;
+                    }
+                    if(backgroundProcess.list.get(i).getPopup()){
+                        allowPopupCheckBox.setSelected(true);
+                    } else{
+                        allowPopupCheckBox.setSelected(false);
+                    }
+                    if(backgroundProcess.list.get(i).getEmail()){
+                        allowEmailCheckBox.setSelected(true);
+                        userEmail = backgroundProcess.getEmailAddress();
+                    } else{
+                        allowEmailCheckBox.setSelected(false);
+                    }
                 }
             }
-        }
-        
-        name = a1_button.getText().split("\t")[0];
-        
 
-        editList();
-        
-        
+            name = a1_button.getText().split("\t")[0];
+
+
+            editList();
+
+        }
     }
     
     
@@ -1046,101 +1129,108 @@ public class GUI extends javax.swing.JFrame {
     
     //IF THE USER PRESSED ON THE 2ND TASK
     private void a2_buttonActionPerformed(java.awt.event.ActionEvent evt) {
-        deleteButton.setVisible(true);
-        
-        
-        
-        
-        String name = a2_button.getText().split("\t")[0];
-        
-        for (int i = 0; i < backgroundProcess.list.size(); i++) {
-            if (backgroundProcess.list.get(i).getName().equals(name)) {
-                nameTextBox.setText(backgroundProcess.list.get(i).getName());
-                monthComboBox.setSelectedIndex(backgroundProcess.list.get(i).getMonth() - 1);
-                dayComboBox.setSelectedIndex(backgroundProcess.list.get(i).getDay() - 1);
-                switch (backgroundProcess.list.get(i).getYear()) {
-                    case 2016:
-                        yearComboBox.setSelectedIndex(0);
-                        break;
-                    case 2017:
-                        yearComboBox.setSelectedIndex(1);
-                        break;
-                    case 2018:
-                        yearComboBox.setSelectedIndex(2);
-                        break;
-                    case 2019:
-                        yearComboBox.setSelectedIndex(3);
-                        break;
-                    default:
-                        yearComboBox.setSelectedIndex(4);
-                        break;
-                }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
-                switch (backgroundProcess.list.get(i).getMinute()) {
-                    case 01:
-                        minuteComboBox.setSelectedIndex(0);
-                        break;
-                    case 05:
-                        minuteComboBox.setSelectedIndex(1);
-                        break;
-                    case 10:
-                        minuteComboBox.setSelectedIndex(2);
-                        break;
-                    case 15:
-                        minuteComboBox.setSelectedIndex(3);
-                        break;
-                    case 20:
-                        minuteComboBox.setSelectedIndex(4);
-                        break;
-                    case 25:
-                        minuteComboBox.setSelectedIndex(5);
-                        break;
-                    case 30:
-                        minuteComboBox.setSelectedIndex(6);
-                        break;
-                    case 35:
-                        minuteComboBox.setSelectedIndex(7);
-                        break;
-                    case 40:
-                        minuteComboBox.setSelectedIndex(8);
-                        break;
-                    case 45:
-                        minuteComboBox.setSelectedIndex(9);
-                        break;
-                    case 50:
-                        minuteComboBox.setSelectedIndex(10);
-                        break;
-                    case 55:
-                        minuteComboBox.setSelectedIndex(11);
-                        break;
-                    default:
-                        minuteComboBox.setSelectedIndex(12);
-                        break;
-                }
+        if(!backgroundProcess.isNull()){
+            deleteButton.setVisible(true);
 
-                switch (backgroundProcess.list.get(i).getPriority()) {
-                    case 1:
-                        priorityComboBox.setSelectedIndex(0);
-                        break;
-                    case 2:
-                        priorityComboBox.setSelectedIndex(1);
-                        break;
-                    default:
-                        priorityComboBox.setSelectedIndex(2);
-                        break;
-                }
-                if(backgroundProcess.list.get(i).getPopup()){
-                    allowPopupCheckBox.setSelected(true);
-                } else{
-                    allowPopupCheckBox.setSelected(false);
+
+
+
+            String name = a2_button.getText().split("\t")[0];
+
+            for (int i = 0; i < backgroundProcess.list.size(); i++) {
+                if (backgroundProcess.list.get(i).getName().equals(name)) {
+                    nameTextBox.setText(backgroundProcess.list.get(i).getName());
+                    monthComboBox.setSelectedIndex(backgroundProcess.list.get(i).getMonth() - 1);
+                    dayComboBox.setSelectedIndex(backgroundProcess.list.get(i).getDay() - 1);
+                    switch (backgroundProcess.list.get(i).getYear()) {
+                        case 2016:
+                            yearComboBox.setSelectedIndex(0);
+                            break;
+                        case 2017:
+                            yearComboBox.setSelectedIndex(1);
+                            break;
+                        case 2018:
+                            yearComboBox.setSelectedIndex(2);
+                            break;
+                        case 2019:
+                            yearComboBox.setSelectedIndex(3);
+                            break;
+                        default:
+                            yearComboBox.setSelectedIndex(4);
+                            break;
+                    }
+                    hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
+                    switch (backgroundProcess.list.get(i).getMinute()) {
+                        case 01:
+                            minuteComboBox.setSelectedIndex(0);
+                            break;
+                        case 05:
+                            minuteComboBox.setSelectedIndex(1);
+                            break;
+                        case 10:
+                            minuteComboBox.setSelectedIndex(2);
+                            break;
+                        case 15:
+                            minuteComboBox.setSelectedIndex(3);
+                            break;
+                        case 20:
+                            minuteComboBox.setSelectedIndex(4);
+                            break;
+                        case 25:
+                            minuteComboBox.setSelectedIndex(5);
+                            break;
+                        case 30:
+                            minuteComboBox.setSelectedIndex(6);
+                            break;
+                        case 35:
+                            minuteComboBox.setSelectedIndex(7);
+                            break;
+                        case 40:
+                            minuteComboBox.setSelectedIndex(8);
+                            break;
+                        case 45:
+                            minuteComboBox.setSelectedIndex(9);
+                            break;
+                        case 50:
+                            minuteComboBox.setSelectedIndex(10);
+                            break;
+                        case 55:
+                            minuteComboBox.setSelectedIndex(11);
+                            break;
+                        default:
+                            minuteComboBox.setSelectedIndex(12);
+                            break;
+                    }
+
+                    switch (backgroundProcess.list.get(i).getPriority()) {
+                        case 1:
+                            priorityComboBox.setSelectedIndex(0);
+                            break;
+                        case 2:
+                            priorityComboBox.setSelectedIndex(1);
+                            break;
+                        default:
+                            priorityComboBox.setSelectedIndex(2);
+                            break;
+                    }
+                    if(backgroundProcess.list.get(i).getPopup()){
+                        allowPopupCheckBox.setSelected(true);
+                    } else{
+                        allowPopupCheckBox.setSelected(false);
+                    }
+                    if(backgroundProcess.list.get(i).getEmail()){
+                        allowEmailCheckBox.setSelected(true);
+                        userEmail = backgroundProcess.getEmailAddress();
+                    } else{
+                        allowEmailCheckBox.setSelected(false);
+                    }
                 }
             }
-        }
-        name = a2_button.getText().split("\t")[0];
+            name = a2_button.getText().split("\t")[0];
 
-        editList();
-        
-        
+            editList();
+
+        }
     }
     
     
@@ -1149,102 +1239,109 @@ public class GUI extends javax.swing.JFrame {
     
     //IF THE USER PRESSED ON THE 3RD TASK
     private void a3_buttonActionPerformed(java.awt.event.ActionEvent evt) {
-        deleteButton.setVisible(true);
-        
-        
-        
-        
-        
-        String name = a3_button.getText().split("\t")[0];
-        
-        for (int i = 0; i < backgroundProcess.list.size(); i++) {
-            if (backgroundProcess.list.get(i).getName().equals(name)) {
-                nameTextBox.setText(backgroundProcess.list.get(i).getName());
-                monthComboBox.setSelectedIndex(backgroundProcess.list.get(i).getMonth() - 1);
-                dayComboBox.setSelectedIndex(backgroundProcess.list.get(i).getDay() - 1);
-                switch (backgroundProcess.list.get(i).getYear()) {
-                    case 2016:
-                        yearComboBox.setSelectedIndex(0);
-                        break;
-                    case 2017:
-                        yearComboBox.setSelectedIndex(1);
-                        break;
-                    case 2018:
-                        yearComboBox.setSelectedIndex(2);
-                        break;
-                    case 2019:
-                        yearComboBox.setSelectedIndex(3);
-                        break;
-                    default:
-                        yearComboBox.setSelectedIndex(4);
-                        break;
-                }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
-                switch (backgroundProcess.list.get(i).getMinute()) {
-                    case 01:
-                        minuteComboBox.setSelectedIndex(0);
-                        break;
-                    case 05:
-                        minuteComboBox.setSelectedIndex(1);
-                        break;
-                    case 10:
-                        minuteComboBox.setSelectedIndex(2);
-                        break;
-                    case 15:
-                        minuteComboBox.setSelectedIndex(3);
-                        break;
-                    case 20:
-                        minuteComboBox.setSelectedIndex(4);
-                        break;
-                    case 25:
-                        minuteComboBox.setSelectedIndex(5);
-                        break;
-                    case 30:
-                        minuteComboBox.setSelectedIndex(6);
-                        break;
-                    case 35:
-                        minuteComboBox.setSelectedIndex(7);
-                        break;
-                    case 40:
-                        minuteComboBox.setSelectedIndex(8);
-                        break;
-                    case 45:
-                        minuteComboBox.setSelectedIndex(9);
-                        break;
-                    case 50:
-                        minuteComboBox.setSelectedIndex(10);
-                        break;
-                    case 55:
-                        minuteComboBox.setSelectedIndex(11);
-                        break;
-                    default:
-                        minuteComboBox.setSelectedIndex(12);
-                        break;
-                }
+        if(!backgroundProcess.isNull()){
+            deleteButton.setVisible(true);
 
-                switch (backgroundProcess.list.get(i).getPriority()) {
-                    case 1:
-                        priorityComboBox.setSelectedIndex(0);
-                        break;
-                    case 2:
-                        priorityComboBox.setSelectedIndex(1);
-                        break;
-                    default:
-                        priorityComboBox.setSelectedIndex(2);
-                        break;
-                }
-                if(backgroundProcess.list.get(i).getPopup()){
-                    allowPopupCheckBox.setSelected(true);
-                } else{
-                    allowPopupCheckBox.setSelected(false);
+
+
+
+
+            String name = a3_button.getText().split("\t")[0];
+
+            for (int i = 0; i < backgroundProcess.list.size(); i++) {
+                if (backgroundProcess.list.get(i).getName().equals(name)) {
+                    nameTextBox.setText(backgroundProcess.list.get(i).getName());
+                    monthComboBox.setSelectedIndex(backgroundProcess.list.get(i).getMonth() - 1);
+                    dayComboBox.setSelectedIndex(backgroundProcess.list.get(i).getDay() - 1);
+                    switch (backgroundProcess.list.get(i).getYear()) {
+                        case 2016:
+                            yearComboBox.setSelectedIndex(0);
+                            break;
+                        case 2017:
+                            yearComboBox.setSelectedIndex(1);
+                            break;
+                        case 2018:
+                            yearComboBox.setSelectedIndex(2);
+                            break;
+                        case 2019:
+                            yearComboBox.setSelectedIndex(3);
+                            break;
+                        default:
+                            yearComboBox.setSelectedIndex(4);
+                            break;
+                    }
+                    hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
+                    switch (backgroundProcess.list.get(i).getMinute()) {
+                        case 01:
+                            minuteComboBox.setSelectedIndex(0);
+                            break;
+                        case 05:
+                            minuteComboBox.setSelectedIndex(1);
+                            break;
+                        case 10:
+                            minuteComboBox.setSelectedIndex(2);
+                            break;
+                        case 15:
+                            minuteComboBox.setSelectedIndex(3);
+                            break;
+                        case 20:
+                            minuteComboBox.setSelectedIndex(4);
+                            break;
+                        case 25:
+                            minuteComboBox.setSelectedIndex(5);
+                            break;
+                        case 30:
+                            minuteComboBox.setSelectedIndex(6);
+                            break;
+                        case 35:
+                            minuteComboBox.setSelectedIndex(7);
+                            break;
+                        case 40:
+                            minuteComboBox.setSelectedIndex(8);
+                            break;
+                        case 45:
+                            minuteComboBox.setSelectedIndex(9);
+                            break;
+                        case 50:
+                            minuteComboBox.setSelectedIndex(10);
+                            break;
+                        case 55:
+                            minuteComboBox.setSelectedIndex(11);
+                            break;
+                        default:
+                            minuteComboBox.setSelectedIndex(12);
+                            break;
+                    }
+
+                    switch (backgroundProcess.list.get(i).getPriority()) {
+                        case 1:
+                            priorityComboBox.setSelectedIndex(0);
+                            break;
+                        case 2:
+                            priorityComboBox.setSelectedIndex(1);
+                            break;
+                        default:
+                            priorityComboBox.setSelectedIndex(2);
+                            break;
+                    }
+                    if(backgroundProcess.list.get(i).getPopup()){
+                        allowPopupCheckBox.setSelected(true);
+                    } else{
+                        allowPopupCheckBox.setSelected(false);
+                    }
+                    if(backgroundProcess.list.get(i).getEmail()){
+                        allowEmailCheckBox.setSelected(true);
+                        userEmail = backgroundProcess.getEmailAddress();
+                    } else{
+                        allowEmailCheckBox.setSelected(false);
+                    }
                 }
             }
-        }
-        name = a3_button.getText().split("\t")[0];
+            name = a3_button.getText().split("\t")[0];
 
-        editList();
-        
-        
+            editList();
+
+        }
     }
     
     
@@ -1253,102 +1350,109 @@ public class GUI extends javax.swing.JFrame {
     
     //IF THE USER PRESSED ON THE 4TH TASK
     private void a4_buttonActionPerformed(java.awt.event.ActionEvent evt) {
-        deleteButton.setVisible(true);
-        
-        
-        
-        
-        
-        String name = a4_button.getText().split("\t")[0];
-        
-        for (int i = 0; i < backgroundProcess.list.size(); i++) {
-            if (backgroundProcess.list.get(i).getName().equals(name)) {
-                nameTextBox.setText(backgroundProcess.list.get(i).getName());
-                monthComboBox.setSelectedIndex(backgroundProcess.list.get(i).getMonth() - 1);
-                dayComboBox.setSelectedIndex(backgroundProcess.list.get(i).getDay() - 1);
-                switch (backgroundProcess.list.get(i).getYear()) {
-                    case 2016:
-                        yearComboBox.setSelectedIndex(0);
-                        break;
-                    case 2017:
-                        yearComboBox.setSelectedIndex(1);
-                        break;
-                    case 2018:
-                        yearComboBox.setSelectedIndex(2);
-                        break;
-                    case 2019:
-                        yearComboBox.setSelectedIndex(3);
-                        break;
-                    default:
-                        yearComboBox.setSelectedIndex(4);
-                        break;
-                }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
-                switch (backgroundProcess.list.get(i).getMinute()) {
-                    case 01:
-                        minuteComboBox.setSelectedIndex(0);
-                        break;
-                    case 05:
-                        minuteComboBox.setSelectedIndex(1);
-                        break;
-                    case 10:
-                        minuteComboBox.setSelectedIndex(2);
-                        break;
-                    case 15:
-                        minuteComboBox.setSelectedIndex(3);
-                        break;
-                    case 20:
-                        minuteComboBox.setSelectedIndex(4);
-                        break;
-                    case 25:
-                        minuteComboBox.setSelectedIndex(5);
-                        break;
-                    case 30:
-                        minuteComboBox.setSelectedIndex(6);
-                        break;
-                    case 35:
-                        minuteComboBox.setSelectedIndex(7);
-                        break;
-                    case 40:
-                        minuteComboBox.setSelectedIndex(8);
-                        break;
-                    case 45:
-                        minuteComboBox.setSelectedIndex(9);
-                        break;
-                    case 50:
-                        minuteComboBox.setSelectedIndex(10);
-                        break;
-                    case 55:
-                        minuteComboBox.setSelectedIndex(11);
-                        break;
-                    default:
-                        minuteComboBox.setSelectedIndex(12);
-                        break;
-                }
+        if(!backgroundProcess.isNull()){
+            deleteButton.setVisible(true);
 
-                switch (backgroundProcess.list.get(i).getPriority()) {
-                    case 1:
-                        priorityComboBox.setSelectedIndex(0);
-                        break;
-                    case 2:
-                        priorityComboBox.setSelectedIndex(1);
-                        break;
-                    default:
-                        priorityComboBox.setSelectedIndex(2);
-                        break;
-                }
-                if(backgroundProcess.list.get(i).getPopup()){
-                    allowPopupCheckBox.setSelected(true);
-                } else{
-                    allowPopupCheckBox.setSelected(false);
+
+
+
+
+            String name = a4_button.getText().split("\t")[0];
+
+            for (int i = 0; i < backgroundProcess.list.size(); i++) {
+                if (backgroundProcess.list.get(i).getName().equals(name)) {
+                    nameTextBox.setText(backgroundProcess.list.get(i).getName());
+                    monthComboBox.setSelectedIndex(backgroundProcess.list.get(i).getMonth() - 1);
+                    dayComboBox.setSelectedIndex(backgroundProcess.list.get(i).getDay() - 1);
+                    switch (backgroundProcess.list.get(i).getYear()) {
+                        case 2016:
+                            yearComboBox.setSelectedIndex(0);
+                            break;
+                        case 2017:
+                            yearComboBox.setSelectedIndex(1);
+                            break;
+                        case 2018:
+                            yearComboBox.setSelectedIndex(2);
+                            break;
+                        case 2019:
+                            yearComboBox.setSelectedIndex(3);
+                            break;
+                        default:
+                            yearComboBox.setSelectedIndex(4);
+                            break;
+                    }
+                    hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
+                    switch (backgroundProcess.list.get(i).getMinute()) {
+                        case 01:
+                            minuteComboBox.setSelectedIndex(0);
+                            break;
+                        case 05:
+                            minuteComboBox.setSelectedIndex(1);
+                            break;
+                        case 10:
+                            minuteComboBox.setSelectedIndex(2);
+                            break;
+                        case 15:
+                            minuteComboBox.setSelectedIndex(3);
+                            break;
+                        case 20:
+                            minuteComboBox.setSelectedIndex(4);
+                            break;
+                        case 25:
+                            minuteComboBox.setSelectedIndex(5);
+                            break;
+                        case 30:
+                            minuteComboBox.setSelectedIndex(6);
+                            break;
+                        case 35:
+                            minuteComboBox.setSelectedIndex(7);
+                            break;
+                        case 40:
+                            minuteComboBox.setSelectedIndex(8);
+                            break;
+                        case 45:
+                            minuteComboBox.setSelectedIndex(9);
+                            break;
+                        case 50:
+                            minuteComboBox.setSelectedIndex(10);
+                            break;
+                        case 55:
+                            minuteComboBox.setSelectedIndex(11);
+                            break;
+                        default:
+                            minuteComboBox.setSelectedIndex(12);
+                            break;
+                    }
+
+                    switch (backgroundProcess.list.get(i).getPriority()) {
+                        case 1:
+                            priorityComboBox.setSelectedIndex(0);
+                            break;
+                        case 2:
+                            priorityComboBox.setSelectedIndex(1);
+                            break;
+                        default:
+                            priorityComboBox.setSelectedIndex(2);
+                            break;
+                    }
+                    if(backgroundProcess.list.get(i).getPopup()){
+                        allowPopupCheckBox.setSelected(true);
+                    } else{
+                        allowPopupCheckBox.setSelected(false);
+                    }
+                    if(backgroundProcess.list.get(i).getEmail()){
+                        allowEmailCheckBox.setSelected(true);
+                        userEmail = backgroundProcess.getEmailAddress();
+                    } else{
+                        allowEmailCheckBox.setSelected(false);
+                    }
                 }
             }
-        }
-        name = a4_button.getText().split("\t")[0];
+            name = a4_button.getText().split("\t")[0];
 
-        editList();
-        
-        
+            editList();
+
+        }
     }
     
     
@@ -1357,101 +1461,108 @@ public class GUI extends javax.swing.JFrame {
     
     //IF THE USER PRESSED ON THE 5TH TASK
     private void a5_buttonActionPerformed(java.awt.event.ActionEvent evt) {
-        deleteButton.setVisible(true);
-        
-        
-        
-        
-        
-        String name = a5_button.getText().split("\t")[0];
-        
-        for (int i = 0; i < backgroundProcess.list.size(); i++) {
-            if (backgroundProcess.list.get(i).getName().equals(name)) {
-                nameTextBox.setText(backgroundProcess.list.get(i).getName());
-                monthComboBox.setSelectedIndex(backgroundProcess.list.get(i).getMonth() - 1);
-                dayComboBox.setSelectedIndex(backgroundProcess.list.get(i).getDay() - 1);
-                switch (backgroundProcess.list.get(i).getYear()) {
-                    case 2016:
-                        yearComboBox.setSelectedIndex(0);
-                        break;
-                    case 2017:
-                        yearComboBox.setSelectedIndex(1);
-                        break;
-                    case 2018:
-                        yearComboBox.setSelectedIndex(2);
-                        break;
-                    case 2019:
-                        yearComboBox.setSelectedIndex(3);
-                        break;
-                    default:
-                        yearComboBox.setSelectedIndex(4);
-                        break;
-                }
-                hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
-                switch (backgroundProcess.list.get(i).getMinute()) {
-                    case 01:
-                        minuteComboBox.setSelectedIndex(0);
-                        break;
-                    case 05:
-                        minuteComboBox.setSelectedIndex(1);
-                        break;
-                    case 10:
-                        minuteComboBox.setSelectedIndex(2);
-                        break;
-                    case 15:
-                        minuteComboBox.setSelectedIndex(3);
-                        break;
-                    case 20:
-                        minuteComboBox.setSelectedIndex(4);
-                        break;
-                    case 25:
-                        minuteComboBox.setSelectedIndex(5);
-                        break;
-                    case 30:
-                        minuteComboBox.setSelectedIndex(6);
-                        break;
-                    case 35:
-                        minuteComboBox.setSelectedIndex(7);
-                        break;
-                    case 40:
-                        minuteComboBox.setSelectedIndex(8);
-                        break;
-                    case 45:
-                        minuteComboBox.setSelectedIndex(9);
-                        break;
-                    case 50:
-                        minuteComboBox.setSelectedIndex(10);
-                        break;
-                    case 55:
-                        minuteComboBox.setSelectedIndex(11);
-                        break;
-                    default:
-                        minuteComboBox.setSelectedIndex(12);
-                        break;
-                }
+        if(!backgroundProcess.isNull()){
+            deleteButton.setVisible(true);
 
-                switch (backgroundProcess.list.get(i).getPriority()) {
-                    case 1:
-                        priorityComboBox.setSelectedIndex(0);
-                        break;
-                    case 2:
-                        priorityComboBox.setSelectedIndex(1);
-                        break;
-                    default:
-                        priorityComboBox.setSelectedIndex(2);
-                        break;
-                }
-                if(backgroundProcess.list.get(i).getPopup()){
-                    allowPopupCheckBox.setSelected(true);
-                } else{
-                    allowPopupCheckBox.setSelected(false);
+
+
+
+
+            String name = a5_button.getText().split("\t")[0];
+
+            for (int i = 0; i < backgroundProcess.list.size(); i++) {
+                if (backgroundProcess.list.get(i).getName().equals(name)) {
+                    nameTextBox.setText(backgroundProcess.list.get(i).getName());
+                    monthComboBox.setSelectedIndex(backgroundProcess.list.get(i).getMonth() - 1);
+                    dayComboBox.setSelectedIndex(backgroundProcess.list.get(i).getDay() - 1);
+                    switch (backgroundProcess.list.get(i).getYear()) {
+                        case 2016:
+                            yearComboBox.setSelectedIndex(0);
+                            break;
+                        case 2017:
+                            yearComboBox.setSelectedIndex(1);
+                            break;
+                        case 2018:
+                            yearComboBox.setSelectedIndex(2);
+                            break;
+                        case 2019:
+                            yearComboBox.setSelectedIndex(3);
+                            break;
+                        default:
+                            yearComboBox.setSelectedIndex(4);
+                            break;
+                    }
+                    hourComboBox.setSelectedIndex(backgroundProcess.list.get(i).getHour());
+                    switch (backgroundProcess.list.get(i).getMinute()) {
+                        case 01:
+                            minuteComboBox.setSelectedIndex(0);
+                            break;
+                        case 05:
+                            minuteComboBox.setSelectedIndex(1);
+                            break;
+                        case 10:
+                            minuteComboBox.setSelectedIndex(2);
+                            break;
+                        case 15:
+                            minuteComboBox.setSelectedIndex(3);
+                            break;
+                        case 20:
+                            minuteComboBox.setSelectedIndex(4);
+                            break;
+                        case 25:
+                            minuteComboBox.setSelectedIndex(5);
+                            break;
+                        case 30:
+                            minuteComboBox.setSelectedIndex(6);
+                            break;
+                        case 35:
+                            minuteComboBox.setSelectedIndex(7);
+                            break;
+                        case 40:
+                            minuteComboBox.setSelectedIndex(8);
+                            break;
+                        case 45:
+                            minuteComboBox.setSelectedIndex(9);
+                            break;
+                        case 50:
+                            minuteComboBox.setSelectedIndex(10);
+                            break;
+                        case 55:
+                            minuteComboBox.setSelectedIndex(11);
+                            break;
+                        default:
+                            minuteComboBox.setSelectedIndex(12);
+                            break;
+                    }
+
+                    switch (backgroundProcess.list.get(i).getPriority()) {
+                        case 1:
+                            priorityComboBox.setSelectedIndex(0);
+                            break;
+                        case 2:
+                            priorityComboBox.setSelectedIndex(1);
+                            break;
+                        default:
+                            priorityComboBox.setSelectedIndex(2);
+                            break;
+                    }
+                    if(backgroundProcess.list.get(i).getPopup()){
+                        allowPopupCheckBox.setSelected(true);
+                    } else{
+                        allowPopupCheckBox.setSelected(false);
+                    }
+                    if(backgroundProcess.list.get(i).getEmail()){
+                        allowEmailCheckBox.setSelected(true);
+                        userEmail = backgroundProcess.getEmailAddress();
+                    } else{
+                        allowEmailCheckBox.setSelected(false);
+                    }
                 }
             }
-        }
-        name = a5_button.getText().split("\t")[0];
+            name = a5_button.getText().split("\t")[0];
 
-        editList();
-        
-        
+            editList();
+
+        }
     }
 }

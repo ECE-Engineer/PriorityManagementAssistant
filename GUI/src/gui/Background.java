@@ -28,8 +28,7 @@ public class Background {
     private static Assignment assignment;
     public static ArrayList<Assignment> list = new ArrayList<>();
     private static PrintWriter backgroundFile, userFile;
-    private static String filePath;
-    private static int track = 0;
+    private static String filePath, userEmail;
 
     public Background() {
         //default constructor
@@ -54,7 +53,20 @@ public class Background {
         }
         while ((line = read.readLine()) != null) {  //load the list
             //System.out.println("DEBUG\t" + "LOADING\t\t" + line);   //DEBUG
-            assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]), Boolean.parseBoolean(line.split("---")[7]));
+            
+            
+            //count all the --- indicaters in each line to determine if 
+            
+            
+            
+            
+            if(Boolean.parseBoolean(line.split("---")[8])){ //look for the email appended to the assignment
+                assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]), Boolean.parseBoolean(line.split("---")[7]), Boolean.parseBoolean(line.split("---")[8]));
+                userEmail = line.split("---")[9];
+            } else{ //don't look for the email appended to the assignment
+                assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]), Boolean.parseBoolean(line.split("---")[7]), Boolean.parseBoolean(line.split("---")[8]));
+            }
+            
             list.add(assignment);
         }
         return filePath;
@@ -91,7 +103,11 @@ public class Background {
     }
 
     public Assignment getAssignment(int i) {
-        return list.get(i);
+        //System.out.println("list.size: " + list.size());  //DEBUG
+        if(i < list.size()){
+            return list.get(i);
+        }
+        return null;
     }
 
     public boolean removeTask(String s) {
@@ -158,6 +174,14 @@ public class Background {
     public String getFilePath() {
         return filePath;
     }
+    
+    public String getEmailAddress() {
+        return userEmail;
+    }
+    
+    public String setEmailAddress(String s) {
+        return userEmail = s;
+    }
 
     public void writeFile(String path) throws FileNotFoundException, UnsupportedEncodingException {//line ZERO must contain the path of the list file
         //open the text file
@@ -168,29 +192,58 @@ public class Background {
             //System.out.println("DEBUG\t" + "WRITING\t\t" + content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());   //DEBUG
             String minute = Integer.toString(content.getMinute());
             //System.out.println(minute);     //DEBUG
-            if (content.getHour() == 0) {
-                if (minute.length() == 1) {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            
+            if(content.getEmail()){
+                if (content.getHour() == 0) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
+                } else if (content.getHour() < 12) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
+                } else if (content.getHour() == 12) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
                 } else {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
                 }
-            } else if (content.getHour() < 12) {
-                if (minute.length() == 1) {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            } else{
+                if (content.getHour() == 0) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
+                } else if (content.getHour() < 12) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
+                } else if (content.getHour() == 12) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
                 } else {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                }
-            } else if (content.getHour() == 12) {
-                if (minute.length() == 1) {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                } else {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                }
-            } else {
-                if (minute.length() == 1) {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                } else {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
                 }
             }
             userFile.println();
@@ -210,7 +263,12 @@ public class Background {
 
         // write to the file the contents of the list
         for (Assignment content : list) {
-            backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority() + "---" + content.getPopup());
+            if(content.getEmail()){//append the user's email to the end
+                backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority() + "---" + content.getPopup() + "---" + content.getEmail() + "---" + userEmail);
+            } else{//don't append the user's email to the end
+                backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority() + "---" + content.getPopup() + "---" + content.getEmail());
+            }
+            
             backgroundFile.println();
         }
 
@@ -222,6 +280,7 @@ public class Background {
         //FilePermission permission = new FilePermission("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\", "write");
         //make the file
         backgroundFile = new PrintWriter("C:\\Users\\" + System.getProperty("user.name") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\startup_PMA_popup_check.bat", "UTF-8");
+        backgroundFile.print("taskkill /im javaw.exe /f");  //kill the current version of the process
         backgroundFile.print("javaw -Xmx200m -jar \"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\PriorityManagementAssistant\\POPUPS\\dist\\POPUPS.jar\"");
         backgroundFile.println();
         //close the file
@@ -235,7 +294,6 @@ public class Background {
             if (list.get(i).getName().equalsIgnoreCase(s)) {
                 taskFound = true;   //assignment present in list
                 assignment = list.get(i);
-                track = i;  //this will be used to perform a debug
                 break;
             }
         }
@@ -289,29 +347,57 @@ public class Background {
             if (content.getName().equalsIgnoreCase(s)) {
                 String minute = Integer.toString(content.getMinute());
                 //System.out.println(minute);     //DEBUG
-                if (content.getHour() == 0) {
-                    if (minute.length() == 1) {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                if(content.getEmail()){
+                    if (content.getHour() == 0) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        }
+                    } else if (content.getHour() < 12) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        }
+                    } else if (content.getHour() == 12) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        }
                     } else {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        }
                     }
-                } else if (content.getHour() < 12) {
-                    if (minute.length() == 1) {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                } else{
+                    if (content.getHour() == 0) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        }
+                    } else if (content.getHour() < 12) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        }
+                    } else if (content.getHour() == 12) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        }
                     } else {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                    }
-                } else if (content.getHour() == 12) {
-                    if (minute.length() == 1) {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                    } else {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                    }
-                } else {
-                    if (minute.length() == 1) {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                    } else {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        }
                     }
                 }
                 taskFound = true;
@@ -341,31 +427,62 @@ public class Background {
         for (Assignment content : list) {
             String minute = Integer.toString(content.getMinute());
             //System.out.println(minute);     //DEBUG
-            if (content.getHour() == 0) {
-                if (minute.length() == 1) {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            
+            if(content.getEmail()){
+                if (content.getHour() == 0) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
+                } else if (content.getHour() < 12) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
+                } else if (content.getHour() == 12) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
                 } else {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
                 }
-            } else if (content.getHour() < 12) {
-                if (minute.length() == 1) {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            } else{
+                if (content.getHour() == 0) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
+                } else if (content.getHour() < 12) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
+                } else if (content.getHour() == 12) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
                 } else {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                }
-            } else if (content.getHour() == 12) {
-                if (minute.length() == 1) {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                } else {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                }
-            } else {
-                if (minute.length() == 1) {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                } else {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
                 }
             }
+            
+            
         }
     }
 

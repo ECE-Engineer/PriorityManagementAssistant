@@ -1,20 +1,28 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This class will represent what is nedded to make an assignment.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  */
 package popups;
 
-/**
- *
- * @author Kyle Z
- */
+//Kyle Zeller
+
 public class Assignment {
     private String name;
     private int month, day, year, hour, minute, priority;
-    private boolean popup;
+    private boolean popup, email;
     
-    public Assignment(String n, int mo, int d, int y, int h, int mi, int pr, boolean po){
+    public Assignment(String n, int mo, int d, int y, int h, int mi, int pr, boolean po, boolean em){
         //assign corresponding values
         name = n;
         month = mo;
@@ -24,6 +32,7 @@ public class Assignment {
         minute = mi;
         priority = pr;
         popup = po;
+        email = em;
     }
     
     public String getName(){
@@ -88,5 +97,13 @@ public class Assignment {
     
     public void setPopup(boolean po){
         this.popup = po;
+    }
+    
+    public boolean getEmail(){
+        return email;
+    }
+    
+    public void setEmail(boolean em){
+        this.email = em;
     }
 }

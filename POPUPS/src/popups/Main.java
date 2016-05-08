@@ -17,10 +17,11 @@ public class Main {
     public static LocalDateTime timePoint = LocalDateTime.now();    // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
         
     public static void main(String[] args) throws IOException, InterruptedException {
+        String filePath;
+        //method to read contents from the list file into the arraylist
+        filePath = backgroundProcess.loadList();
         for(;;){
-            String filePath;
-            //method to read contents from the list file into the arraylist
-            filePath = backgroundProcess.loadList();
+            
             //check to see if the list is empty
             if(!backgroundProcess.isNull()){
 
@@ -31,6 +32,9 @@ public class Main {
                 if(!backgroundProcess.isNull()){
                     //due all the analytics here
                     backgroundProcess.generatePOPUPS();
+                    
+                    //due all the analytics here
+                    backgroundProcess.generateEMAILS();
                 }
 
                 //write back to the file on the desktop

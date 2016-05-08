@@ -26,12 +26,19 @@ import static popups.Main.timePoint;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+
+
 public class Background {
 
     private static Assignment assignment;
     private static ArrayList<Assignment> list = new ArrayList<>();
     private static PrintWriter backgroundFile, userFile;
-    private static String filePath;
+    private static String filePath, userEmail;
 
     public Background() {
         //default constructor
@@ -48,6 +55,14 @@ public class Background {
         return (filePath.substring((filePath.lastIndexOf("\\", filePath.lastIndexOf("\\", filePath.length()) - 1)) + 1, filePath.lastIndexOf("\\", filePath.length())));
     }
 
+    public String getEmailAddress() {
+        return userEmail;
+    }
+    
+    public String setEmailAddress(String s) {
+        return userEmail = s;
+    }
+
     public void writeFile(String path) throws FileNotFoundException, UnsupportedEncodingException {//line ZERO must contain the path of the list file
         //open the text file
         userFile = new PrintWriter(path, "UTF-8");
@@ -57,29 +72,58 @@ public class Background {
             //System.out.println("DEBUG\t" + "WRITING\t\t" + content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority());   //DEBUG
             String minute = Integer.toString(content.getMinute());
             //System.out.println(minute);     //DEBUG
-            if (content.getHour() == 0) {
-                if (minute.length() == 1) {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            
+            if(content.getEmail()){
+                if (content.getHour() == 0) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
+                } else if (content.getHour() < 12) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
+                } else if (content.getHour() == 12) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
                 } else {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
                 }
-            } else if (content.getHour() < 12) {
-                if (minute.length() == 1) {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            } else{
+                if (content.getHour() == 0) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
+                } else if (content.getHour() < 12) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
+                } else if (content.getHour() == 12) {
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
                 } else {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                }
-            } else if (content.getHour() == 12) {
-                if (minute.length() == 1) {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                } else {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                }
-            } else {
-                if (minute.length() == 1) {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                } else {
-                    userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                    if (minute.length() == 1) {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        userFile.print(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
                 }
             }
             userFile.println();
@@ -87,6 +131,29 @@ public class Background {
 
         // Close the file.
         userFile.close();
+    }
+
+    public void createBackgroundFile(String s) throws FileNotFoundException, UnsupportedEncodingException {  //make a background file to store all logs / program runs
+        //make the file
+        backgroundFile = new PrintWriter("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt", "UTF-8");
+
+        //line ZERO must contain the path of the list file
+        backgroundFile.print(s);
+        backgroundFile.println();
+
+        // write to the file the contents of the list
+        for (Assignment content : list) {
+            if(content.getEmail()){//append the user's email to the end
+                backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority() + "---" + content.getPopup() + "---" + content.getEmail() + "---" + userEmail);
+            } else{//don't append the user's email to the end
+                backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority() + "---" + content.getPopup() + "---" + content.getEmail());
+            }
+            
+            backgroundFile.println();
+        }
+
+        //close the file
+        backgroundFile.close();
     }
 
     public boolean validFilePath(String s) {
@@ -110,24 +177,6 @@ public class Background {
         return (new File("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt").exists());
     }
 
-    public void createBackgroundFile(String s) throws FileNotFoundException, UnsupportedEncodingException {  //make a background file to store all logs / program runs
-        //make the file
-        backgroundFile = new PrintWriter("C:\\Users\\" + System.getProperty("user.name") + "\\Documents\\runPMA.txt", "UTF-8");
-
-        //line ZERO must contain the path of the list file
-        backgroundFile.print(s);
-        backgroundFile.println();
-
-        // write to the file the contents of the list
-        for (Assignment content : list) {
-            backgroundFile.print(content.getName() + "---" + content.getMonth() + "---" + content.getDay() + "---" + content.getYear() + "---" + content.getHour() + "---" + content.getMinute() + "---" + content.getPriority() + "---" + content.getPopup());
-            backgroundFile.println();
-        }
-
-        //close the file
-        backgroundFile.close();
-    }
-
     public void createBatchFile() throws FileNotFoundException, UnsupportedEncodingException {
         //FilePermission permission = new FilePermission("C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\", "write");
         //make the file
@@ -149,7 +198,20 @@ public class Background {
         }
         while ((line = read.readLine()) != null) {  //load the list
             //System.out.println("DEBUG\t" + "LOADING\t\t" + line);   //DEBUG
-            assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]), Boolean.parseBoolean(line.split("---")[7]));
+            
+            
+            //count all the --- indicaters in each line to determine if 
+            
+            
+            
+            
+            if(Boolean.parseBoolean(line.split("---")[8])){ //look for the email appended to the assignment
+                assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]), Boolean.parseBoolean(line.split("---")[7]), Boolean.parseBoolean(line.split("---")[8]));
+                userEmail = line.split("---")[9];
+            } else{ //don't look for the email appended to the assignment
+                assignment = new Assignment(line.split("---")[0], Integer.parseInt(line.split("---")[1]), Integer.parseInt(line.split("---")[2]), Integer.parseInt(line.split("---")[3]), Integer.parseInt(line.split("---")[4]), Integer.parseInt(line.split("---")[5]), Integer.parseInt(line.split("---")[6]), Boolean.parseBoolean(line.split("---")[7]), Boolean.parseBoolean(line.split("---")[8]));
+            }
+            
             list.add(assignment);
         }
         return filePath;
@@ -171,29 +233,247 @@ public class Background {
         for (Assignment content : list) {
             String minute = Integer.toString(content.getMinute());
             //System.out.println(minute);     //DEBUG
-            if (content.getHour() == 0) {
-                if (minute.length() == 1) {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            
+            if(content.getEmail()){
+                if (content.getHour() == 0) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
+                } else if (content.getHour() < 12) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
+                } else if (content.getHour() == 12) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
                 } else {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                    }
                 }
-            } else if (content.getHour() < 12) {
-                if (minute.length() == 1) {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            } else{
+                if (content.getHour() == 0) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
+                } else if (content.getHour() < 12) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
+                } else if (content.getHour() == 12) {
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
                 } else {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                    if (minute.length() == 1) {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    } else {
+                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                    }
                 }
-            } else if (content.getHour() == 12) {
-                if (minute.length() == 1) {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                } else {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                }
-            } else {
-                if (minute.length() == 1) {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                } else {
-                    System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+            }
+            
+            
+        }
+    }
+    
+    public void sendEmail(String m){
+        // Assuming you are sending email from localhost
+        String host = "localhost";
+
+        // Get system properties
+        Properties properties = System.getProperties();
+
+        // Setup mail server
+        properties.setProperty("mail.smtp.host", host);
+
+        // Get the default Session object.
+        Session session = Session.getDefaultInstance(properties);
+        
+        try{
+            // Create a default MimeMessage object.
+            MimeMessage message = new MimeMessage(session);
+
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress(userEmail));
+
+            // Set To: header field of the header.
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(userEmail));
+
+            // Set Subject: header field
+            message.setSubject(m);
+
+            // Now set the actual message
+            message.setText("CHECK YOUR DUE ASSIGNMENTS");
+            
+            // Send message
+            Transport.send(message);
+         }catch (MessagingException mex) {
+            mex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "YOU'VE ENTERED AND INVALID EMAIL ADDRESS PLEASE. PLEASE FIX THIS ASAP!", "INVALID EMAIL", ERROR_MESSAGE);
+         }
+    }
+    
+    public void generateEMAILS() {
+        for (Assignment content : list) {
+            if (content.getPopup() == true) {
+                //create an email notification with the time remaining & priority level in it
+                
+                //this is the email header
+                String message;
+                
+                
+                
+                //start the conparison
+                if (content.getYear() == timePoint.getYear()) {//if true look at month
+                    if (content.getMonth() == timePoint.getMonthValue()) {//if true look at day
+                        if (content.getDay() == timePoint.getDayOfMonth()) {//if true look at hour
+                            if (((content.getHour() - timePoint.getHour()) < 3) || ((((content.getHour() - timePoint.getHour()) == 3)) && ((content.getMinute() < timePoint.getMinute())))) {
+                                //check the priority
+                                if (content.getPriority() == 3) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 3 Hours!!! HURRY!!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else if (content.getPriority() == 2) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 3 Hours!! HURRY!!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else {//priority assumed to be 1
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 3 Hours! HURRY!!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                }
+                            } else if (((content.getHour() - timePoint.getHour()) < 6) || ((((content.getHour() - timePoint.getHour()) == 6)) && ((content.getMinute() < timePoint.getMinute())))) {
+                                //check the priority
+                                if (content.getPriority() == 3) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 6 Hours!!! HURRY SOON!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else if (content.getPriority() == 2) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 6 Hours!! HURRY SOON!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else {//priority assumed to be 1
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 6 Hours! HURRY SOON!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                }
+                            } else if (((content.getHour() - timePoint.getHour()) < 12) || ((((content.getHour() - timePoint.getHour()) == 12)) && ((content.getMinute() < timePoint.getMinute())))) {
+                                //check the priority
+                                if (content.getPriority() == 3) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 12 Hours!!! DON'T WAIT TOO LONG!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else if (content.getPriority() == 2) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 12 Hours!! DON'T WAIT TOO LONG!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else {//priority assumed to be 1
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 12 Hours! DON'T WAIT TOO LONG!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                }
+                            }
+                        } else if ((content.getDay() - timePoint.getDayOfMonth()) == 1) {//if true look at hour
+                            if ((((23 - timePoint.getHour()) + content.getHour()) < 3) || ((((23 - timePoint.getHour()) + content.getHour()) == 3) && ((content.getMinute() < timePoint.getMinute())))) {
+                                //check the priority
+                                if (content.getPriority() == 3) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 3 Hours!!! HURRY!!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else if (content.getPriority() == 2) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 3 Hours!! HURRY!!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else {//priority assumed to be 1
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 3 Hours! HURRY!!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                }
+                            } else if ((((23 - timePoint.getHour()) + content.getHour()) < 6) || ((((23 - timePoint.getHour()) + content.getHour()) == 6) && ((content.getMinute() < timePoint.getMinute())))) {
+                                //check the priority
+                                if (content.getPriority() == 3) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 6 Hours!!! HURRY SOON!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else if (content.getPriority() == 2) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 6 Hours!! HURRY SOON!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else {//priority assumed to be 1
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 6 Hours! HURRY SOON!!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                }
+                            } else if ((((23 - timePoint.getHour()) + content.getHour()) < 12) || ((((23 - timePoint.getHour()) + content.getHour()) == 12) && ((content.getMinute() < timePoint.getMinute())))) {
+                                //check the priority
+                                if (content.getPriority() == 3) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 12 Hours!!! DON'T WAIT TOO LONG!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else if (content.getPriority() == 2) {
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 12 Hours!! DON'T WAIT TOO LONG!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                } else {//priority assumed to be 1
+                                    //Set the text to display
+                                    message = "Assignment " + content.getName() + " is due in the next 12 Hours! DON'T WAIT TOO LONG!";
+                                    
+                                    //email the message and if it doesn't display an error
+                                    sendEmail(message);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -734,29 +1014,57 @@ public class Background {
             if (content.getName().equalsIgnoreCase(s)) {
                 String minute = Integer.toString(content.getMinute());
                 //System.out.println(minute);     //DEBUG
-                if (content.getHour() == 0) {
-                    if (minute.length() == 1) {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                if(content.getEmail()){
+                    if (content.getHour() == 0) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        }
+                    } else if (content.getHour() < 12) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        }
+                    } else if (content.getHour() == 12) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        }
                     } else {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail() + "\t" + userEmail);
+                        }
                     }
-                } else if (content.getHour() < 12) {
-                    if (minute.length() == 1) {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                } else{
+                    if (content.getHour() == 0) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() + 12) + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        }
+                    } else if (content.getHour() < 12) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        }
+                    } else if (content.getHour() == 12) {
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        }
                     } else {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " AM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                    }
-                } else if (content.getHour() == 12) {
-                    if (minute.length() == 1) {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                    } else {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + content.getHour() + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                    }
-                } else {
-                    if (minute.length() == 1) {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
-                    } else {
-                        System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup());
+                        if (minute.length() == 1) {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":0" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        } else {
+                            System.out.println(content.getName() + "\t\t\t" + content.getMonth() + "/" + content.getDay() + "/" + content.getYear() + "\t\t\t" + (content.getHour() - 12) + ":" + content.getMinute() + " PM\t\t\t" + "PRIORITY:\t\t\t" + content.getPriority() + "\t\t\tPOPUPS:\t\t\t" + content.getPopup() + "\t\tEmails:\t\t" + content.getEmail());
+                        }
                     }
                 }
                 taskFound = true;
