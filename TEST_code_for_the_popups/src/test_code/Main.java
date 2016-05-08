@@ -21,33 +21,32 @@ public class Main {
         String filePath;
         //method to read contents from the list file into the arraylist
         filePath = backgroundProcess.loadList();
-        for(;;){
-            //update the list
-            backgroundProcess.updateList();
-            
+
+        //update the list
+        backgroundProcess.updateList();
+
+        //check to see if the list is empty
+        if(!backgroundProcess.isNull()){
+
+            //remove all overdue assignments
+            backgroundProcess.removeOnLoad();
+
             //check to see if the list is empty
             if(!backgroundProcess.isNull()){
+                //due all the analytics here
+                backgroundProcess.generatePOPUPS();
 
-                //remove all overdue assignments
-                backgroundProcess.removeOnLoad();
-
-                //check to see if the list is empty
-                if(!backgroundProcess.isNull()){
-                    //due all the analytics here
-                    backgroundProcess.generatePOPUPS();
-                    
-                    //due all the analytics here
-                    backgroundProcess.generateEMAILS();
-                }
-
-                //write back to the file on the desktop
-                backgroundProcess.writeFile(filePath);    //write to & save file
-                //write back to the file runPMA in the documents folder
-                backgroundProcess.createBackgroundFile(filePath);
-
-                //add a delay for 1 iteration every hour
-                TimeUnit.HOURS.sleep(1);
+                //due all the analytics here
+                backgroundProcess.generateEMAILS();
             }
+
+            //write back to the file on the desktop
+            backgroundProcess.writeFile(filePath);    //write to & save file
+            //write back to the file runPMA in the documents folder
+            backgroundProcess.createBackgroundFile(filePath);
+
+            //add a delay for 1 iteration every hour
+            TimeUnit.HOURS.sleep(1);
         }
     }
     
