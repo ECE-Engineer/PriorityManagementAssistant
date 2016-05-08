@@ -8,6 +8,7 @@ package popups;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
+import javax.mail.MessagingException;
 
 //Kyle Zeller
 
@@ -16,11 +17,13 @@ public class Main {
     private static Background backgroundProcess = new Background();
     public static LocalDateTime timePoint = LocalDateTime.now();    // The current date and time (YYYY-MM-DDTHH:MM:SS.642)
         
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, MessagingException {
         String filePath;
         //method to read contents from the list file into the arraylist
         filePath = backgroundProcess.loadList();
         for(;;){
+            //update the list
+            backgroundProcess.updateList();
             
             //check to see if the list is empty
             if(!backgroundProcess.isNull()){

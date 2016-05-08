@@ -3,6 +3,7 @@ package gui;
 import java.awt.Component;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
@@ -35,7 +36,7 @@ public class GUI extends javax.swing.JFrame {
     public static Assignment assignment;
     
     
-    String name, userEmail;
+    String name, userEmail, pass;
     int month, day, year, hour, minute, priority;
     boolean popup, email;
     
@@ -571,9 +572,11 @@ public class GUI extends javax.swing.JFrame {
                     assignment.setPopup(true);
                 if(allowEmailCheckBox.isSelected()){
                     assignment.setEmail(true);
-                    if(userEmail.isEmpty()){
+                    if(userEmail == null){
                         userEmail = JOptionPane.showInputDialog("Please Enter Your Email");
+                        pass = JOptionPane.showInputDialog("Please Enter Your Password");
                         backgroundProcess.setEmailAddress(userEmail);
+                        backgroundProcess.setEmailPassword(pass);
                     }
                 }
                 JOptionPane.showMessageDialog(null, "Please Restart Your Computer For These New Changes To Be Made");
@@ -734,6 +737,7 @@ public class GUI extends javax.swing.JFrame {
                 if(backgroundProcess.list.get(i).getEmail()){
                     allowEmailCheckBox.setSelected(true);
                     userEmail = backgroundProcess.getEmailAddress();
+                    pass = backgroundProcess.getEmailPassword();
                 } else{
                     allowEmailCheckBox.setSelected(false);
                 }
@@ -801,8 +805,11 @@ public class GUI extends javax.swing.JFrame {
             priority = assignment.getPriority();
             popup = assignment.getPopup();
             email = assignment.getEmail();
-            if(email)
+            
+            if(email){
                 userEmail = backgroundProcess.getEmailAddress();
+                pass = backgroundProcess.getEmailPassword();
+            }
 
             if(hour == 0){
                  if(Integer.toString(minute).length() == 1){
@@ -841,8 +848,11 @@ public class GUI extends javax.swing.JFrame {
             priority = assignment.getPriority();
             popup = assignment.getPopup();
             email = assignment.getEmail();
-            if(email)
+            
+            if(email){
                 userEmail = backgroundProcess.getEmailAddress();
+                pass = backgroundProcess.getEmailPassword();
+            }
 
             if(hour == 0){
                  if(Integer.toString(minute).length() == 1){
@@ -881,8 +891,11 @@ public class GUI extends javax.swing.JFrame {
             priority = assignment.getPriority();
             popup = assignment.getPopup();
             email = assignment.getEmail();
-            if(email)
+            
+            if(email){
                 userEmail = backgroundProcess.getEmailAddress();
+                pass = backgroundProcess.getEmailPassword();
+            }
 
             if(hour == 0){
                  if(Integer.toString(minute).length() == 1){
@@ -921,8 +934,11 @@ public class GUI extends javax.swing.JFrame {
             priority = assignment.getPriority();
             popup = assignment.getPopup();
             email = assignment.getEmail();
-            if(email)
+            
+            if(email){
                 userEmail = backgroundProcess.getEmailAddress();
+                pass = backgroundProcess.getEmailPassword();
+            }
 
             if(hour == 0){
                  if(Integer.toString(minute).length() == 1){
@@ -961,8 +977,11 @@ public class GUI extends javax.swing.JFrame {
             priority = assignment.getPriority();
             popup = assignment.getPopup();
             email = assignment.getEmail();
-            if(email)
+            
+            if(email){
                 userEmail = backgroundProcess.getEmailAddress();
+                pass = backgroundProcess.getEmailPassword();
+            }
 
             if(hour == 0){
                  if(Integer.toString(minute).length() == 1){
@@ -992,12 +1011,46 @@ public class GUI extends javax.swing.JFrame {
     
     //run the gui program
     public static void main(String args[]) throws FileNotFoundException, UnsupportedEncodingException, IOException {
-        //System.out.println(timePoint.getHour());//DEBUG TO PROVE THAT HOURS ARE FROM 0-23
-        //load the assignments into the list
-        //remove the overdue assignments
-        backgroundProcess.loadList();
-        backgroundProcess.removeOnLoad();
-        filePath = backgroundProcess.getFilePath();
+        String choice, line;
+        boolean badInfoFlag = true;
+        
+        if(!backgroundProcess.isFile()) {//this will run for when the program is first executed
+            do {
+                choice = JOptionPane.showInputDialog("Would you like the list to be saved in your Desktop folder?\t" + ("Y / N"));        //setting a default saving location
+            } while (!choice.equalsIgnoreCase("Y") && !choice.equalsIgnoreCase("N"));
+            
+            if(choice.equalsIgnoreCase("Y")) {
+                do {
+                    line = JOptionPane.showInputDialog("Name Your List File???" + "\n" + "EX :\t" + "\"newFile\"");
+
+                    try {  // Catch errors in I/O if necessary.
+                        badInfoFlag = false;
+                        PrintWriter writer = new PrintWriter(("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\" + line + ".txt"), "UTF-8");
+                    } catch(IOException e){
+                        badInfoFlag = true;
+                    }
+                } while (line == null || badInfoFlag);
+                filePath = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\" + line + ".txt";
+            } else  {
+                do {
+                    line = JOptionPane.showInputDialog("Where Do You Want Your Assignments to Be Saved???" + "\n" + "Specify Path Name\t" + "\"C:\\Users\\person\\Desktop\\test\\newFile.txt\"");
+
+                    try {  // Catch errors in I/O if necessary.
+                        badInfoFlag = false;
+                        PrintWriter writer = new PrintWriter(line, "UTF-8");
+                    } catch(IOException e){
+                        badInfoFlag = true;
+                    }
+                } while (line == null || badInfoFlag);
+                filePath = line;  //user specified path
+            }
+        } else {
+            //load the assignments into the list
+            //remove the overdue assignments
+            filePath = backgroundProcess.loadList();
+            backgroundProcess.removeOnLoad();
+        }
+        
         backgroundProcess.writeFile(filePath);    //write to & save file
         backgroundProcess.createBackgroundFile(filePath); //IF THE FILE EXISTS THE CONTENTS OF IT MUST BE LOADED PRIOR TO RUNNING THE MAIN PROGRAM
 
@@ -1108,6 +1161,7 @@ public class GUI extends javax.swing.JFrame {
                     if(backgroundProcess.list.get(i).getEmail()){
                         allowEmailCheckBox.setSelected(true);
                         userEmail = backgroundProcess.getEmailAddress();
+                        pass = backgroundProcess.getEmailPassword();
                     } else{
                         allowEmailCheckBox.setSelected(false);
                     }
@@ -1221,6 +1275,7 @@ public class GUI extends javax.swing.JFrame {
                     if(backgroundProcess.list.get(i).getEmail()){
                         allowEmailCheckBox.setSelected(true);
                         userEmail = backgroundProcess.getEmailAddress();
+                        pass = backgroundProcess.getEmailPassword();
                     } else{
                         allowEmailCheckBox.setSelected(false);
                     }
@@ -1332,6 +1387,7 @@ public class GUI extends javax.swing.JFrame {
                     if(backgroundProcess.list.get(i).getEmail()){
                         allowEmailCheckBox.setSelected(true);
                         userEmail = backgroundProcess.getEmailAddress();
+                        pass = backgroundProcess.getEmailPassword();
                     } else{
                         allowEmailCheckBox.setSelected(false);
                     }
@@ -1443,6 +1499,7 @@ public class GUI extends javax.swing.JFrame {
                     if(backgroundProcess.list.get(i).getEmail()){
                         allowEmailCheckBox.setSelected(true);
                         userEmail = backgroundProcess.getEmailAddress();
+                        pass = backgroundProcess.getEmailPassword();
                     } else{
                         allowEmailCheckBox.setSelected(false);
                     }
@@ -1554,6 +1611,7 @@ public class GUI extends javax.swing.JFrame {
                     if(backgroundProcess.list.get(i).getEmail()){
                         allowEmailCheckBox.setSelected(true);
                         userEmail = backgroundProcess.getEmailAddress();
+                        pass = backgroundProcess.getEmailPassword();
                     } else{
                         allowEmailCheckBox.setSelected(false);
                     }
