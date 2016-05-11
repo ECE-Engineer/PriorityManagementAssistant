@@ -634,14 +634,14 @@ public class GUI extends javax.swing.JFrame {
     //Browse Button brings up the written file in a notepad document
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try {
-            backgroundProcess.writeFile(backgroundProcess.getFilePath());
+            backgroundProcess.writeFile(filePath);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        ProcessBuilder pb = new ProcessBuilder("Notepad.exe", backgroundProcess.getFilePath());
+        ProcessBuilder pb = new ProcessBuilder("Notepad.exe", filePath);
         try {
             pb.start();
         } catch (IOException ex) {
